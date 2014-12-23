@@ -2,6 +2,7 @@
 <html lang="en">
     <?php require(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_head.php'); ?>
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-datepicker/css/datepicker.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-datepicker/css/datepicker.css" />
     <body>
         <!--        <div class="login-container">
                     <div class="middle-login">
@@ -47,6 +48,8 @@
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/common-script.js"></script> 
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery.nicescroll.js"></script>
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
+        <script type="text/javascript"  src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-wizard/bootstrap-wizard.min.js"></script> 
+        <script type="text/javascript"  src="<?php echo Yii::app()->theme->baseUrl; ?>/js/form-wizard.js"></script> 
         <script type="text/javascript">
             $('.default-date-picker').datepicker({
                 format: 'yyyy-mm-dd'

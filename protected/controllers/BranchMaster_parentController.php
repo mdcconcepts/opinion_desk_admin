@@ -18,6 +18,12 @@ class BranchMaster_parentController extends Controller {
 //        );
 //    }
 
+    public function actionTest($id) {
+
+        echo json_encode("here");
+        Yii::app()->end();
+    }
+
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed

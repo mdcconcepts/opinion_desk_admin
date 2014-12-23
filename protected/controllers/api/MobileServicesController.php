@@ -468,20 +468,22 @@ class MobileServicesController extends Controller {
         /**
          * This Header is used for getting data for authentication
          */
-        $headers = apache_request_headers();
-
-//        echo json_encode($headers);
+//        $headers = $_SERVER;
+//
+//        foreach ($headers as $header => $value) {
+//            echo "$header: $value <br />\n";
+//        }
+//        echo json_encode($_SERVER['HTTP_API_OPINION_DESK_USERNAME']);
 //        Yii::app()->end();
-
         // Check if we have the USERNAME and PASSWORD HTTP headers set?
-        if (!(isset($headers['API_' . self::APPLICATION_ID . '_USERNAME']) and isset($headers['API_' . self::APPLICATION_ID . '_PASSWORD']))) {
+        if (!(isset($_SERVER['HTTP_API_' . self::APPLICATION_ID . '_USERNAME']) and isset($_SERVER['HTTP_API_' . self::APPLICATION_ID . '_PASSWORD']))) {
             // Error: Unauthorized
             $this->_sendResponse(403);
         }
 
-        $username = $headers['API_' . self:: APPLICATION_ID . '_USERNAME'];
+        $username = $_SERVER['HTTP_API_' . self:: APPLICATION_ID . '_USERNAME'];
 
-        $password = $headers['API_' . self::APPLICATION_ID . '_PASSWORD'];
+        $password = $_SERVER['HTTP_API_' . self::APPLICATION_ID . '_PASSWORD'];
 
         // Find the user
         $Tablet_User = TabletMaster::model()->findAll(array(

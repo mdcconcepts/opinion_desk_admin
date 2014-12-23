@@ -1,5 +1,4 @@
 <?php
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -25,11 +24,15 @@ class BranchDashboard_helper {
 
             $sqlStatement = "SELECT COUNT(`option_value`) AS Total_Feedback FROM "
                     . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
-                    . " WHERE `branch_id`= :branch_id )";
+                    . " WHERE `branch_id`= :branch_id )  AND DATE(`created_at`) BETWEEN DATE(:FROM_DATE)"
+                    . " AND DATE(:TO_DATE)";
 
             $command = $connection->createCommand($sqlStatement);
 
             $command->bindParam(':branch_id', $Branch_Id, PDO::PARAM_INT);
+            $command->bindParam(':FROM_DATE', $from_Date, PDO::PARAM_INT);
+            $command->bindParam(':TO_DATE', $to_Date, PDO::PARAM_INT);
+
             $command->execute();
 
             $reader = $command->query();
@@ -52,12 +55,16 @@ class BranchDashboard_helper {
 
             $sqlStatement = "SELECT ROUND(AVG(`option_value`),2) AS Average_Ratting FROM "
                     . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
-                    . " WHERE `branch_id` = :branch_id )";
+                    . " WHERE `branch_id` = :branch_id ) AND DATE(`created_at`) BETWEEN DATE(:FROM_DATE)"
+                    . " AND DATE(:TO_DATE)";
 
             $command = $connection->createCommand($sqlStatement);
 
             $customer_id = Yii::app()->user->id;
             $command->bindParam(':branch_id', $Branch_Id, PDO::PARAM_INT);
+            $command->bindParam(':FROM_DATE', $from_Date, PDO::PARAM_INT);
+            $command->bindParam(':TO_DATE', $to_Date, PDO::PARAM_INT);
+
 //            $command->bindParam(':from_Date', $from_Date, PDO::PARAM_INT);
 //            $command->bindParam(':to_Date', $to_Date, PDO::PARAM_INT);
 
@@ -66,6 +73,9 @@ class BranchDashboard_helper {
             $reader = $command->query();
 
             foreach ($reader as $row) {
+                if ($row['Average_Ratting'] == null) {
+                    return 0;
+                }
                 return $row['Average_Ratting'];
             }
         } catch (Exception $ex) {
@@ -84,13 +94,17 @@ class BranchDashboard_helper {
             $sqlStatement = "SELECT COUNT(`option_value`) AS Total_Positive_Feedback FROM "
                     . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
                     . " WHERE `branch_id` = :branch_id )"
-                    . " AND `option_value`>2";
+                    . " AND `option_value`>2 AND DATE(`created_at`) BETWEEN DATE(:FROM_DATE)"
+                    . " AND DATE(:TO_DATE)";
 
 
             $command = $connection->createCommand($sqlStatement);
 
             $customer_id = Yii::app()->user->id;
             $command->bindParam(':branch_id', $Branch_Id, PDO::PARAM_INT);
+            $command->bindParam(':FROM_DATE', $from_Date, PDO::PARAM_INT);
+            $command->bindParam(':TO_DATE', $to_Date, PDO::PARAM_INT);
+
 
             $command->execute();
 
@@ -115,12 +129,16 @@ class BranchDashboard_helper {
             $sqlStatement = "SELECT COUNT(`option_value`) AS Total_Negative_Feedback FROM "
                     . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
                     . " WHERE `branch_id` = :branch_id )"
-                    . " AND `option_value`<=2";
+                    . " AND `option_value`<=2 AND DATE(`created_at`) BETWEEN DATE(:FROM_DATE)"
+                    . " AND DATE(:TO_DATE)";
 
 
             $command = $connection->createCommand($sqlStatement);
 
             $command->bindParam(':branch_id', $Branch_Id, PDO::PARAM_INT);
+            $command->bindParam(':FROM_DATE', $from_Date, PDO::PARAM_INT);
+            $command->bindParam(':TO_DATE', $to_Date, PDO::PARAM_INT);
+
             $command->execute();
 
             $reader = $command->query();
@@ -135,7 +153,7 @@ class BranchDashboard_helper {
         return 0;
     }
 
-    public static function getTotalCustomerForBranches($from_Date, $to_Date, $Branch_Id) {
+    public static function getTotalCustomerForAllBranches($from_Date, $to_Date, $Branch_Id) {
         try {
 
 
@@ -143,11 +161,17 @@ class BranchDashboard_helper {
 
             $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer FROM "
                     . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
-                    . " WHERE `branch_id` = :branch_id )";
+                    . " WHERE `branch_id`=:branch_id) "
+                    . "AND DATE(`created_at`) BETWEEN :FROM_DATE AND :TO_DATE";
 
             $command = $connection->createCommand($sqlStatement);
 
+            $customer_id = Yii::app()->user->id;
+
             $command->bindParam(':branch_id', $Branch_Id, PDO::PARAM_INT);
+            $command->bindParam(':FROM_DATE', $from_Date, PDO::PARAM_INT);
+            $command->bindParam(':TO_DATE', $to_Date, PDO::PARAM_INT);
+
             $command->execute();
 
             $reader = $command->query();
@@ -162,7 +186,35 @@ class BranchDashboard_helper {
         return 0;
     }
 
-    public static function getTotalMALECustomerForBranches($from_Date, $to_Date, $Branch_Id) {
+    public static function getTotalCustomerForBranches($Branch_Id) {
+        try {
+            $connection = Yii::app()->db;
+
+            $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer FROM "
+                    . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
+                    . " WHERE `branch_id` = :branch_id) ";
+
+            $command = $connection->createCommand($sqlStatement);
+
+            $customer_id = Yii::app()->user->id;
+
+            $command->bindParam(':branch_id', $Branch_Id, PDO::PARAM_INT);
+
+            $command->execute();
+
+            $reader = $command->query();
+
+            foreach ($reader as $row) {
+                return $row['Total_Customer'];
+            }
+        } catch (Exception $ex) {
+            return "error, " . $ex->getMessage();
+        }
+
+        return 0;
+    }
+
+    public static function getTotalMALECustomerForBranches($Branch_Id) {
         try {
 
 
@@ -190,7 +242,7 @@ class BranchDashboard_helper {
         return 0;
     }
 
-    public static function getTotalFEMALECustomerForBranches($from_Date, $to_Date, $Branch_Id) {
+    public static function getTotalFEMALECustomerForBranches($Branch_Id) {
         try {
 
 
@@ -199,7 +251,7 @@ class BranchDashboard_helper {
             $sqlStatement = "SELECT COUNT(`gender`) AS Total_Male_Customer FROM `client_master` WHERE "
                     . "`client_id` in (SELECT `client_id` FROM `responce_master` "
                     . "WHERE `question_id` in (SELECT `id` FROM `question_master` "
-                    . "WHERE `branch_id` = :branch_id )) AND `gender`=1";
+                    . "WHERE `branch_id` = :branch_id )) AND `gender`=0";
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -218,7 +270,45 @@ class BranchDashboard_helper {
         return 0;
     }
 
-    public static function getAgeBoundsForCustomerForBranches($from_Date, $to_Date, $Branch_Id) {
+    public static function getTotalNewCustomers($Branch_Id) {
+        try {
+
+            return BranchDashboard_helper::getTotalCustomerForBranches($Branch_Id) - BranchDashboard_helper::getTotalRepeateCustomers($Branch_Id);
+        } catch (Exception $ex) {
+            return "error, " . $ex->getMessage();
+        }
+
+        return 0;
+    }
+
+    public static function getTotalRepeateCustomers($Branch_Id) {
+        try {
+
+
+            $connection = Yii::app()->db;
+
+            $sqlStatement = "select COUNT(*) AS TotalReapet from (SELECT `client_id` FROM `responce_master`"
+                    . " WHERE `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id` = :branch_id) "
+                    . "GROUP BY `client_id` HAVING COUNT(`client_id`)>1) AS Repeate_Customer ";
+
+            $command = $connection->createCommand($sqlStatement);
+
+            $command->bindParam(':branch_id', $Branch_Id, PDO::PARAM_INT);
+            $command->execute();
+
+            $reader = $command->query();
+
+            foreach ($reader as $row) {
+                return $row['TotalReapet'];
+            }
+        } catch (Exception $ex) {
+            return "error, " . $ex->getMessage();
+        }
+
+        return 0;
+    }
+
+    public static function getAgeBoundsForCustomerForBranches($Branch_Id) {
         try {
 
 
@@ -227,8 +317,8 @@ class BranchDashboard_helper {
             $sqlStatement = "SELECT
                               CASE
                              WHEN age >= 0 AND age <= 18 THEN '0-18'
-                              WHEN age >= 18 AND age <= 28 THEN '18-28'
-                              WHEN age >=28 THEN '28+'
+                              WHEN age >= 18 AND age <= 24 THEN '18-24'
+                              WHEN age >=24 THEN '24+'
                             END AS ageband,
                             COUNT(*) As Total_customers
                             FROM (
@@ -236,30 +326,27 @@ class BranchDashboard_helper {
                             (DATE_FORMAT(NOW(), '00-%m-%d') < DATE_FORMAT(`dob`, '00-%m-%d')) 
                             AS age FROM `client_master` WHERE `client_id` IN 
                             (SELECT `client_id` FROM `responce_master` WHERE `question_id` in 
-                            (SELECT `id` FROM `question_master` WHERE `branch_id` = :branch_id )))
+                            (SELECT `id` FROM `question_master` WHERE `branch_id`=:branch_id )))
                             AS TBL GROUP BY ageband";
 
             $command = $connection->createCommand($sqlStatement);
 
             $command->bindParam(':branch_id', $Branch_Id, PDO::PARAM_INT);
+
             $command->execute();
 
             $reader = $command->query();
 
             foreach ($reader as $row) {
-                echo '<tr>
-                            <td>
-                            ' . $row['ageband'] . '
-                            </td>
-                            <td>
-                            ' . $row['Total_customers'] . '
-                            </td>
-                        </tr>';
+                ?>
+
+                <td class="fa-border"><button class="btn btn-danger padd-adj" type="button"><?php echo $row['Total_customers']; ?></button>
+                    <?php echo $row['ageband'] ?></td>
+                <?php
             }
         } catch (Exception $ex) {
             return "error, " . $ex->getMessage();
         }
-
         return 0;
     }
 

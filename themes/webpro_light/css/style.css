@@ -7,7 +7,7 @@ html, body {
 	height: 100%;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 100;
-	background: #efefef;
+	background: #f5f4f4; 
 	color: #424a4d;
 }
 h1, h2, h3, h4, h5, h6 {
@@ -922,7 +922,7 @@ body.container {
 }
 .login-container .block-web {
 	border: 0 none;
-	box-shadow: -21px 32px 40px rgba(0, 0, 0, 0.2);
+	box-shadow: 0px 1px 16px rgba(0, 0, 0, 0.5);
 	margin-bottom: 20px;
 	overflow: hidden;
 	padding: 0;

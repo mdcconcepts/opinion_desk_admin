@@ -39,12 +39,25 @@ class AssetsHelperForCustomTemplate {
             ?>
             <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
             <!-- Include all compiled plugins (below), or include individual files as needed --> 
-            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery-1.8.3.min.js"></script> 
+
+
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/amcharts.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/serial.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/themes/light.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/branch_dashboard_helper.js"></script> 
+
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/data-tables/jquery.dataTables.js"></script> 
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/data-tables/DT_bootstrap.js"></script> 
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/data-tables/dynamic_table_init.js"></script>
-            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/edit-table/edit-table.js"></script>
 
+            <?php
+            /**
+              <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery-1.8.3.min.js"></script>
+              <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/edit-table/edit-table.js"></script>
+
+             * 
+             */
+            ?>
             <script>
                 jQuery(document).ready(function () {
                     EditableTable.init();
@@ -53,6 +66,7 @@ class AssetsHelperForCustomTemplate {
                     });
                 });
             </script>
+
             <?php
         } elseif (Yii::app()->controller->id == 'questionMaster_Child') {
             ?>
@@ -91,6 +105,16 @@ class AssetsHelperForCustomTemplate {
                     });
                 });
             </script>
+            <?php
+        } else {
+            ?>
+            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+            <!-- Include all compiled plugins (below), or include individual files as needed --> 
+
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/amcharts.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/serial.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/themes/light.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/dashboard_helper.js"></script> 
             <?php
         }
     }

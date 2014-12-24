@@ -74,6 +74,7 @@ class TabletMaster extends CActiveRecord {
             'password' => 'Password',
             'created_at' => 'Created At',
             'update_at' => 'Update At',
+            'update_token' => 'Update Token',
             'branch_id' => 'Branch',
         );
     }
@@ -124,12 +125,14 @@ class TabletMaster extends CActiveRecord {
         $userId = 0;
 
         if ($this->isNewRecord)
-            $this->created_at = new CDbExpression('NOW()');
+            $this->created_at = date('Y-m-d H:i:s');
 
-        $this->update_at = new CDbExpression('NOW()');
+        $this->update_at = date('Y-m-d H:i:s');
         if (null != Yii::app()->user->id)
             $userId = (int) Yii::app()->user->id;
 
+        $this->update_token = TabletUpdateTokenHelper::generate_random_password();
+//        TabletUpdateTokenHelper::updateTableToken($this->id);
 //        if ($this->isNewRecord) {
 //            $this->password = $this->hashPassword($this->password);
 //        } else {

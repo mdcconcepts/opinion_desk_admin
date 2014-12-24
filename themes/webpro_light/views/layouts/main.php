@@ -34,9 +34,13 @@
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/knob/jquery.knob.min.js"></script> 
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/demo-slider/demo-slider.js"></script>
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
+        <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> 
         <script type="text/javascript">
             $('.default-date-picker').datepicker({
                 format: 'yyyy-mm-dd'
+            });
+            $('.colorpicker-default').colorpicker({
+                format: 'hex'
             });
         </script>
         <?php AssetsHelperForCustomTemplate::getJSForController() ?>

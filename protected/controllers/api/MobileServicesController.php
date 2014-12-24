@@ -39,7 +39,7 @@ class MobileServicesController extends Controller {
         }
 
         if ($Tablet->joining_date == null) {
-            $Tablet->joining_date = new CDbExpression('NOW()');
+            $Tablet->joining_date = date('Y-m-d H:i:s');
         }
         $transaction = Yii::app()->db->beginTransaction();
         try {
@@ -55,8 +55,8 @@ class MobileServicesController extends Controller {
                         'tablet_id' => $Tablet->id,
                         'first_name' => $Tablet->first_name_user,
                         'last_name' => $Tablet->last_name_user,
-                        'user_profile_image_url' => $Tablet->user_profile_image_url,
-                        'joining_date' => $Tablet->joining_date,
+                        'joining_date' => date(' jS F Y', strtotime($Tablet->joining_date)),
+                        'app_theme_color' => $this->getThemeColorForTablet($Tablet->branch_id)
                     ]
                 ];
                 $this->_sendResponse(200, $Responce);
@@ -81,6 +81,74 @@ class MobileServicesController extends Controller {
             'Error' => 'Unknown Error.',
         ];
         $this->_sendResponse(401, $Responce);
+    }
+
+    /**
+     * This method is used for authenticating user
+     */
+    public function actionCheckClientMobile() {
+        $Tablet = $this->_checkAuth();
+
+        if ($Tablet->is_login == 0) {
+            $Responce = [
+                'Status_code' => '503',
+                'Success' => 'False',
+                'Message' => 'Request Fail!',
+                'Error' => 'Device is logged out!',
+            ];
+            $this->_sendResponse(401, $Responce);
+        }
+
+
+        $Post_Mobile = Yii::app()->request->getPost('Mobile_No');
+
+        $Client = ClientMaster::model()->findAll(array(
+            'condition' => 'mobile_no = :mobile_no',
+            'params' => array(':mobile_no' => $Post_Mobile)
+        ));
+
+        if ($Client[0] === null) {
+            // Error: Unauthorized
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'Success',
+                'Message' => 'Customer of this number not found !',
+            ];
+            $this->_sendResponse(200, $Responce);
+        }
+
+        $Responce = [
+            'Status_code' => '200',
+            'Success' => 'False',
+            'Message' => 'Customer found !',
+            'client_id' => $Client[0]->client_id,
+        ];
+        $this->_sendResponse(200, $Responce);
+    }
+
+    private function getThemeColorForTablet($branch_id) {
+        try {
+
+
+            $connection = Yii::app()->db;
+
+            $sqlStatement = "SELECT `theme_color` FROM `profiles` WHERE `user_id`"
+                    . " in (SELECT `customer_id` FROM `branch_master` WHERE `id`=:branch_id)";
+
+            $command = $connection->createCommand($sqlStatement);
+
+            $command->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
+
+            $command->execute();
+
+            $reader = $command->query();
+
+            foreach ($reader as $row) {
+                return $row['theme_color'];
+            }
+        } catch (Exception $ex) {
+            return "error, " . $ex->getMessage();
+        }
     }
 
     /**
@@ -145,6 +213,17 @@ class MobileServicesController extends Controller {
                 'Success' => 'False',
                 'Message' => 'Request Fail!',
                 'Error' => 'Device is logged out!',
+            ];
+            $this->_sendResponse(401, $Responce);
+        }
+
+        $Post_Token = Yii::app()->request->getPost('Token');
+
+        if ($Post_Token == $Tablet->update_token) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'True',
+                'Message' => 'Already up to date, no need to update',
             ];
             $this->_sendResponse(401, $Responce);
         }
@@ -243,6 +322,8 @@ class MobileServicesController extends Controller {
 
         $Post_Questions = CJSON::decode(Yii::app()->request->getPost('Questions'));
 
+        $Post_Testimonial = CJSON::decode(Yii::app()->request->getPost('Testimonial'));
+
         $this->validateBasicClientPostResponce($Post_Client);
 
         $Post_Custom_Fields_Client = $Post_Client['Custom_Fields'];
@@ -263,6 +344,9 @@ class MobileServicesController extends Controller {
 
                 $this->saveQuestionResponceData($Client->getPrimaryKey(), $Post_Questions);
 
+                if (isset($Post_Testimonial))
+                    $this->saveTestimonialResponceData($Client->getPrimaryKey(), $Post_Testimonial);
+
                 $transaction->commit();
 
                 $Responce = [
@@ -273,6 +357,60 @@ class MobileServicesController extends Controller {
 
                 $this->_sendResponse(200, $Responce);
             }
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            $Responce = [
+                'Status_code' => $e->getCode(),
+                'Success' => 'Fail',
+                'Message' => 'Exception On Save',
+                'Error' => $e->getMessage()
+            ];
+            $this->_sendResponse(404, $Responce);
+        }
+        $Responce = [
+            'Status_code' => '400',
+            'Success' => 'Fail',
+            'Message' => 'Unknown Responce',
+        ];
+        $this->_sendResponse(400, $Responce);
+    }
+
+    public function actionpostResponseExistingClientData() {
+
+        $Tablet = $this->_checkAuth();
+
+        $Post_Client_Id = Yii::app()->request->getPost('Client_Id');
+
+        $Post_Questions = CJSON::decode(Yii::app()->request->getPost('Questions'));
+
+        $Post_Testimonial = CJSON::decode(Yii::app()->request->getPost('Testimonial'));
+
+//        $this->validateBasicClientPostResponce($Post_Client);
+
+        $Post_Custom_Fields_Client = $Post_Client['Custom_Fields'];
+
+
+
+
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+
+            $this->saveCustomFieldData($Post_Client_Id, $Post_Custom_Fields_Client);
+
+            $this->saveQuestionResponceData($Post_Client_Id, $Post_Questions);
+
+            if (isset($Post_Testimonial))
+                $this->saveTestimonialResponceData($Post_Client_Id, $Post_Testimonial);
+
+            $transaction->commit();
+
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'True',
+                'Message' => 'Client Response Saved !',
+            ];
+
+            $this->_sendResponse(200, $Responce);
         } catch (Exception $e) {
             $transaction->rollBack();
             $Responce = [
@@ -306,24 +444,44 @@ class MobileServicesController extends Controller {
 
                 if ($isFirst) {
                     $query = "INSERT INTO `opinion_desk_db`.`responce_master` "
-                            . "(`id`, `option_value`, `responce_text`, `responce_audio_url`, "
-                            . "`responce_vedio_url`,  `question_id`, `client_id`) "
+                            . "(`id`, `option_value`, `question_id`, `client_id`,`created_at`) "
                             . "VALUES (NULL, " . $Post_Questions[$index]['option_value'] . ", "
-                            . "'" . $Post_Questions[$index]['responce_text'] . "' ,"
-                            . " '" . $Post_Questions[$index]['responce_audio_url'] . "', "
-                            . "'" . $Post_Questions[$index]['responce_vedio_url'] . "', "
                             . "'" . $Post_Questions[$index]['question_id'] . "',"
-                            . " '" . $client_id . "')";
+                            . " '" . $client_id . "','" . date('Y-m-d H:i:s') . "')";
                     $isFirst = false;
                 } else {
                     $query.=" , (NULL, " . $Post_Questions[$index]['option_value'] . ", "
-                            . "'" . $Post_Questions[$index]['responce_text'] . "' ,"
-                            . " '" . $Post_Questions[$index]['responce_audio_url'] . "', "
-                            . "'" . $Post_Questions[$index]['responce_vedio_url'] . "', "
                             . "'" . $Post_Questions[$index]['question_id'] . "',"
-                            . " '" . $client_id . "')";
+                            . " '" . $client_id . "','" . date('Y-m-d H:i:s') . "')";
                 }
             }
+
+            $connection = Yii::app()->db;
+
+            $command = $connection->createCommand($query);
+
+            $command->execute();
+        }
+    }
+
+    /**
+     * This method is used for saving question responce in database.
+     * @param type $client_id Client id of user just enter into the system.
+     * @param type $Post_Questions This is Post Question Responce Array
+     */
+    private function saveTestimonialResponceData($client_id, $Post_Testimonial) {
+
+        if ($this->validateBasicTestimonialPostResponce($Post_Testimonial)) {
+//            if (!isset($Post_Testimonial['responce_text']) && 
+//            !isset($Post_Testimonial['responce_audio_url']) &&
+//             !isset($Post_Testimonial['responce_vedio_url'])) {
+
+            $query = "INSERT INTO `testimonial_response_table`(`id`, `responce_text`, "
+                    . "`responce_audio_url`, `responce_vedio_url`, `client_id`, `created_at`) VALUES "
+                    . "(NULL, '" . $Post_Testimonial['responce_text'] . "', "
+                    . "'" . $Post_Testimonial['responce_audio_url'] . "', "
+                    . "'" . $Post_Testimonial['responce_vedio_url'] . "',"
+                    . " '" . $client_id . "','" . date('Y-m-d H:i:s') . "')";
 
             $connection = Yii::app()->db;
 
@@ -435,6 +593,18 @@ class MobileServicesController extends Controller {
     }
 
     /**
+     * This method is used for validating single question
+     * @param type $Post_Question this is question parameter singlton object
+     */
+    private function validateBasicTestimonialPostResponce($Post_Testimonial) {
+
+        if (!isset($Post_Testimonial['responce_text']) && !isset($Post_Testimonial['responce_audio_url']) && !isset($Post_Testimonial['responce_vedio_url'])) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * This function is used for validating custom fields
      * @param type $Post_Custom_Field_Client This is custom Client Field Post
      */
@@ -465,6 +635,7 @@ class MobileServicesController extends Controller {
      * @return void
      */
     private function _checkAuth() {
+        date_default_timezone_set("Asia/Kolkata");
         /**
          * This Header is used for getting data for authentication
          */

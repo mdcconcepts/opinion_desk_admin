@@ -131,7 +131,7 @@ class QuestionMaster extends CActiveRecord {
         } else {
             
         }
-
+        TabletUpdateTokenHelper::updateForQuestions($this->branch_id);
 
         return parent::beforeSave();
     }

@@ -194,6 +194,8 @@
 
                                                         </select>
                                                         <?php
+                                                    } elseif ($field->varname == "theme_color") {
+                                                        echo $form->textField($profile, $field->varname, array('class' => 'colorpicker-default form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));
                                                     } else {
                                                         echo $form->textField($profile, $field->varname, array('class' => 'form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));
                                                     }

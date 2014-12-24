@@ -37,7 +37,7 @@
   <?php $this->endWidget(); ?>
  * 
  */
-?>
+?> 
 <div class="row">
     <div class="col-md-12">
         <div class="block-web full">

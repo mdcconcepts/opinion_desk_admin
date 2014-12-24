@@ -3,6 +3,7 @@
     <?php require(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_head.php'); ?>
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-datepicker/css/datepicker.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-datepicker/css/datepicker.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-colorpicker/css/colorpicker.css" />
     <body>
         <!--        <div class="login-container">
                     <div class="middle-login">
@@ -50,9 +51,13 @@
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
         <script type="text/javascript"  src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-wizard/bootstrap-wizard.min.js"></script> 
         <script type="text/javascript"  src="<?php echo Yii::app()->theme->baseUrl; ?>/js/form-wizard.js"></script> 
+        <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> 
         <script type="text/javascript">
             $('.default-date-picker').datepicker({
                 format: 'yyyy-mm-dd'
+            });
+            $('.colorpicker-default').colorpicker({
+                format: 'hex'
             });
         </script>
     </body>

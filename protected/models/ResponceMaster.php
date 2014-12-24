@@ -32,8 +32,6 @@ class ResponceMaster extends CActiveRecord {
             array('option_value, created_at, question_id, client_id', 'required'),
             array('question_id, client_id', 'numerical', 'integerOnly' => true),
             array('option_value', 'numerical'),
-            array('responce_text', 'length', 'max' => 200),
-            array('responce_audio_url, responce_vedio_url', 'length', 'max' => 45),
             /*
               //Example username
               array('username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u',
@@ -43,7 +41,7 @@ class ResponceMaster extends CActiveRecord {
              */
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, option_value, responce_text, responce_audio_url, responce_vedio_url, created_at, question_id, client_id', 'safe', 'on' => 'search'),
+            array('id, option_value,  created_at, question_id, client_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -65,9 +63,6 @@ class ResponceMaster extends CActiveRecord {
         return array(
             'id' => 'Responce',
             'option_value' => 'Option Value',
-            'responce_text' => 'Responce Text',
-            'responce_audio_url' => 'Responce Audio Url',
-            'responce_vedio_url' => 'Responce Vedio Url',
             'created_at' => 'Created At',
             'question_id' => 'Question',
             'client_id' => 'Client',
@@ -93,9 +88,6 @@ class ResponceMaster extends CActiveRecord {
 
         $criteria->compare('id', $this->id);
         $criteria->compare('option_value', $this->option_value);
-        $criteria->compare('responce_text', $this->responce_text, true);
-        $criteria->compare('responce_audio_url', $this->responce_audio_url, true);
-        $criteria->compare('responce_vedio_url', $this->responce_vedio_url, true);
         $criteria->compare('created_at', $this->created_at, true);
         $criteria->compare('question_id', $this->question_id);
         $criteria->compare('client_id', $this->client_id);

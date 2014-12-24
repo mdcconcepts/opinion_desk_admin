@@ -78,7 +78,7 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
                      */
                     $transaction->commit();
                     Yii::app()->user->setFlash($messageType, $message);
-                    $this->redirect(array('index', 'id' => $model->id));
+                    $this->redirect(array('index'));
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
@@ -133,7 +133,7 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
                 if ($model->save()) {
                     $transaction->commit();
                     Yii::app()->user->setFlash($messageType, $message);
-                    $this->redirect(array('view', 'id' => $model->id));
+                    $this->redirect(array('index'));
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
@@ -143,7 +143,7 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
 
             $model->attributes = $_POST['CustomerCustomFieldAssignmentTable'];
             if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
+                $this->redirect(array('index'));
         }
 
         $this->render('update', array(

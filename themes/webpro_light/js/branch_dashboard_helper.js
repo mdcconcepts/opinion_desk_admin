@@ -80,41 +80,60 @@ $('input[name="dashboard_radio_feedback_index"]').on("change", function () {
                 if (data.Success == "True") {
 
                     var chart = AmCharts.makeChart("dashboard_graph", {
-                        "type": "serial",
-                        "theme": "light",
-                        "dataProvider": data.dataProvider,
-                        "valueAxes": [{
-                                "gridColor": "#FFFFFF",
-                                "gridAlpha": 0.2,
-                                "dashLength": 0
-                            }],
-                        "gridAboveGraphs": true,
-                        "startDuration": 1,
-                        "graphs": [{
-                                "balloonText": "[[category]]: <b>[[value]]</b>",
-                                "fillAlphas": 0.8,
-                                "lineAlpha": 0.2,
-                                "type": "column",
-                                "valueField": "visits"
-                            }],
-                        "chartCursor": {
-                            "categoryBalloonEnabled": false,
-                            "cursorAlpha": 0,
-                            "zoomable": false
+                        type: "stock",
+                        "theme": "none",
+                        pathToImages: "http://www.amcharts.com/lib/3/images/",
+                        categoryAxesSettings: {
+                            minPeriod: "mm"
                         },
-                        "categoryField": "country",
-                        "categoryAxis": {
-                            "gridPosition": "start",
-                            "gridAlpha": 0,
-                            "tickPosition": "start",
-                            "tickLength": 20
+                        dataSets: [{
+                                color: "#b0de09",
+                                fieldMappings: [{
+                                        fromField: "value",
+                                        toField: "value"
+                                    }, {
+                                        fromField: "volume",
+                                        toField: "volume"
+                                    }],
+                                dataProvider: data.dataProvider,
+                                categoryField: "date"
+                            }],
+                        panels: [{
+                                showCategoryAxis: false,
+                                title: "Value",
+                                percentHeight: 70,
+                                stockGraphs: [{
+                                        id: "g1",
+                                        valueField: "value",
+                                        type: "smoothedLine",
+                                        lineThickness: 2,
+                                        bullet: "round"
+                                    }],
+                                stockLegend: {
+                                    valueTextRegular: " ",
+                                    markerType: "none"
+                                }
+                            },
+                            {
+                                title: "Volume",
+                                percentHeight: 30,
+                                stockGraphs: [{
+                                        valueField: "volume",
+                                        type: "column",
+                                        cornerRadiusTop: 2,
+                                        fillAlphas: 1
+                                    }],
+                                stockLegend: {
+                                    valueTextRegular: " ",
+                                    markerType: "none"
+                                }
+                            }
+                        ],
+                        chartCursorSettings: {
+                            valueBalloonsEnabled: true
                         },
-                        "exportConfig": {
-                            "menuTop": 0,
-                            "menuItems": [{
-                                    "icon": '/lib/3/images/export.png',
-                                    "format": 'png'
-                                }]
+                        panelsSettings: {
+                            usePrefixes: true
                         }
                     });
 
@@ -136,45 +155,64 @@ var data = {
 };
 jQuery.post(postTo, data,
         function (data) {
-
+ 
             if (data.Success == "True") {
 
                 var chart = AmCharts.makeChart("dashboard_graph", {
-                    "type": "serial",
-                    "theme": "light",
-                    "dataProvider": data.dataProvider,
-                    "valueAxes": [{
-                            "gridColor": "#FFFFFF",
-                            "gridAlpha": 0.2,
-                            "dashLength": 0
-                        }],
-                    "gridAboveGraphs": true,
-                    "startDuration": 1,
-                    "graphs": [{
-                            "balloonText": "[[category]]: <b>[[value]]</b>",
-                            "fillAlphas": 0.8,
-                            "lineAlpha": 0.2,
-                            "type": "column",
-                            "valueField": "visits"
-                        }],
-                    "chartCursor": {
-                        "categoryBalloonEnabled": false,
-                        "cursorAlpha": 0,
-                        "zoomable": false
+                    type: "stock",
+                    "theme": "none",
+                    pathToImages: "http://www.amcharts.com/lib/3/images/",
+                    categoryAxesSettings: {
+                        minPeriod: "mm"
                     },
-                    "categoryField": "country",
-                    "categoryAxis": {
-                        "gridPosition": "start",
-                        "gridAlpha": 0,
-                        "tickPosition": "start",
-                        "tickLength": 20
+                    dataSets: [{
+                            color: "#b0de09",
+                            fieldMappings: [{
+                                    fromField: "value",
+                                    toField: "value"
+                                }, {
+                                    fromField: "volume",
+                                    toField: "volume"
+                                }],
+                            dataProvider: data.dataProvider,
+                            categoryField: "date"
+                        }],
+                    panels: [{
+                            showCategoryAxis: false,
+                            title: "Value",
+                            percentHeight: 70,
+                            stockGraphs: [{
+                                    id: "g1",
+                                    valueField: "value",
+                                    type: "smoothedLine",
+                                    lineThickness: 2,
+                                    bullet: "round"
+                                }],
+                            stockLegend: {
+                                valueTextRegular: " ",
+                                markerType: "none"
+                            }
+                        },
+                        {
+                            title: "Volume",
+                            percentHeight: 30,
+                            stockGraphs: [{
+                                    valueField: "volume",
+                                    type: "column",
+                                    cornerRadiusTop: 2,
+                                    fillAlphas: 1
+                                }],
+                            stockLegend: {
+                                valueTextRegular: " ",
+                                markerType: "none"
+                            }
+                        }
+                    ],
+                    chartCursorSettings: {
+                        valueBalloonsEnabled: true
                     },
-                    "exportConfig": {
-                        "menuTop": 0,
-                        "menuItems": [{
-                                "icon": '/lib/3/images/export.png',
-                                "format": 'png'
-                            }]
+                    panelsSettings: {
+                        usePrefixes: true
                     }
                 });
 
@@ -457,8 +495,8 @@ $('input[name="dashboard_radio_Female_Male_index"]').on("change", function () {
                         }
                     });
 
-                    chart.addListener("dataUpdated", zoomChart);
-                    chart.zoomToIndexes(chart.dataProvider.length - 20, chart.dataProvider.length - 1);
+//                    chart.addListener("dataUpdated", zoomChart);
+//                    chart.zoomToIndexes(chart.dataProvider.length - 20, chart.dataProvider.length - 1);
 
                 } else if (data.Success == "False") {
 
@@ -534,8 +572,8 @@ jQuery.post(postTo, data,
                     }
                 });
 
-                chart.addListener("dataUpdated", zoomChart);
-                chart.zoomToIndexes(chart.dataProvider.length - 20, chart.dataProvider.length - 1);
+//                chart.addListener("dataUpdated", zoomChart);
+//                chart.zoomToIndexes(chart.dataProvider.length - 20, chart.dataProvider.length - 1);
 
             } else if (data.Success == "False") {
 

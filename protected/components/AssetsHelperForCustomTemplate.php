@@ -44,6 +44,7 @@ class AssetsHelperForCustomTemplate {
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/amcharts.js"></script> 
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/serial.js"></script> 
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/themes/light.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/amstock.js"></script> 
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/branch_dashboard_helper.js"></script> 
 
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/data-tables/jquery.dataTables.js"></script> 
@@ -114,6 +115,7 @@ class AssetsHelperForCustomTemplate {
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/amcharts.js"></script> 
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/serial.js"></script> 
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/themes/light.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/amcharts/amstock.js"></script> 
             <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/dashboard_helper.js"></script> 
             <?php
         }

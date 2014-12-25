@@ -77,44 +77,64 @@ $('input[name="dashboard_radio_feedback_index"]').on("change", function () {
     jQuery.post(postTo, data,
             function (data) {
 
+                console.log(data.dataProvider);
                 if (data.Success == "True") {
 
                     var chart = AmCharts.makeChart("dashboard_graph", {
-                        "type": "serial",
-                        "theme": "light",
-                        "dataProvider": data.dataProvider,
-                        "valueAxes": [{
-                                "gridColor": "#FFFFFF",
-                                "gridAlpha": 0.2,
-                                "dashLength": 0
-                            }],
-                        "gridAboveGraphs": true,
-                        "startDuration": 1,
-                        "graphs": [{
-                                "balloonText": "[[category]]: <b>[[value]]</b>",
-                                "fillAlphas": 0.8,
-                                "lineAlpha": 0.2,
-                                "type": "column",
-                                "valueField": "visits"
-                            }],
-                        "chartCursor": {
-                            "categoryBalloonEnabled": false,
-                            "cursorAlpha": 0,
-                            "zoomable": false
+                        type: "stock",
+                        "theme": "none",
+                        pathToImages: "http://www.amcharts.com/lib/3/images/",
+                        categoryAxesSettings: {
+                            minPeriod: "mm"
                         },
-                        "categoryField": "country",
-                        "categoryAxis": {
-                            "gridPosition": "start",
-                            "gridAlpha": 0,
-                            "tickPosition": "start",
-                            "tickLength": 20
+                        dataSets: [{
+                                color: "#b0de09",
+                                fieldMappings: [{
+                                        fromField: "value",
+                                        toField: "value"
+                                    }, {
+                                        fromField: "volume",
+                                        toField: "volume"
+                                    }],
+                                dataProvider: data.dataProvider,
+                                categoryField: "date"
+                            }],
+                        panels: [{
+                                showCategoryAxis: false,
+                                title: "Value",
+                                percentHeight: 70,
+                                stockGraphs: [{
+                                        id: "g1",
+                                        valueField: "value",
+                                        type: "smoothedLine",
+                                        lineThickness: 2,
+                                        bullet: "round"
+                                    }],
+                                stockLegend: {
+                                    valueTextRegular: " ",
+                                    markerType: "none"
+                                }
+                            },
+                            {
+                                title: "Volume",
+                                percentHeight: 30,
+                                stockGraphs: [{
+                                        valueField: "volume",
+                                        type: "column",
+                                        cornerRadiusTop: 2,
+                                        fillAlphas: 1
+                                    }],
+                                stockLegend: {
+                                    valueTextRegular: " ",
+                                    markerType: "none"
+                                }
+                            }
+                        ],
+                        chartCursorSettings: {
+                            valueBalloonsEnabled: true
                         },
-                        "exportConfig": {
-                            "menuTop": 0,
-                            "menuItems": [{
-                                    "icon": '/lib/3/images/export.png',
-                                    "format": 'png'
-                                }]
+                        panelsSettings: {
+                            usePrefixes: true
                         }
                     });
 
@@ -140,41 +160,60 @@ jQuery.post(postTo, data,
             if (data.Success == "True") {
 
                 var chart = AmCharts.makeChart("dashboard_graph", {
-                    "type": "serial",
-                    "theme": "light",
-                    "dataProvider": data.dataProvider,
-                    "valueAxes": [{
-                            "gridColor": "#FFFFFF",
-                            "gridAlpha": 0.2,
-                            "dashLength": 0
-                        }],
-                    "gridAboveGraphs": true,
-                    "startDuration": 1,
-                    "graphs": [{
-                            "balloonText": "[[category]]: <b>[[value]]</b>",
-                            "fillAlphas": 0.8,
-                            "lineAlpha": 0.2,
-                            "type": "column",
-                            "valueField": "visits"
-                        }],
-                    "chartCursor": {
-                        "categoryBalloonEnabled": false,
-                        "cursorAlpha": 0,
-                        "zoomable": false
+                    type: "stock",
+                    "theme": "none",
+                    pathToImages: "http://www.amcharts.com/lib/3/images/",
+                    categoryAxesSettings: {
+                        minPeriod: "mm"
                     },
-                    "categoryField": "country",
-                    "categoryAxis": {
-                        "gridPosition": "start",
-                        "gridAlpha": 0,
-                        "tickPosition": "start",
-                        "tickLength": 20
+                    dataSets: [{
+                            color: "#b0de09",
+                            fieldMappings: [{
+                                    fromField: "value",
+                                    toField: "value"
+                                }, {
+                                    fromField: "volume",
+                                    toField: "volume"
+                                }],
+                            dataProvider: data.dataProvider,
+                            categoryField: "date"
+                        }],
+                    panels: [{
+                            showCategoryAxis: false,
+                            title: "Value",
+                            percentHeight: 70,
+                            stockGraphs: [{
+                                    id: "g1",
+                                    valueField: "value",
+                                    type: "smoothedLine",
+                                    lineThickness: 2,
+                                    bullet: "round"
+                                }],
+                            stockLegend: {
+                                valueTextRegular: " ",
+                                markerType: "none"
+                            }
+                        },
+                        {
+                            title: "Volume",
+                            percentHeight: 30,
+                            stockGraphs: [{
+                                    valueField: "volume",
+                                    type: "column",
+                                    cornerRadiusTop: 2,
+                                    fillAlphas: 1
+                                }],
+                            stockLegend: {
+                                valueTextRegular: " ",
+                                markerType: "none"
+                            }
+                        }
+                    ],
+                    chartCursorSettings: {
+                        valueBalloonsEnabled: true
                     },
-                    "exportConfig": {
-                        "menuTop": 0,
-                        "menuItems": [{
-                                "icon": '/lib/3/images/export.png',
-                                "format": 'png'
-                            }]
+                    panelsSettings: {
+                        usePrefixes: true
                     }
                 });
 
@@ -186,3 +225,151 @@ jQuery.post(postTo, data,
 
 
         }, 'json');
+
+var chartData = generateChartData();
+
+console.log(chartData)
+
+
+// generate some random data, quite different range
+//function generateChartData() {
+//    var chartData = [];
+//    var firstDate = new Date();
+//    firstDate.setDate(firstDate.getDate() - 100);
+//
+//    $Date = ['Jan', 'Feb', 'Apr', 'Mar', 'Jun', 'Jul', 'Aug', 'Sup', 'Oct', 'Nov', 'Dec'];
+//    $Date = ['2014-1-1', '2014-2-1', '2014-3-1', '2014-4-1', '2014-5-1', '2014-6-1', '2014-7-1', '2014-8-1', '2014-9-1', '2014-10-1', '2014-11-1', '2014-12-1'];
+//    for (var i = 0; i < 11; i++) {
+//        // we create date objects here. In your data, you can have date strings
+//        // and then set format of your dates using chart.dataDateFormat property,
+//        // however when possible, use date objects, as this will speed up chart rendering.
+//        var newDate = new Date(firstDate);
+//        newDate.setDate(newDate.getDate() + i);
+//
+//        var visits = Math.round(Math.random() * 40) + 100;
+//        var hits = Math.round(Math.random() * 80) + 500;
+//        var views = Math.round(Math.random() * 6000);
+//
+//        chartData.push({
+//            country: $Date[i],
+//            value: visits,
+//            volume: hits,
+////            views: views
+//        });
+//    }
+//    return chartData;
+//}
+
+//function generateChartData() {
+//    var chartData = [];
+//    var firstDate = new Date();
+//    firstDate.setDate(firstDate.getDate() - 100);
+//
+//    for (var i = 0; i < 100; i++) {
+//        // we create date objects here. In your data, you can have date strings
+//        // and then set format of your dates using chart.dataDateFormat property,
+//        // however when possible, use date objects, as this will speed up chart rendering.
+//        var newDate = new Date(firstDate);
+//        newDate.setDate(newDate.getDate() + i);
+//
+//        var a = Math.round(Math.random() * (40 + i)) + 100 + i;
+//        var b = Math.round(Math.random() * 100000000);
+//
+//        chartData.push({
+//            date: newDate,
+//            value: a,
+//            volume: b
+//        });
+//    }
+//    return chartData;
+//}
+
+//var chart = AmCharts.makeChart("dashboard_graph", {
+//    type: "stock",
+//    "theme": "none",
+//    pathToImages: "http://www.amcharts.com/lib/3/images/",
+////    categoryAxesSettings: {
+////        minPeriod: "mm"
+////    },
+//    dataSets: [{
+//            color: "#b0de09",
+//            fieldMappings: [{
+//                    fromField: "value",
+//                    toField: "value"
+//                }, {
+//                    fromField: "volume",
+//                    toField: "volume"
+//                }],
+//            dataProvider: chartData,
+//            categoryField: "country"
+//        }],
+//    panels: [{
+//            showCategoryAxis: false,
+//            title: "Value",
+//            percentHeight: 70,
+//            stockGraphs: [{
+//                    id: "g1",
+//                    valueField: "value",
+//                    type: "smoothedLine",
+//                    lineThickness: 2,
+//                    bullet: "round"
+//                }],
+//            stockLegend: {
+//                valueTextRegular: " ",
+//                markerType: "none"
+//            }
+//        },
+//        {
+//            title: "Volume",
+//            percentHeight: 30,
+//            stockGraphs: [{
+//                    valueField: "volume",
+//                    type: "column",
+//                    cornerRadiusTop: 2,
+//                    fillAlphas: 1
+//                }],
+//            stockLegend: {
+//                valueTextRegular: " ",
+//                markerType: "none"
+//            }
+//        }
+//    ],
+////    chartScrollbarSettings: {
+////        graph: "g1",
+////        usePeriod: "10mm",
+////        position: "top"
+////    },
+//    chartCursorSettings: {
+//        valueBalloonsEnabled: true
+//    },
+////    periodSelector: {
+////        position: "top",
+////        dateFormat: "YYYY-MM-DD",
+////        inputFieldWidth: 150,
+////        periods: [{
+////                period: "hh",
+////                count: 1,
+////                label: "1 hour",
+////                selected: true
+////
+////            }, {
+////                period: "hh",
+////                count: 2,
+////                label: "2 hours"
+////            }, {
+////                period: "hh",
+////                count: 5,
+////                label: "5 hour"
+////            }, {
+////                period: "hh",
+////                count: 12,
+////                label: "12 hours"
+////            }, {
+////                period: "MAX",
+////                label: "MAX"
+////            }]
+////    },
+//    panelsSettings: {
+//        usePrefixes: true
+//    }
+//});

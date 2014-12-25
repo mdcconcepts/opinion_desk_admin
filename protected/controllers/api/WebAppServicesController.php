@@ -34,7 +34,8 @@ class WebAppServicesController extends Controller {
                     $connection = Yii::app()->db;
 
                     $sqlStatement = "SELECT Week(`created_at`) AS Week,COUNT(`created_at`)
-                Total_Customer_Visit FROM `responce_master` WHERE MONTH(`created_at`)=MONTH(now()) 
+                Total_Customer_Visit,AVG(`option_value`)
+                Average_Feedback_Value FROM `responce_master` WHERE MONTH(`created_at`)=MONTH(now()) 
                 AND `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id` in
                 (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id))
                 GROUP BY Week(`created_at`)";
@@ -53,8 +54,9 @@ class WebAppServicesController extends Controller {
 
                     foreach ($reader as $row) {
                         $data = array();
-                        $data['country'] = $i++ . 'st Week';
-                        $data['visits'] = $row['Total_Customer_Visit'];
+                        $data['date'] = date("Y-m-d", strtotime(date("Y") . "W" . ($row['Week'] + 1)));
+                        $data['value'] = $row['Total_Customer_Visit'];
+                        $data['volume'] = round($row['Average_Feedback_Value'], 2);
                         array_push($dataProvider, $data);
                     }
 
@@ -80,8 +82,9 @@ class WebAppServicesController extends Controller {
 
                     $connection = Yii::app()->db;
 
-                    $sqlStatement = "SELECT MONTHNAME(`created_at`) AS MONTHNAME,COUNT(`created_at`)
-                Total_Customer_Visit FROM `responce_master` WHERE YEAR(`created_at`)=YEAR(now()) 
+                    $sqlStatement = "SELECT Month(`created_at`) AS Month,COUNT(`created_at`)
+                Total_Customer_Visit,AVG(`option_value`)
+                Average_Feedback_Value FROM `responce_master` WHERE YEAR(`created_at`)=YEAR(now()) 
                 AND `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id` in
                 (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id))
                 GROUP BY MONTH(`created_at`)";
@@ -100,8 +103,9 @@ class WebAppServicesController extends Controller {
 
                     foreach ($reader as $row) {
                         $data = array();
-                        $data['country'] = $row['MONTHNAME'];
-                        $data['visits'] = $row['Total_Customer_Visit'];
+                        $data['date'] = date("Y") . '-' . $row['Month'] . '-' . '1';
+                        $data['value'] = $row['Total_Customer_Visit'];
+                        $data['volume'] = round($row['Average_Feedback_Value'], 2);
                         array_push($dataProvider, $data);
                     }
 
@@ -129,7 +133,8 @@ class WebAppServicesController extends Controller {
                     $connection = Yii::app()->db;
 
                     $sqlStatement = "SELECT YEAR(`created_at`) AS YEAR,COUNT(`created_at`)
-                Total_Customer_Visit FROM `responce_master` WHERE 
+                Total_Customer_Visit,AVG(`option_value`)
+                Average_Feedback_Value FROM `responce_master` WHERE 
                 `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id` in
                 (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id))
                 GROUP BY YEAR(`created_at`)";
@@ -148,8 +153,9 @@ class WebAppServicesController extends Controller {
 
                     foreach ($reader as $row) {
                         $data = array();
-                        $data['country'] = $row['YEAR'];
-                        $data['visits'] = $row['Total_Customer_Visit'];
+                        $data['date'] = $row['YEAR'];
+                        $data['value'] = $row['Total_Customer_Visit'];
+                        $data['volume'] = round($row['Average_Feedback_Value'], 2);
                         array_push($dataProvider, $data);
                     }
 
@@ -195,7 +201,8 @@ class WebAppServicesController extends Controller {
                     $connection = Yii::app()->db;
 
                     $sqlStatement = "SELECT Week(`created_at`) AS Week,COUNT(`created_at`)
-                Total_Customer_Visit FROM `responce_master` WHERE MONTH(`created_at`)=MONTH(now()) 
+                Total_Customer_Visit,AVG(`option_value`)
+                Average_Feedback_Value FROM `responce_master` WHERE MONTH(`created_at`)=MONTH(now()) 
                 AND `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id`=:branch_id )
                 GROUP BY Week(`created_at`)";
 
@@ -213,8 +220,9 @@ class WebAppServicesController extends Controller {
 
                     foreach ($reader as $row) {
                         $data = array();
-                        $data['country'] = $i++ . 'st Week';
-                        $data['visits'] = $row['Total_Customer_Visit'];
+                        $data['date'] = date("Y-m-d", strtotime(date("Y") . "W" . ($row['Week'] + 1)));
+                        $data['value'] = $row['Total_Customer_Visit'];
+                        $data['volume'] = round($row['Average_Feedback_Value'], 2);
                         array_push($dataProvider, $data);
                     }
 
@@ -240,8 +248,9 @@ class WebAppServicesController extends Controller {
 
                     $connection = Yii::app()->db;
 
-                    $sqlStatement = "SELECT MONTHNAME(`created_at`) AS MONTHNAME,COUNT(`created_at`)
-                Total_Customer_Visit FROM `responce_master` WHERE YEAR(`created_at`)=YEAR(now()) 
+                    $sqlStatement = "SELECT Month(`created_at`) AS Month,COUNT(`created_at`)
+                Total_Customer_Visit,AVG(`option_value`)
+                Average_Feedback_Value FROM `responce_master` WHERE YEAR(`created_at`)=YEAR(now()) 
                 AND `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id`=:branch_id
                 )
                 GROUP BY MONTH(`created_at`)";
@@ -260,8 +269,9 @@ class WebAppServicesController extends Controller {
 
                     foreach ($reader as $row) {
                         $data = array();
-                        $data['country'] = $row['MONTHNAME'];
-                        $data['visits'] = $row['Total_Customer_Visit'];
+                        $data['date'] = date("Y") . '-' . $row['Month'] . '-' . '1';
+                        $data['value'] = $row['Total_Customer_Visit'];
+                        $data['volume'] = round($row['Average_Feedback_Value'], 2);
                         array_push($dataProvider, $data);
                     }
 
@@ -289,7 +299,8 @@ class WebAppServicesController extends Controller {
                     $connection = Yii::app()->db;
 
                     $sqlStatement = "SELECT YEAR(`created_at`) AS YEAR,COUNT(`created_at`)
-                Total_Customer_Visit FROM `responce_master` WHERE 
+                Total_Customer_Visit,AVG(`option_value`)
+                Average_Feedback_Value FROM `responce_master` WHERE 
                 `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id`=:branch_id )
                 GROUP BY YEAR(`created_at`)";
 
@@ -306,10 +317,13 @@ class WebAppServicesController extends Controller {
                     $i = 1;
 
                     foreach ($reader as $row) {
-                        $data = array();
-                        $data['country'] = $row['YEAR'];
-                        $data['visits'] = $row['Total_Customer_Visit'];
-                        array_push($dataProvider, $data);
+                        if ($row['YEAR'] != 0) {
+                            $data = array();
+                            $data['date'] = $row['YEAR'] . '-1-1';
+                            $data['value'] = $row['Total_Customer_Visit'];
+                            $data['volume'] = round($row['Average_Feedback_Value'], 2);
+                            array_push($dataProvider, $data);
+                        }
                     }
 
                     $Responce = [
@@ -350,8 +364,9 @@ class WebAppServicesController extends Controller {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "select category_name,Totoal_Visit from "
-                    . "(SELECT created_at,category_id,COUNT(*) AS Totoal_Visit "
+            $sqlStatement = "select category_name,Average_Feedback_Value from "
+                    . "(SELECT created_at,category_id,AVG(`option_value`) AS
+                         Average_Feedback_Value "
                     . "FROM `responce_master` INNER JOIN (SELECT branch_id,id, "
                     . "`category_id` FROM `question_master` WHERE  `category_id` "
                     . "IN (SELECT `id` FROM `category_master` WHERE `lob_id` IN "
@@ -401,7 +416,7 @@ class WebAppServicesController extends Controller {
             foreach ($reader as $row) {
                 $data = array();
                 $data['country'] = $row['category_name'];
-                $data['visits'] = $row['Totoal_Visit'];
+                $data['visits'] = round($row['Average_Feedback_Value'], 2);
                 array_push($dataProvider, $data);
             }
 

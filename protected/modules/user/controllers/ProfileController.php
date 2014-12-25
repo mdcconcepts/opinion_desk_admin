@@ -21,11 +21,82 @@ class ProfileController extends Controller {
         ));
     }
 
+    public function actionupload() {
+
+        if (Yii::app()->request->isPostRequest) { //change it
+            $model = User::model()->findByPK($_POST['user_id'])->profile;
+//                    Profile::model()->findAll(array(
+//                'condition' => 'user_id = :user_id',
+//                'params' => array(':user_id' => $_POST['user_id'])
+//            ));
+            $model = $model->profile;
+            $files = $_FILES['organisation_logo']['tmp_name'];
+            $fileName = $_FILES['organisation_logo']['name'];
+            $target = "upload/user_profile_images/";
+            $target = $target . basename($_FILES['organisation_logo']['name']);
+            if (move_uploaded_file($_FILES['organisation_logo']['tmp_name'], $target)) {
+                echo "successuu";
+            } else {
+                echo "error";
+            }
+//            if (move_uploaded_file($_FILES['organisation_logo']['tmp_name'], 'upload/user_profile_images/' . $fileName)) {
+//                echo "successuu";
+//            } else {
+//                echo "error";
+//            }
+
+            Yii::app()->end();
+            //$rnd = rand(0,9999);
+//                $model->attributes = $_POST['ProductImages'];
+//                $fileName = $file->getName();
+//                $model->image = $fileName;
+//                $model->product_id = $id;
+//                $model->sortorder = $_POST['ProductImages']['sortorder'];
+//                if ($model->save()) {
+//                    $files->saveAs(Yii::getPathOfAlias('webroot') . '/upload/productImage/' . $fileName); // image will uplode to rootDirectory/banner/                                                 
+//                    //thumbmail---------------start---
+//                    Yii::app()->thumb->setThumbsDirectory('/upload/productImage/original/');
+//                    Yii::app()->thumb->load(Yii::getPathOfAlias('webroot') . '/upload/productImage/' . $fileName)->resize(538, 359)->save($fileName);
+//
+//                    Yii::app()->thumb->setThumbsDirectory('/upload/productImage/thumb/');
+//                    Yii::app()->thumb->load(Yii::getPathOfAlias('webroot') . '/upload/productImage/' . $fileName)->resize('0', '110')->save($fileName);
+//
+//                    Yii::app()->thumb->setThumbsDirectory('/upload/productImage/thumb_70/');
+//                    Yii::app()->thumb->load(Yii::getPathOfAlias('webroot') . '/upload/productImage/' . $fileName)->resize('0', 70)->save($fileName);
+//
+//                    Yii::app()->user->setFlash('productImage', 'productImage has been added successfully');
+//                    $this->redirect(array('view', 'id' => $model->image_id));
+//                }
+//            }
+//            $fileName = "{$rnd}-{$uploadedFile}";  // random number + file name
+//            $model->organisation_logo = $fileName;
+//            $model->organisation_logo = CUploadedFile::getInstanceByName('organisation_logo');
+////            $fileName = "{$uploadedFile}"; //this is not required  
+////            $model->profilepic = '/images/' . $fileName; //this is also not required
+//            $model->organisation_logo = $_POST['organisation_logo'];
+//
+//            if ($model->save()) {
+//
+//                $uploadedFile->saveAs(Yii::app()->basePath . '/../images/' . $fileName);  // 
+////                $model->organisation_logo->saveAs(Yii::app()->basePath . '/../images/' . $model->profilepic);
+////                echo json_encode($model);
+////                Yii::app()->end();
+//            }
+        }
+
+
+        $this->render('upload', array(
+            'model' => $model,
+        ));
+    }
+
     /**
      * Updates a particular model.
      * If update is successful, the browser will be redirected to the 'view' page.
      */
     public function actionEdit() {
+
+
         $model = $this->loadUser();
         $profile = $model->profile;
 
@@ -38,6 +109,14 @@ class ProfileController extends Controller {
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
             $profile->attributes = $_POST['Profile'];
+
+            $target = "upload/user_profile_images/";
+            $target = $target . basename($_FILES['organisation_logo']['name']);
+            if (move_uploaded_file($_FILES['organisation_logo']['tmp_name'], $target)) {
+                $profile->organisation_logo = $target;
+            }
+//            echo $_FILES['Profile[organisation_logo]']['name'];
+//            Yii::app()->end();
 
             if ($model->validate() && $profile->validate()) {
                 $model->save();
@@ -52,6 +131,7 @@ class ProfileController extends Controller {
         $this->render('edit', array(
             'model' => $model,
             'profile' => $profile,
+//            'Uploadmodel' => $Uploadmodel
         ));
     }
 

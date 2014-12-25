@@ -3,8 +3,8 @@
         <div class = "header-seperation">
             <ul class = "nav navbar-nav">
                 <li class = "sidebar-toggle-box"> <a href = "#"><i class = "fa fa-bars"></i></a> </li>
-                <li> <a href = "index.html"><strong>WebPro</strong></a> </li>
-                <li class = "hidden-xs"> <a href = "#"><i class = "fa fa-angle-double-left"></i> Go to the front page</a> </li>
+                <li> <a href = "<?php echo Yii::app()->request->baseUrl ?>"><strong>Opinion Desk</strong></a> </li>
+                <!--<li class = "hidden-xs"> <a href = "#"><i class = "fa fa-angle-double-left"></i> Go to the front page</a> </li>-->
                 <li class = "hidden-xs">
                     <div class = "hov">
                         <div class = "btn-group"> <a data-toggle = "dropdown" href = "" class = "con"><span class = "fa fa-bell"></span><span class = "label label-danger">33</span></a>
@@ -65,22 +65,22 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class = "btn-group"> <a data-toggle = "dropdown" href = "" class = "con"><span class = "fa fa-user"></span><span class = "label label-primary">+5</span></a>
-                            <ul role = "menu" class = "dropdown-menu pull-right dropdown-profile">
-                                <li class = "title"><span class = "icon icon-user"></span>&nbsp;
-                                    &nbsp;
-                                    Welcome, John!</li>
-                                <li><a href = "#"><span class = "fa fa-gears"></span>Settings</a></li>
-                                <li><a href = "#"><span class = "fa fa-user"></span>Profile</a></li>
-                                <li><a href = "#"><span class = "fa fa-envelope"></span>Messages</a></li>
-                                <li><a href = "#"><span class = "fa fa-power-off"></span>Logout</a></li>
-                            </ul>
-                        </div>
+<!--                        <div class = "btn-group"> <a data-toggle = "dropdown" href = "" class = "con"><span class = "fa fa-user"></span><span class = "label label-primary">+5</span></a>
+<ul role = "menu" class = "dropdown-menu pull-right dropdown-profile">
+<li class = "title"><span class = "icon icon-user"></span>&nbsp;
+&nbsp;
+Welcome, John!</li>
+<li><a href = "#"><span class = "fa fa-gears"></span>Settings</a></li>
+<li><a href = "#"><span class = "fa fa-user"></span>Profile</a></li>
+<li><a href = "#"><span class = "fa fa-envelope"></span>Messages</a></li>
+<li><a href = "#"><span class = "fa fa-power-off"></span>Logout</a></li>
+</ul>
+</div>-->
                     </div>
                 </li>
-                <li class = "hidden-xs"> <form method = "post" action = "index.html" class = "searchform"><input type = "text" placeholder = "Search here..." name = "keyword" class = "form-control"></form> </li>
-                <li id = "last-one"> <a href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/logout">Log Out <i class = "fa fa-angle-double-right"></i></a> </li>
-                <li><a id = "show-right-info-bar" href = "javascript:;" class = ""><i class = "fa fa-bars"></i></a></li>
+                <!--<li class = "hidden-xs"> <form method = "post" action = "index.html" class = "searchform"><input type = "text" placeholder = "Search here..." name = "keyword" class = "form-control"></form> </li>-->
+                <li id = "last-one" style="margin-right: -41px;"> <a href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/logout">Log Out <i class = "fa fa-angle-double-right"></i></a> </li>
+                <!--<li><a id = "show-right-info-bar" href = "javascript:;" class = ""><i class = "fa fa-bars"></i></a></li>-->
             </ul><!--/nav navbar-nav-->
         </div><!--/header-seperation-->
     </div><!--/navbar-inner-->

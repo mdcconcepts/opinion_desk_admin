@@ -33,7 +33,7 @@
                             foreach ($profileFields as $field) {
                                 if ($field->varname != "batch_count") {
                                     ?>
-                                    <div class="form-group">
+                                    <div class="form-group" enctype="multipart/form-data">
                                         <?php
                                         echo $form->labelEx($profile, $field->varname, array('class' => 'col-sm-3 control-label'));
                                         ?><div class = "col-sm-9">
@@ -68,6 +68,13 @@
                                                 <?php
                                             } elseif ($field->varname == "theme_color") {
                                                 echo $form->textField($profile, $field->varname, array('class' => 'colorpicker-default form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));
+                                            } elseif ($field->varname == "organisation_logo") {
+//                                                echo $profile->organisation_logo;
+                                                ?>
+                                                <img src = "<?php echo Yii::app()->request->baseUrl . '/' . User::model()->findByPK(Yii::app()->user->id)->profile->organisation_logo; ?>"> 
+                                                <input type="file" name="organisation_logo"/>
+                                                <?php
+//                                                echo $form->fileField($profile, $field->varname, array('class' => ' form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));
                                             } else {
                                                 echo $form->textField($profile, $field->varname, array('class' => 'form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));
                                             }

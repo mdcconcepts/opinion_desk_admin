@@ -5,15 +5,16 @@
         font-size	: 11px;
     }	
 </style>
+
 <div class="row">
     <div class="col-md-12">
-        <h2><i class="fa fa-dashboard"></i> Dashboard</h2>
+        <h2><i class="fa fa-dashboard"></i> Home</h2>
     </div><!--/col-md-12--> 
 </div><!--/row--> 
 <div class="row">
     <div class="col-md-6">
         <div class="block-web">
-            <h3 class="content-header"> Your Current Setup
+            <h3 class="content-header"> Your Statistics
                 <div data-toggle="buttons" class="button-group pull-right"> 
                     <a class="btn small  border-gray active" href="javascript:;"> <span class="button-content" style=" padding: 3px; ">
                             <input type="radio" name="dashboard_radio_index" value="today">
@@ -133,7 +134,7 @@
             </h3>
             <div id="dashboard_graph" class="custom-bar-chart">
 
-                <?php // echo Dashboard_helper::getWeeklyReportForBranch(); ?>
+                <?php // echo Dashboard_helper::getWeeklyReportForBranch();  ?>
 
             </div><!--/custom-bar-chart-->
         </div><!--/block-web-->

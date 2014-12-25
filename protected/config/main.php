@@ -9,6 +9,7 @@ return array(
     'name' => 'Opinion Desk',
     'aliases' => array(
         'bootstrap' => realpath(__DIR__ . '/../extensions/yiibooster'),
+        'xupload' => realpath(__DIR__ . '/../extensions/xupload-0.5.1')
     ),
     // preloading 'log' component
     'preload' => array('log', 'bootstrap'),

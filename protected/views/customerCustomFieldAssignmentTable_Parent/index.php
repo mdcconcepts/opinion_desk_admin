@@ -12,7 +12,7 @@
                     </div>
                 <?php endif; ?>
                 <div class="btn-group" style="margin-bottom: 20px;">
-                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/customerCustomFieldAssignmentTable_Parent/create" class="btn btn-primary">
+                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/customerCustomFieldAssignmentTable_Parent/create?pId=<?php echo $pId; ?>" class="btn btn-primary">
                         Add New <i class="fa fa-plus"></i>
                     </a>
                 </div>
@@ -38,7 +38,7 @@
                             array(
                                 'class' => 'bootstrap.widgets.TbButtonColumn',
                                 'htmlOptions' => array('style' => 'width:90px'),
-                                'template' => '{update} {delete}',
+                                'template' => '{update}     {detail}',
                                 'buttons' => array
                                     (
 //                                    'detail' => array
@@ -50,20 +50,20 @@
 //                                            'class' => 'badge badge-info',
 //                                        ),
 //                                    ),
-                                    'update' => array
+                                    'detail' => array
                                         (
-                                        'label' => 'Update Branch',
-                                        'icon' => 'fa fa-pencil',
-                                        'url' => 'array("update","id"=>$data->id)',
+                                        'label' => 'View Question',
+                                        'icon' => 'fa fa-level-down',
+                                        'url' => 'array("view","id"=>$data->id,"pId"=>$_GET["pId"])',
                                         'options' => array(
                                             'class' => 'badge badge-info',
                                         ),
                                     ),
-                                    'delete' => array
+                                    'update' => array
                                         (
                                         'label' => 'Update Branch',
-                                        'icon' => 'fa fa-trash-o',
-                                        'url' => 'array("delete","id"=>$data->id)',
+                                        'icon' => 'fa fa-pencil',
+                                        'url' => 'array("update","id"=>$data->id,"pId"=>$_GET["pId"])',
                                         'options' => array(
                                             'class' => 'badge badge-info',
                                         ),

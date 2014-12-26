@@ -8,7 +8,7 @@
                         <h3 class="content-header">Update Branch</h3>
                     </div>
                     <div class="porlets-content">
-                        <?php echo $this->renderPartial('_form', array('model' => $model)); ?>
+                        <?php echo $this->renderPartial('_form', array('model' => $model, 'pId' => $pId)); ?>
                     </div><!--/porlets-content-->
                 </div><!--/block-web--> 
             </div><!--/col-md-6-->

@@ -33,7 +33,8 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
     </div>
 </div>
-<input style="display:none" class="span5" value="<?php echo Yii::app()->user->id; ?>" name="CustomerCustomFieldAssignmentTable[user_id]" id="CustomerCustomFieldAssignmentTable_user_id" type="text">
+<input style="display:none" class="span5" value="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent?pId=" . $pId); ?>" name="returnUrl" id="returnUrl" type="text">
+<input style="display:none" class="span5" value="<?php echo $_GET['pId']; ?>" name="CustomerCustomFieldAssignmentTable[branch_id]" id="CustomerCustomFieldAssignmentTable_branch_id" type="text">
 <div class="form-group">
     <?php echo $form->labelEx($model, 'customer_custom_field_id', array('class' => 'col-sm-3 control-label')); ?>
     <div class="col-sm-9">
@@ -52,7 +53,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'label' => $model->isNewRecord ? 'Create' : 'Save',
     ));
     ?>
-    <a href="<?php echo Yii::app()->request->getBaseUrl(); ?>/index.php/customerCustomFieldAssignmentTable_Parent" class="btn btn-default" >Cancel</a>
+    <a href="<?php echo Yii::app()->request->getBaseUrl(); ?>/index.php/customerCustomFieldAssignmentTable_Parent?pId=<?php echo $pId; ?>" class="btn btn-default" >Cancel</a>
 </div><!--/form-group-->
 <!--</form>-->
 <?php $this->endWidget(); ?>

@@ -6,7 +6,7 @@
  * The followings are the available columns in table 'customer_custom_field_assignment_table':
  * @property integer $id
  * @property integer $customer_custom_field_id
- * @property integer $user_id
+ * @property integer $branch_id
  */
 class CustomerCustomFieldAssignmentTable extends CActiveRecord {
 
@@ -24,8 +24,8 @@ class CustomerCustomFieldAssignmentTable extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('customer_custom_field_id, user_id', 'required'),
-            array('customer_custom_field_id, user_id', 'numerical', 'integerOnly' => true),
+            array('customer_custom_field_id, branch_id', 'required'),
+            array('customer_custom_field_id, branch_id', 'numerical', 'integerOnly' => true),
             /*
               //Example username
               array('username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u',
@@ -35,7 +35,7 @@ class CustomerCustomFieldAssignmentTable extends CActiveRecord {
              */
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, customer_custom_field_id, user_id', 'safe', 'on' => 'search'),
+            array('id, customer_custom_field_id, branch_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -49,6 +49,7 @@ class CustomerCustomFieldAssignmentTable extends CActiveRecord {
             'Customer_Custom_Fields_Val' => array(self::BELONGS_TO, 'CustomerCustomField', 'customer_custom_field_id'),
             'sub_data_field' => array(self::HAS_MANY, 'SubCustomerCustomFieldAssignment', 'customer_custom_field_assignment_id'),
             'Customer_Custom_Fields' => array(self::HAS_MANY, 'CustomerCustomFieldData', 'customer_custom_field_assignment_id'),
+            'CustomerCustomFieldAssignmentTable' => array(self::HAS_ONE, 'BranchMaster', 'branch_id'),
         );
     }
 
@@ -59,7 +60,7 @@ class CustomerCustomFieldAssignmentTable extends CActiveRecord {
         return array(
             'id' => 'ID',
             'customer_custom_field_id' => 'Customer Custom Field',
-            'user_id' => 'User',
+            'branch_id' => 'branch',
         );
     }
 
@@ -82,7 +83,7 @@ class CustomerCustomFieldAssignmentTable extends CActiveRecord {
 
         $criteria->compare('id', $this->id);
         $criteria->compare('customer_custom_field_id', $this->customer_custom_field_id);
-        $criteria->compare('user_id', $this->user_id);
+        $criteria->compare('user_id', $this->branch_id);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -181,10 +182,9 @@ class CustomerCustomFieldAssignmentTable extends CActiveRecord {
         return $scope;
     }
 
-    public function getDataFromPK() {
-        $user_id = Yii::app()->user->id;
+    public function getDataFromPK($pId) {
         $criteria = new CDbCriteria;
-        $criteria->condition = "user_id=" . $user_id;
+        $criteria->condition = "branch_id=" . $pId;
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
         ));

@@ -8,6 +8,9 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
      */
     public $layout = '//layouts/column1';
     public $menuCaption = 'Sub Menu';
+    public $pName = 'BranchMaster_parent'; //parent Model Class Name => Program
+    public $pUrl = 'BranchMaster_parent'; //parent URL => pusdiklat/planning/program
+    public $pId = 'branch_master_id'; //parent field ID => programId
 
     /**
      * @return array action filters
@@ -24,17 +27,23 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
      */
     public function actionView($id) {
 
-        $this->layout = 'column2';
-
         if (isset($_GET['asModal'])) {
             $this->renderPartial('view', array(
                 'model' => $this->loadModel($id),
             ));
         } else {
 
+//            if (isset($_GET['pId']) and $_GET['pId'] > 0) {
+            $pId = (int) $_GET['pId'];
             $this->render('view', array(
                 'model' => $this->loadModel($id),
+                'pName' => $this->pName,
+                'pUrl' => $this->pUrl,
+                'pId' => $pId,
             ));
+//            } else {
+//                $this->redirect(Yii::app()->createUrl($this->pUrl));
+//            }
         }
     }
 
@@ -44,52 +53,64 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
      */
     public function actionCreate() {
 
-        $model = new CustomerCustomFieldAssignmentTable;
+        if (isset($_GET['pId']) and $_GET['pId'] > 0) {
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+            $pId = (int) $_GET['pId'];
 
-        if (isset($_POST['CustomerCustomFieldAssignmentTable'])) {
-            $transaction = Yii::app()->db->beginTransaction();
-            try {
-                $messageType = 'warning';
-                $message = "There are some errors ";
-                $model->attributes = $_POST['CustomerCustomFieldAssignmentTable'];
-                //$uploadFile=CUploadedFile::getInstance($model,'filename');
-                if ($model->save()) {
-                    $messageType = 'success';
-                    $message = "<strong>Well done!</strong> You successfully create data ";
-                    /*
-                      $model2 = CustomerCustomFieldAssignmentTable::model()->findByPk($model->id);
-                      if(!empty($uploadFile)) {
-                      $extUploadFile = substr($uploadFile, strrpos($uploadFile, '.')+1);
-                      if(!empty($uploadFile)) {
-                      if($uploadFile->saveAs(Yii::app()->basePath.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.'customercustomfieldassignmenttable'.DIRECTORY_SEPARATOR.$model2->id.DIRECTORY_SEPARATOR.$model2->id.'.'.$extUploadFile)){
-                      $model2->filename=$model2->id.'.'.$extUploadFile;
-                      $model2->save();
-                      $message .= 'and file uploded';
-                      }
-                      else{
-                      $messageType = 'warning';
-                      $message .= 'but file not uploded';
-                      }
-                      }
-                      }
-                     */
-                    $transaction->commit();
-                    Yii::app()->user->setFlash($messageType, $message);
-                    $this->redirect(array('index'));
+            $model = new CustomerCustomFieldAssignmentTable;
+
+            // Uncomment the following line if AJAX validation is needed
+            // $this->performAjaxValidation($model);
+
+            if (isset($_POST['CustomerCustomFieldAssignmentTable'])) {
+                $transaction = Yii::app()->db->beginTransaction();
+                try {
+                    $messageType = 'warning';
+                    $message = "There are some errors ";
+                    $model->attributes = $_POST['CustomerCustomFieldAssignmentTable'];
+                    //$uploadFile=CUploadedFile::getInstance($model,'filename');
+                    if ($model->save()) {
+                        $messageType = 'success';
+                        $message = "<strong>Well done!</strong> You successfully create data ";
+                        /*
+                          $model2 = CustomerCustomFieldAssignmentTable::model()->findByPk($model->id);
+                          if(!empty($uploadFile)) {
+                          $extUploadFile = substr($uploadFile, strrpos($uploadFile, '.')+1);
+                          if(!empty($uploadFile)) {
+                          if($uploadFile->saveAs(Yii::app()->basePath.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.'customercustomfieldassignmenttable'.DIRECTORY_SEPARATOR.$model2->id.DIRECTORY_SEPARATOR.$model2->id.'.'.$extUploadFile)){
+                          $model2->filename=$model2->id.'.'.$extUploadFile;
+                          $model2->save();
+                          $message .= 'and file uploded';
+                          }
+                          else{
+                          $messageType = 'warning';
+                          $message .= 'but file not uploded';
+                          }
+                          }
+                          }
+                         */
+                        $transaction->commit();
+
+                        Yii::app()->user->setFlash($messageType, $message);
+
+                        $this->redirect(array('index', 'pId' => $pId));
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                    Yii::app()->user->setFlash('error', "{$e->getMessage()}");
+                    //$this->refresh();
                 }
-            } catch (Exception $e) {
-                $transaction->rollBack();
-                Yii::app()->user->setFlash('error', "{$e->getMessage()}");
-                //$this->refresh();
             }
-        }
 
-        $this->render('create', array(
-            'model' => $model,
-        ));
+            $this->render('create', array(
+                'model' => $model,
+                'pName' => $this->pName,
+                'pUrl' => $this->pUrl,
+                'pId' => $pId,
+            ));
+        } else {
+            $this->redirect(Yii::app()->createUrl($this->pUrl));
+        }
     }
 
     /**
@@ -98,6 +119,8 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
+
+        $pId = (int) $_GET['pId'];
 
         $model = $this->loadModel($id);
 
@@ -133,7 +156,7 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
                 if ($model->save()) {
                     $transaction->commit();
                     Yii::app()->user->setFlash($messageType, $message);
-                    $this->redirect(array('index'));
+                    $this->redirect(array('view', 'pId' => $pId));
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
@@ -148,6 +171,9 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
 
         $this->render('update', array(
             'model' => $model,
+            'pName' => $this->pName,
+            'pUrl' => $this->pUrl,
+            'pId' => $pId,
         ));
     }
 
@@ -162,7 +188,7 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
 
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax']))
-                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index', 'pId' => $_GET['pId'],));
         } catch (Exception $exc) {
             Yii::app()->user->setFlash('error', "{$exc->getMessage()}");
         }
@@ -179,15 +205,23 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
           'dataProvider'=>$dataProvider,
           ));
          */
+        if (isset($_GET['pId']) and $_GET['pId'] > 0) {
+            $pId = (int) $_GET['pId'];
+            $model = new CustomerCustomFieldAssignmentTable('search');
+            $model->unsetAttributes();  // clear any default values
+            if (isset($_GET['CustomerCustomFieldAssignmentTable']))
+                $model->attributes = $_GET['CustomerCustomFieldAssignmentTable'];
 
-        $model = new CustomerCustomFieldAssignmentTable('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['CustomerCustomFieldAssignmentTable']))
-            $model->attributes = $_GET['CustomerCustomFieldAssignmentTable'];
-
-        $this->render('index', array(
-            'model' => $model,
-        ));
+            $this->render('index', array(
+                'model' => $model,
+                'pName' => $this->pName,
+                'pUrl' => $this->pUrl,
+                'pId' => $pId,
+            ));
+        }
+        else {
+            $this->redirect(Yii::app()->createUrl($this->pUrl));
+        }
     }
 
     /**
@@ -195,14 +229,24 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
      */
     public function actionAdmin() {
 
-        $model = new CustomerCustomFieldAssignmentTable('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['CustomerCustomFieldAssignmentTable']))
-            $model->attributes = $_GET['CustomerCustomFieldAssignmentTable'];
+        if (isset($_GET['pId']) and $_GET['pId'] > 0) {
+            $pId = (int) $_GET['pId'];
 
-        $this->render('admin', array(
-            'model' => $model,
-        ));
+            $model = new CustomerCustomFieldAssignmentTable('search');
+            $model->unsetAttributes();  // clear any default values
+            if (isset($_GET['CustomerCustomFieldAssignmentTable']))
+                $model->attributes = $_GET['CustomerCustomFieldAssignmentTable'];
+
+            $this->render('admin', array(
+                'model' => $model,
+                'pName' => $this->pName,
+                'pUrl' => $this->pUrl,
+                'pId' => $pId,
+            ));
+        }
+        else {
+            $this->redirect(Yii::app()->createUrl($this->pUrl));
+        }
     }
 
     /**

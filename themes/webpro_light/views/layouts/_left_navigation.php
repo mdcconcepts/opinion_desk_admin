@@ -32,15 +32,8 @@
                     <?php
                 }
                 ?>
-
+                <li><a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/branchMaster_parent/create"><i class="fa fa-angle-right"></i> Create Branch</a></li>
             </ul>
-        </li>
-        <li> <a href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php/customerCustomFieldAssignmentTable_Parent" <?php
-            if (Yii::app()->controller->id == 'customerCustomFieldAssignmentTable_Parent') {
-                echo 'class = "active"';
-            }
-            ?>> 
-                <i class = "fa fa-dashboard"></i> <span>Manage Customer Fields</span> </a> 
         </li>
 
     </ul><!--/nav-accordion sidebar-menu-->

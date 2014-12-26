@@ -22,6 +22,7 @@
             <li class="active"> <a href="#"> <i class="glyphicon glyphicon-inbox"></i> Branch </a> </li>
             <li><a href="<?php echo Yii::app()->createUrl("questionMaster_Child?pId=" . $model->id); ?>"><i class="glyphicon glyphicon-star-empty"></i> Questions</a></li>
             <li><a href="<?php echo Yii::app()->createUrl("tabletMaster_child?pId=" . $model->id); ?>"><i class="glyphicon glyphicon-phone"></i> Tablets </a></li>
+            <li><a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent?pId=" . $model->id); ?>"><i class="glyphicon glyphicon-phone"></i> Custom Fields</a></li>
             <li> <a href="<?php echo Yii::app()->createUrl("branchMaster_parent"); ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>
         </ul>
     </div><!-- col-sm-3 -->

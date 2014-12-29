@@ -35,6 +35,7 @@
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/demo-slider/demo-slider.js"></script>
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> 
+        <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery.tokenize.js"></script> 
         <script type="text/javascript">
             $('.default-date-picker').datepicker({
                 format: 'yyyy-mm-dd'
@@ -42,6 +43,29 @@
             $('.colorpicker-default').colorpicker({
                 format: 'hex'
             });
+            var checkin = $('.dpd1').datepicker({
+                format: 'yyyy-mm-dd',
+                onRender: function (date) {
+                    return date.valueOf() < now.valueOf() ? 'disabled' : '';
+                }
+            }).on('changeDate', function (ev) {
+                if (ev.date.valueOf() > checkout.date.valueOf()) {
+                    var newDate = new Date(ev.date)
+                    newDate.setDate(newDate.getDate() + 1);
+                    checkout.setValue(newDate);
+                }
+                checkin.hide();
+                $('.dpd2')[0].focus();
+            }).data('datepicker');
+            var checkout = $('.dpd2').datepicker({
+                format: 'yyyy-mm-dd',
+                onRender: function (date) {
+                    return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+                }
+            }).on('changeDate', function (ev) {
+                checkout.hide();
+            }).data('datepicker');
+            $('.data_export').tokenize();
         </script>
         <?php AssetsHelperForCustomTemplate::getJSForController() ?>
     </body>

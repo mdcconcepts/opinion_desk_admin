@@ -157,6 +157,7 @@ class MobileServicesController extends Controller {
     public function actionLogOut() {
         $Tablet = $this->_checkAuth();
 
+
         if ($Tablet->is_login == 0) {
             $Responce = [
                 'Status_code' => '401',
@@ -172,6 +173,7 @@ class MobileServicesController extends Controller {
             $Tablet->is_login = 0;
 
             if ($Tablet->save()) {
+
                 $transaction->commit();
                 $Responce = [
                     'Status_code' => '200',
@@ -180,6 +182,8 @@ class MobileServicesController extends Controller {
                 ];
                 $this->_sendResponse(200, $Responce);
             }
+            echo json_encode($Tablet);
+            Yii::app()->end();
         } catch (Exception $e) {
             $transaction->rollBack();
 
@@ -191,6 +195,7 @@ class MobileServicesController extends Controller {
             ];
             $this->_sendResponse(401, $Responce);
         }
+
 
         $Responce = [
             'Status_code' => '401',
@@ -228,13 +233,13 @@ class MobileServicesController extends Controller {
             $this->_sendResponse(401, $Responce);
         }
 
-        $Customer_Id = BranchMaster::model()->findAllByPk($Tablet->branch_id)[0]->customer_id;
+//        $Customer_Id = BranchMaster::model()->findAllByPk($Tablet->branch_id)[0]->customer_id;
 
         $Responce = [
             'Status_code' => '200',
             'Success' => 'True',
             'Message' => 'Requested Data available !',
-            'Custom_Fields ' => $this->getCustomFields($Customer_Id),
+            'Custom_Fields ' => $this->getCustomFields($Tablet->branch_id),
             'Feedback_Questions ' => $this->getFeedbackQuestions($Tablet->branch_id)
         ];
         $this->_sendResponse(200, $Responce);
@@ -277,10 +282,10 @@ class MobileServicesController extends Controller {
 
     /**
      * This function is used for getting custom fields for client according to customer_id (User_id)
-     * @param type $Customer_Id
+     * @param type $Branch_Id
      * @return array returns custom fields for clients
      */
-    private function getCustomFields($Customer_Id) {
+    private function getCustomFields($Branch_Id) {
         $connection = Yii::app()->db;
 
         $sqlStatement = "SELECT `customer_custom_field_assignment_table`.id,"
@@ -290,11 +295,11 @@ class MobileServicesController extends Controller {
                 . "`customer_custom_field_assignment_table`.`customer_custom_field_id`= "
                 . "`customer_custom_field`.`id` INNER JOIN `field_category_table` ON "
                 . "`customer_custom_field`.field_category_id=`field_category_table`.id WHERE "
-                . "`user_id`=:user_id";
+                . "`branch_id`=:branch_id";
 
         $command = $connection->createCommand($sqlStatement);
 
-        $command->bindParam(':user_id', $Customer_Id, PDO::PARAM_INT);
+        $command->bindParam(':branch_id', $Branch_Id, PDO::PARAM_INT);
         $command->execute();
 
         $reader = $command->query();
@@ -336,6 +341,7 @@ class MobileServicesController extends Controller {
         try {
             $Client->name = $Post_Client['name'];
             $Client->mobile_no = $Post_Client['mobile_no'];
+            $Client->email = $Post_Client['email'];
             $Client->gender = $Post_Client['gender'];
             $Client->dob = $Post_Client['dob'];
             if ($Client->save()) {
@@ -345,7 +351,7 @@ class MobileServicesController extends Controller {
                 $this->saveQuestionResponceData($Client->getPrimaryKey(), $Post_Questions);
 
                 if (isset($Post_Testimonial))
-                    $this->saveTestimonialResponceData($Client->getPrimaryKey(), $Post_Testimonial);
+                    $this->saveTestimonialResponceData($Post_Client_Id, $Post_Testimonial, $Tablet->branch_id);
 
                 $transaction->commit();
 
@@ -400,7 +406,7 @@ class MobileServicesController extends Controller {
             $this->saveQuestionResponceData($Post_Client_Id, $Post_Questions);
 
             if (isset($Post_Testimonial))
-                $this->saveTestimonialResponceData($Post_Client_Id, $Post_Testimonial);
+                $this->saveTestimonialResponceData($Post_Client_Id, $Post_Testimonial, $Tablet->branch_id);
 
             $transaction->commit();
 
@@ -469,7 +475,7 @@ class MobileServicesController extends Controller {
      * @param type $client_id Client id of user just enter into the system.
      * @param type $Post_Questions This is Post Question Responce Array
      */
-    private function saveTestimonialResponceData($client_id, $Post_Testimonial) {
+    private function saveTestimonialResponceData($client_id, $Post_Testimonial, $branch_id) {
 
         if ($this->validateBasicTestimonialPostResponce($Post_Testimonial)) {
 //            if (!isset($Post_Testimonial['responce_text']) && 
@@ -477,10 +483,10 @@ class MobileServicesController extends Controller {
 //             !isset($Post_Testimonial['responce_vedio_url'])) {
 
             $query = "INSERT INTO `testimonial_response_table`(`id`, `responce_text`, "
-                    . "`responce_audio_url`, `responce_vedio_url`, `client_id`, `created_at`) VALUES "
+                    . "`responce_audio_url`, `responce_vedio_url`,`branch_id`, `client_id`, `created_at`) VALUES "
                     . "(NULL, '" . $Post_Testimonial['responce_text'] . "', "
                     . "'" . $Post_Testimonial['responce_audio_url'] . "', "
-                    . "'" . $Post_Testimonial['responce_vedio_url'] . "',"
+                    . "'" . $Post_Testimonial['responce_vedio_url'] . "'," . branch_id . ","
                     . " '" . $client_id . "','" . date('Y-m-d H:i:s') . "')";
 
             $connection = Yii::app()->db;
@@ -546,6 +552,14 @@ class MobileServicesController extends Controller {
                 'Success' => 'Fail',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'Client Mobile Number not found.'
+            ];
+            $this->_sendResponse(404, $Responce);
+        } elseif (!isset($Post_Client['email'])) {
+            $Responce = [
+                'Status_code' => '404',
+                'Success' => 'Fail',
+                'Message' => 'Bad Request Parameters',
+                'Error' => 'Client Email not found.'
             ];
             $this->_sendResponse(404, $Responce);
         } elseif (!isset($Post_Client['gender'])) {

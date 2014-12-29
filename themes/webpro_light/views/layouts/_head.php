@@ -14,6 +14,7 @@
     <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/kalendar/kalendar.css" rel="stylesheet">
     <link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-colorpicker/css/colorpicker.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/jquery.tokenize.css" />
     <?php AssetsHelperForCustomTemplate::getCSSForController() ?>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

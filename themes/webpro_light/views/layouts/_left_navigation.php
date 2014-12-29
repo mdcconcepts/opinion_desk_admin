@@ -33,7 +33,22 @@
                 }
                 ?>
                 <li><a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/branchMaster_parent/create"><i class="fa fa-angle-right"></i> Create Branch</a></li>
+
             </ul>
+        </li>
+        <li> <a href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php/ResponceMaster_child" <?php
+            if (Yii::app()->controller->id == 'responceMaster_child') {
+                echo 'class = "active"';
+            }
+            ?>>
+                <i class = "fa fa-bar-chart-o"></i> <span>Reports</span> </a> 
+        </li>
+        <li> <a href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php" <?php
+            if (Yii::app()->controller->id == '#') {
+                echo 'class = "active"';
+            }
+            ?>>
+                <i class = "fa fa-video-camera"></i> <span>Testimonials</span> </a> 
         </li>
 
     </ul><!--/nav-accordion sidebar-menu-->

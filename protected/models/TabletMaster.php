@@ -131,7 +131,7 @@ class TabletMaster extends CActiveRecord {
         if (null != Yii::app()->user->id)
             $userId = (int) Yii::app()->user->id;
 
-        $this->update_token = TabletUpdateTokenHelper::generate_random_password();
+//        $this->update_token = TabletUpdateTokenHelper::generate_random_password();
 //        TabletUpdateTokenHelper::updateTableToken($this->id);
 //        if ($this->isNewRecord) {
 //            $this->password = $this->hashPassword($this->password);

@@ -43,7 +43,7 @@
             ?>>
                 <i class = "fa fa-bar-chart-o"></i> <span>Reports</span> </a> 
         </li>
-        <li> <a href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php" <?php
+        <li> <a href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php/testimonials" <?php
             if (Yii::app()->controller->id == '#') {
                 echo 'class = "active"';
             }

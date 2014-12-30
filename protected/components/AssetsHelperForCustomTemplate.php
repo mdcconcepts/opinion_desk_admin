@@ -31,6 +31,10 @@ class AssetsHelperForCustomTemplate {
             <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/advanced-datatable/css/demo_table.css" rel="stylesheet">
             <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/advanced-datatable/css/demo_page.css" rel="stylesheet">
             <?php
+        } elseif (Yii::app()->controller->id == 'testimonials') {
+            ?>
+            <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/jplayer/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css" />
+            <?php
         }
     }
 
@@ -105,6 +109,35 @@ class AssetsHelperForCustomTemplate {
                         "aaSorting": [[4, "desc"]]
                     });
                 });
+            </script>
+            <?php
+        } elseif (Yii::app()->controller->id == 'testimonials') {
+            ?>
+            <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/jplayer/jquery.min.js"></script>
+            <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/jplayer/jquery.jplayer.min.js"></script>
+            <script type="text/javascript">
+                //<![CDATA[
+                $(document).ready(function () {
+
+                    $("#jquery_jplayer_1").jPlayer({
+                        ready: function () {
+                            $(this).jPlayer("setMedia", {
+                                title: "Bubble",
+                                mp3: "http://jplayer.org/audio/mp3/Miaow-07-Bubble.mp3"
+                            });
+                        },
+                        swfPath: "../../dist/jplayer",
+                        supplied: "mp3",
+                        wmode: "window",
+                        useStateClassSkin: true,
+                        autoBlur: false,
+                        smoothPlayBar: true,
+                        keyEnabled: true,
+                        remainingDuration: true,
+                        toggleDuration: true
+                    });
+                });
+                //]]>
             </script>
             <?php
         } else {

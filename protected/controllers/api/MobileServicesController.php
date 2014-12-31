@@ -28,7 +28,7 @@ class MobileServicesController extends Controller {
     public function actionAuth() {
         $Tablet = $this->_checkAuth();
 
-        if ($Tablet->is_login == 1) {
+        if ($this->isLogin($Tablet->id)) {
             $Responce = [
                 'Status_code' => '401',
                 'Success' => 'False',
@@ -43,24 +43,26 @@ class MobileServicesController extends Controller {
         }
         $transaction = Yii::app()->db->beginTransaction();
         try {
-            $Tablet->is_login = 1;
+//            $Tablet->is_login = 1;
 
-            if ($Tablet->save()) {
-                $transaction->commit();
-                $Responce = [
-                    'Status_code' => '200',
-                    'Success' => 'True',
-                    'Message' => 'Authentication is successful !',
-                    'Tablet' => [
-                        'tablet_id' => $Tablet->id,
-                        'first_name' => $Tablet->first_name_user,
-                        'last_name' => $Tablet->last_name_user,
-                        'joining_date' => date(' jS F Y', strtotime($Tablet->joining_date)),
-                        'app_theme_color' => $this->getThemeColorForTablet($Tablet->branch_id)
-                    ]
-                ];
-                $this->_sendResponse(200, $Responce);
-            }
+
+            $this->begin_session($Tablet->id);
+            $transaction->commit();
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'True',
+                'Message' => 'Authentication is successful !',
+                'Tablet' => [
+                    'tablet_id' => $Tablet->id,
+                    'first_name' => $Tablet->first_name_user,
+                    'last_name' => $Tablet->last_name_user,
+                    'joining_date' => date(' jS F Y', strtotime($Tablet->joining_date)),
+                    'app_theme_color' => $this->getThemeColorForTablet($Tablet->branch_id),
+                    'app_logo' => $this->getThemeLogoForTablet($Tablet->branch_id),
+                    'terms_and_conditions' => $this->getTerms_ConditionsForTablet($Tablet->branch_id)
+                ]
+            ];
+            $this->_sendResponse(200, $Responce);
         } catch (Exception $e) {
             $transaction->rollBack();
 
@@ -89,7 +91,7 @@ class MobileServicesController extends Controller {
     public function actionCheckClientMobile() {
         $Tablet = $this->_checkAuth();
 
-        if ($Tablet->is_login == 0) {
+        if (!$this->isLogin($Tablet->id)) {
             $Responce = [
                 'Status_code' => '503',
                 'Success' => 'False',
@@ -151,14 +153,63 @@ class MobileServicesController extends Controller {
         }
     }
 
+    private function getThemeLogoForTablet($branch_id) {
+        try {
+
+
+            $connection = Yii::app()->db;
+
+            $sqlStatement = "SELECT `organisation_logo` FROM `profiles` WHERE `user_id`"
+                    . " in (SELECT `customer_id` FROM `branch_master` WHERE `id`=:branch_id)";
+
+            $command = $connection->createCommand($sqlStatement);
+
+            $command->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
+
+            $command->execute();
+
+            $reader = $command->query();
+
+            foreach ($reader as $row) {
+                return $row['organisation_logo'];
+            }
+        } catch (Exception $ex) {
+            return "error, " . $ex->getMessage();
+        }
+    }
+
+    private function getTerms_ConditionsForTablet($branch_id) {
+        try {
+
+
+            $connection = Yii::app()->db;
+
+            $sqlStatement = "SELECT `terms_and_conditions` FROM `profiles` WHERE `user_id`"
+                    . " in (SELECT `customer_id` FROM `branch_master` WHERE `id`=:branch_id)";
+
+            $command = $connection->createCommand($sqlStatement);
+
+            $command->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
+
+            $command->execute();
+
+            $reader = $command->query();
+
+            foreach ($reader as $row) {
+                return $row['terms_and_conditions'];
+            }
+        } catch (Exception $ex) {
+            return "error, " . $ex->getMessage();
+        }
+    }
+
     /**
      * This method is used for logging out user.
      */
     public function actionLogOut() {
         $Tablet = $this->_checkAuth();
 
-
-        if ($Tablet->is_login == 0) {
+        if (!$this->isLogin($Tablet->id)) {
             $Responce = [
                 'Status_code' => '401',
                 'Success' => 'False',
@@ -170,20 +221,15 @@ class MobileServicesController extends Controller {
 
         $transaction = Yii::app()->db->beginTransaction();
         try {
-            $Tablet->is_login = 0;
-
-            if ($Tablet->save()) {
-
-                $transaction->commit();
-                $Responce = [
-                    'Status_code' => '200',
-                    'Success' => 'True',
-                    'Message' => 'Logout Request is successful!',
-                ];
-                $this->_sendResponse(200, $Responce);
-            }
-            echo json_encode($Tablet);
-            Yii::app()->end();
+//            $Tablet->is_login = 0;
+            $this->destroy_session($Tablet->id);
+            $transaction->commit();
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'True',
+                'Message' => 'Logout Request is successful!',
+            ];
+            $this->_sendResponse(200, $Responce);
         } catch (Exception $e) {
             $transaction->rollBack();
 
@@ -212,7 +258,7 @@ class MobileServicesController extends Controller {
     public function actiongetAllDynamicData() {
         $Tablet = $this->_checkAuth();
 
-        if ($Tablet->is_login == 0) {
+        if (!$this->isLogin($Tablet->id)) {
             $Responce = [
                 'Status_code' => '503',
                 'Success' => 'False',
@@ -240,7 +286,8 @@ class MobileServicesController extends Controller {
             'Success' => 'True',
             'Message' => 'Requested Data available !',
             'Custom_Fields ' => $this->getCustomFields($Tablet->branch_id),
-            'Feedback_Questions ' => $this->getFeedbackQuestions($Tablet->branch_id)
+            'Feedback_Questions ' => $this->getFeedbackQuestions($Tablet->branch_id),
+            'update_token' => $Tablet->update_token
         ];
         $this->_sendResponse(200, $Responce);
     }
@@ -253,7 +300,8 @@ class MobileServicesController extends Controller {
     private function getFeedbackQuestions($branch_id) {
         $connection = Yii::app()->db;
 
-        $sqlStatement = "SELECT * FROM `question_master` INNER JOIN `category_master` ON  "
+
+        $sqlStatement = "SELECT *,question_master.id AS question_id_i FROM `question_master` INNER JOIN `category_master` ON  "
                 . "`question_master`.`category_id`=`category_master`.id "
                 . "WHERE `branch_id`=:branch_id";
 
@@ -266,8 +314,7 @@ class MobileServicesController extends Controller {
         $Feedback_Questions = array();
         foreach ($Questions as $question) {
             $Feedback_Question = array();
-
-            $Feedback_Question['question_id'] = $question['id'];
+            $Feedback_Question['question_id'] = $question['question_id_i'];
             $Feedback_Question['option_type_id'] = $question['option_type_id'];
             $Feedback_Question['question'] = $question['question'];
 
@@ -323,11 +370,15 @@ class MobileServicesController extends Controller {
 
         $Tablet = $this->_checkAuth();
 
-        $Post_Client = CJSON::decode(Yii::app()->request->getPost('Client'));
+        $Post = Yii::app()->getRequest()->getRawBody();
 
-        $Post_Questions = CJSON::decode(Yii::app()->request->getPost('Questions'));
+        $Post_Feedback_Id = CJSON::decode($Post)['Feedback_Id'];
 
-        $Post_Testimonial = CJSON::decode(Yii::app()->request->getPost('Testimonial'));
+        $Post_Client = CJSON::decode($Post)['Client'];
+
+        $Post_Questions = CJSON::decode($Post)['Questions'];
+
+        $Post_Testimonial = CJSON::decode($Post)['Testimonial'];
 
         $this->validateBasicClientPostResponce($Post_Client);
 
@@ -351,7 +402,7 @@ class MobileServicesController extends Controller {
                 $this->saveQuestionResponceData($Client->getPrimaryKey(), $Post_Questions);
 
                 if (isset($Post_Testimonial))
-                    $this->saveTestimonialResponceData($Post_Client_Id, $Post_Testimonial, $Tablet->branch_id);
+                    $this->saveTestimonialResponceData($Client->getPrimaryKey(), $Post_Testimonial, $Tablet->branch_id);
 
                 $transaction->commit();
 
@@ -359,6 +410,7 @@ class MobileServicesController extends Controller {
                     'Status_code' => '200',
                     'Success' => 'True',
                     'Message' => 'Client Response Saved !',
+                    'Feedback_Id' => $Post_Feedback_Id
                 ];
 
                 $this->_sendResponse(200, $Responce);
@@ -486,7 +538,7 @@ class MobileServicesController extends Controller {
                     . "`responce_audio_url`, `responce_vedio_url`,`branch_id`, `client_id`, `created_at`) VALUES "
                     . "(NULL, '" . $Post_Testimonial['responce_text'] . "', "
                     . "'" . $Post_Testimonial['responce_audio_url'] . "', "
-                    . "'" . $Post_Testimonial['responce_vedio_url'] . "'," . branch_id . ","
+                    . "'" . $Post_Testimonial['responce_vedio_url'] . "'," . $branch_id . ","
                     . " '" . $client_id . "','" . date('Y-m-d H:i:s') . "')";
 
             $connection = Yii::app()->db;
@@ -640,6 +692,50 @@ class MobileServicesController extends Controller {
             ];
             $this->_sendResponse(404, $Responce);
         }
+    }
+
+    function begin_session($tablet_id) {
+        session_regenerate_id();
+        $username = $_SERVER['HTTP_API_' . self:: APPLICATION_ID . '_USERNAME'];
+
+        $password = $_SERVER['HTTP_API_' . self::APPLICATION_ID . '_PASSWORD'];
+        $_SESSION['session_token'] = md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR'] . $username . $password);
+
+        $Tablet_Session = new TabletSessionMaster();
+        $Tablet_Session->tablet_id = $tablet_id;
+        $Tablet_Session->session_token = $_SESSION['session_token'];
+        $Tablet_Session->timeout = date('Y-m-d H:i:s');
+        $Tablet_Session->save();
+
+        return $_SESSION['session_token'];
+    }
+
+    function destroy_session($tablet_id) {
+        $Session = TabletSessionMaster::model()->findAll(array(
+                    'condition' => 'tablet_id = :tablet_id',
+                    'params' => array(':tablet_id' => $tablet_id)
+                ))[0];
+
+        $Session->delete();
+        $_SESSION['session_token'] = "Deleted";
+        return $_SESSION['session_token'];
+    }
+
+    function isLogin($tablet_id) {
+        session_start();
+        $username = $_SERVER['HTTP_API_' . self:: APPLICATION_ID . '_USERNAME'];
+
+        $password = $_SERVER['HTTP_API_' . self::APPLICATION_ID . '_PASSWORD'];
+        $SESSION_TOKEN = TabletSessionMaster::model()->findAll(array(
+                    'condition' => 'tablet_id = :tablet_id',
+                    'params' => array(':tablet_id' => $tablet_id)
+                ))[0]->session_token;
+        if ($SESSION_TOKEN != md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR'] . $username . $password)) {
+            session_destroy();
+            return false;
+        }
+
+        return true;
     }
 
     /**

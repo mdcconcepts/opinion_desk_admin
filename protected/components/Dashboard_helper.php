@@ -152,7 +152,7 @@ class Dashboard_helper {
         return 0;
     }
 
-    public static function getTotalCustomerForAllBranches($from_Date, $to_Date) {
+    public static function getTotalCustomerForAllBranches() {
         try {
 
 
@@ -160,19 +160,13 @@ class Dashboard_helper {
 
             $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer FROM "
                     . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
-                    . " WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id)) "
-                    . "AND DATE(`created_at`) BETWEEN :FROM_DATE AND :TO_DATE"
-            ;
+                    . " WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id))";
 
             $command = $connection->createCommand($sqlStatement);
 
             $customer_id = Yii::app()->user->id;
 
             $command->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
-
-            $command->bindParam(':FROM_DATE', $from_Date, PDO::PARAM_INT);
-
-            $command->bindParam(':TO_DATE', $to_Date, PDO::PARAM_INT);
 
             $command->execute();
 

@@ -251,17 +251,27 @@
 
 
         <div class="col-sm-4 col-md-4">
-            <div class="block-web primary-box">
+            <div class="block-web primary-box" onclick="location.href = '<?php echo Yii::app()->request->baseUrl . '/index.php/ResponceMaster_child/viewbranchreport?branch_id=' . $Branch->id; ?>';" style="cursor: pointer;">
                 <div class="header">
-                    <div class="actions"> <a class="minimize" href="#"><i class="fa fa-chevron-down"></i></a> <a class="refresh" href="#"><i class="fa fa-repeat"></i></a>  </div>
-                    <h3><a style="color: #fff;  text-decoration: none;" href="<?php echo Yii::app()->request->baseUrl . '/index.php/ResponceMaster_child/viewbranchreport?branch_id=' . $Branch->id; ?>"><?php echo $Branch->branch_name ?></a></h3>
+                    <h3><?php echo $Branch->branch_name ?></h3>
                 </div>
-                <div class="porlets-content">
-                    <p>
-                        <strong>Address</strong>:<br/><br/>
-                        <?php echo $Branch->branch_address ?>
-                    </p>
-                </div>
+                <!--                <h3 class="content-header"> Your Branch Statistics
+                                    </h3>-->
+                <table class="table margin-top-20 today" width="100%" border="0" cellspacing="0" cellpadding="0" >
+                    <tr>
+                        <td class="fa-border"><button class="btn btn-danger padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalFeedBackCountForBranches(date('Y-m-d'), date('Y-m-d'), $Branch->id); ?></button>
+                            Total Feedback</td>
+                        <td class="fa-border"><button class="btn btn-primary padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalFeedBackAverageForBranches(date('Y-m-d'), date('Y-m-d'), $Branch->id); ?></button>
+                            Average Ratting</td>
+
+                    </tr>
+                    <tr>
+                        <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo BranchDashboard_helper::getPositiveFeedbackForBranches(date('Y-m-d'), date('Y-m-d'), $Branch->id); ?></button>
+                            Positive Ratting</td>
+                        <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo BranchDashboard_helper::getNegativeFeedbackForBranches(date('Y-m-d'), date('Y-m-d'), $Branch->id); ?></button>
+                            Negative Ratting</td>
+                    </tr>
+                </table>
             </div>
         </div>
 

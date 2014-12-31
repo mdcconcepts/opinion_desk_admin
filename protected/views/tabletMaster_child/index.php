@@ -2,7 +2,6 @@
     <div class="col-md-12">
         <div class="block-web">
             <div class="header">
-                <div class="actions"> <a class="minimize" href="#"><i class="fa fa-chevron-down"></i></a> <a class="refresh" href="#"><i class="fa fa-repeat"></i></a> <a class="close-down" href="#"><i class="fa fa-times"></i></a> </div>
                 <h3 class="content-header">Tablet List</h3>
             </div>
             <div class="porlets-content">
@@ -12,12 +11,10 @@
                     </div>
                 <?php endif; ?>
                 <div class="btn-group" style="margin-bottom: 20px;">
-                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/branchMaster_parent/<?php echo $_GET['pId']; ?>" class="btn btn-primary">
-                        Branch <i class="fa fa-arrow-circle-left"></i>
-                    </a>
-                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tabletMaster_child/create?pId=<?php echo $_GET['pId']; ?>" class="btn btn-primary">
-                        Add New <i class="fa fa-plus"></i>
-                    </a>
+                    <ul class="demo-btns">
+                        <li> <a class="btn btn-labeled btn-primary" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/branchMaster_parent/<?php echo $_GET['pId']; ?>"> <span class="btn-label"><i class="glyphicon glyphicon-chevron-left"></i></span>Back </a> </li>
+                        <li> <a class="btn btn-labeled btn-primary" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tabletMaster_child/create?pId=<?php echo $_GET['pId']; ?>"> <span class="btn-label"><i class="glyphicon glyphicon-plus-sign"></i></span> Create Tablet </a> </li>
+                    </ul>
                 </div>
                 <div class="table-responsive">
                     <?php
@@ -74,24 +71,15 @@
                             ),
                             array(
                                 'class' => 'bootstrap.widgets.TbButtonColumn',
-                                'htmlOptions' => array('style' => 'width:90px'),
-                                'template' => '{update}     {detail}',
+                                'htmlOptions' => array('style' => 'width:30px'),
+                                'template' => '{detail}',
                                 'buttons' => array
                                     (
                                     'detail' => array
                                         (
                                         'label' => 'View Question',
-                                        'icon' => 'fa fa-level-down',
+                                        'icon' => 'fa fa-folder-open',
                                         'url' => 'array("view","id"=>$data->id,"pId"=>$_GET["pId"])',
-                                        'options' => array(
-                                            'class' => 'badge badge-info',
-                                        ),
-                                    ),
-                                    'update' => array
-                                        (
-                                        'label' => 'Update Branch',
-                                        'icon' => 'fa fa-pencil',
-                                        'url' => 'array("update","id"=>$data->id,"pId"=>$_GET["pId"])',
                                         'options' => array(
                                             'class' => 'badge badge-info',
                                         ),

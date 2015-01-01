@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="block-web">
             <div class="header">
-                <h3 class="content-header">Data Table</h3>
+                <h3 class="content-header">All Customer Fields</h3>
             </div>
             <div class="porlets-content">
                 <?php if (Yii::app()->user->hasFlash('error')): ?>
@@ -52,7 +52,7 @@
 //                                    ),
                                     'detail' => array
                                         (
-                                        'label' => 'View Question',
+                                        'label' => 'View Details',
                                         'icon' => 'fa fa-folder-open',
                                         'url' => 'array("view","id"=>$data->id,"pId"=>$_GET["pId"])',
                                         'options' => array(

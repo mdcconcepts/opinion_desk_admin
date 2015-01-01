@@ -51,7 +51,7 @@ class WebAppServicesController extends Controller {
                     $dataProvider = array();
 
                     $i = 1;
-
+                  
                     foreach ($reader as $row) {
                         $data = array();
                         $data['date'] = date("Y-m-d", strtotime(date("Y") . "W" . ($row['Week'] + 1)));
@@ -82,7 +82,7 @@ class WebAppServicesController extends Controller {
 
                     $connection = Yii::app()->db;
 
-                    $sqlStatement = "SELECT Month(`created_at`) AS Month,COUNT(`created_at`)
+                   echo $sqlStatement = "SELECT Month(`created_at`) AS Month,COUNT(`created_at`)
                 Total_Customer_Visit,AVG(`option_value`)
                 Average_Feedback_Value FROM `responce_master` WHERE YEAR(`created_at`)=YEAR(now()) 
                 AND `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id` in

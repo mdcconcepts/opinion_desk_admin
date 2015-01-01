@@ -10,11 +10,11 @@
         <div class="pull-right">
             <div class="btn-group">
                 <a href="<?php echo Yii::app()->createUrl("questionMaster_Child/update/" . $model->id . "?pId=" . $pId); ?>" title="" data-toggle="tooltip" type="button" class="btn btn-white tooltips" data-original-title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                <a href="<?php echo Yii::app()->createUrl("questionMaster_Child/delete/" . $model->id . "?pId=" . $pId); ?>" title="" data-toggle="tooltip" type="button" class="btn btn-white tooltips" data-original-title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
+                <a href="#" onclick="delete_data('Are you sure you want to DELETE this Field?', '<?php echo Yii::app()->createUrl("questionMaster_Child/delete/" . $model->id . "?pId=" . $pId); ?>');" title="" data-toggle="tooltip" type="button" class="btn btn-white tooltips" data-original-title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
             </div>
         </div> 
 
-        <strong><?php // echo $model->branch_name; ?></strong>
+        <strong><?php // echo $model->branch_name;   ?></strong>
         <br/>
         <br/>
         <br/>

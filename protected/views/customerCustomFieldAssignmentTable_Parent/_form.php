@@ -50,7 +50,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     $this->widget('bootstrap.widgets.TbButton', array(
         'buttonType' => 'submit',
         'type' => 'primary',
-        'label' => $model->isNewRecord ? 'Create' : 'Save',
+        'label' => $model->isNewRecord ? 'Add' : 'Save',
     ));
     ?>
     <a href="<?php echo Yii::app()->request->getBaseUrl(); ?>/index.php/customerCustomFieldAssignmentTable_Parent?pId=<?php echo $pId; ?>" class="btn btn-default" >Cancel</a>

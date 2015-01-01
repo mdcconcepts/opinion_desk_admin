@@ -10,11 +10,11 @@
         <div class="pull-right">
             <div class="btn-group">
                 <a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent/update/" . $model->id . "?pId=" . $pId); ?>" title="" data-toggle="tooltip" type="button" class="btn btn-white tooltips" data-original-title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                <a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent/delete/" . $model->id . "?pId=" . $pId); ?>" title="" data-toggle="tooltip" type="button" class="btn btn-white tooltips" data-original-title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
+                <a href="#" title="" onclick="delete_data('Are you sure you want to DELETE this Field?', '<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent/delete/" . $model->id . "?pId=" . $pId); ?>');" data-toggle="tooltip" type="button" class="btn btn-white tooltips" data-original-title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
             </div>
         </div> 
 
-        <strong><?php // echo $model->branch_name;            ?></strong>
+        <strong><?php // echo $model->branch_name;                         ?></strong>
         <br/>
         <br/>
         <br/>
@@ -22,15 +22,12 @@
         $this->widget('bootstrap.widgets.TbDetailView', array(
             'data' => $model,
             'attributes' => array(
-                'id',
                 'customer_custom_field_id',
-                'branch_id',
             ),
         ));
         ?>
     </div><!--/ block-web -->
 </div><!-- /col-sm-9 -->
-
 <?php
 /* @var $this CustomerCustomFieldAssignmentTable_ParentController */
 /* @var $model CustomerCustomFieldAssignmentTable */

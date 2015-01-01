@@ -182,6 +182,41 @@ class Dashboard_helper {
         return 0;
     }
 
+    public static function getTodaysTotalCustomerForAllBranches($from_Date, $to_Date) {
+        try {
+
+
+            $connection = Yii::app()->db;
+
+            $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer FROM "
+                    . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
+                    . " WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id)) "
+                    . " AND DATE(`created_at`) BETWEEN :FROM_DATE AND :TO_DATE";
+
+            $command = $connection->createCommand($sqlStatement);
+
+            $customer_id = Yii::app()->user->id;
+
+            $command->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+
+            $command->bindParam(':FROM_DATE', $from_Date, PDO::PARAM_INT);
+
+            $command->bindParam(':TO_DATE', $to_Date, PDO::PARAM_INT);
+
+            $command->execute();
+
+            $reader = $command->query();
+
+            foreach ($reader as $row) {
+                return $row['Total_Customer'];
+            }
+        } catch (Exception $ex) {
+            return "error, " . $ex->getMessage();
+        }
+
+        return 0;
+    }
+
     public static function getTotalMALECustomerForAllBranches() {
         try {
 

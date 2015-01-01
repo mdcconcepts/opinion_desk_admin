@@ -372,7 +372,7 @@ class MobileServicesController extends Controller {
 
         $Post = Yii::app()->getRequest()->getRawBody();
 
-        $Post_Feedback_Id = CJSON::decode($Post)['Feedback_Id'];
+        $Post_Feedback_Id = CJSON::decode($Post)['feedbackID'];
 
         $Post_Client = CJSON::decode($Post)['Client'];
 
@@ -396,7 +396,6 @@ class MobileServicesController extends Controller {
             $Client->gender = $Post_Client['gender'];
             $Client->dob = $Post_Client['dob'];
             if ($Client->save()) {
-
                 $this->saveCustomFieldData($Client->getPrimaryKey(), $Post_Custom_Fields_Client);
 
                 $this->saveQuestionResponceData($Client->getPrimaryKey(), $Post_Questions);
@@ -410,7 +409,7 @@ class MobileServicesController extends Controller {
                     'Status_code' => '200',
                     'Success' => 'True',
                     'Message' => 'Client Response Saved !',
-                    'Feedback_Id' => $Post_Feedback_Id
+                    'feedbackID' => $Post_Feedback_Id
                 ];
 
                 $this->_sendResponse(200, $Responce);
@@ -428,7 +427,7 @@ class MobileServicesController extends Controller {
         $Responce = [
             'Status_code' => '400',
             'Success' => 'Fail',
-            'Message' => 'Unknown Responce',
+            'Message' => $Client->getErrors(),
         ];
         $this->_sendResponse(400, $Responce);
     }
@@ -436,6 +435,8 @@ class MobileServicesController extends Controller {
     public function actionpostResponseExistingClientData() {
 
         $Tablet = $this->_checkAuth();
+
+        $Post_Feedback_Id = CJSON::decode($Post)['feedbackID'];
 
         $Post_Client_Id = Yii::app()->request->getPost('Client_Id');
 
@@ -466,6 +467,7 @@ class MobileServicesController extends Controller {
                 'Status_code' => '200',
                 'Success' => 'True',
                 'Message' => 'Client Response Saved !',
+                'feedbackID' => $Post_Feedback_Id
             ];
 
             $this->_sendResponse(200, $Responce);

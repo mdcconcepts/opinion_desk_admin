@@ -67,31 +67,31 @@ class TabletUpdateTokenHelper {
         }
     }
 
-    public static function updateForQuestions($branch_id) {
-        try {
-
-
-            $token = TabletUpdateTokenHelper::generate_random_password();
-
-            $query = "UPDATE `tablet_master` SET `update_token`='$token',"
-                    . "`update_at`='" . date('Y-m-d H:i:s') . "' WHERE `branch_id`= $branch_id";
-
-            $connection = Yii::app()->db;
-
-            $command = $connection->createCommand($query);
-
-            $command->execute();
-
-            /**
-             * Parameter For Query
-             */
-//            $command->bindParam(':tablet_id', $tablet_id, PDO::PARAM_INT);
-//            $command->bindParam(':Token', $token, PDO::PARAM_INT);
-//            $command->bindParam(':update_at', date('Y-m-d H:i:s'), PDO::PARAM_INT);
-        } catch (Exception $ex) {
-            echo "error, " . $ex->getMessage();
-        }
-    }
+//    public static function updateForQuestions($branch_id) {
+//        try {
+//
+//
+//            $token = TabletUpdateTokenHelper::generate_random_password();
+//
+//            $query = "UPDATE `tablet_master` SET `update_token`='$token',"
+//                    . "`update_at`='" . date('Y-m-d H:i:s') . "' WHERE `branch_id`= $branch_id";
+//
+//            $connection = Yii::app()->db;
+//
+//            $command = $connection->createCommand($query);
+//
+//            $command->execute();
+//
+//            /**
+//             * Parameter For Query
+//             */
+////            $command->bindParam(':tablet_id', $tablet_id, PDO::PARAM_INT);
+////            $command->bindParam(':Token', $token, PDO::PARAM_INT);
+////            $command->bindParam(':update_at', date('Y-m-d H:i:s'), PDO::PARAM_INT);
+//        } catch (Exception $ex) {
+//            echo "error, " . $ex->getMessage();
+//        }
+//    }
 
     public static function updateForCustomFields() {
         try {

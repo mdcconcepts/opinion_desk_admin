@@ -3,7 +3,7 @@
         <div class="block-web">
             <div class="header">
                 <div class="actions"> <a class="minimize" href="#"><i class="fa fa-chevron-down"></i></a> <a class="refresh" href="#"><i class="fa fa-repeat"></i></a> <a class="close-down" href="#"><i class="fa fa-times"></i></a> </div>
-                <h3 class="content-header">Data Table</h3>
+                <h3 class="content-header">All Branches</h3>
             </div>
             <div class="porlets-content">
                 <?php if (Yii::app()->user->hasFlash('error')): ?>
@@ -29,11 +29,6 @@
                                 )+
                                 array_search($data,$this->grid->dataProvider->getData())+1',
                                 'htmlOptions' => array('style' => 'width: 25px; text-align:center;'),
-                            ),
-                            array(
-                                'name' => 'customer_id',
-                                'value' => '($data->customer_id)',
-                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
                             ),
                             array(
                                 'name' => 'branch_name',
@@ -63,23 +58,14 @@
                             array(
                                 'class' => 'bootstrap.widgets.TbButtonColumn',
                                 'htmlOptions' => array('style' => 'width:90px'),
-                                'template' => '{update}     {detail}',
+                                'template' => '{detail}',
                                 'buttons' => array
                                     (
                                     'detail' => array
                                         (
                                         'label' => 'View Branch',
-                                        'icon' => 'fa fa-level-down',
+                                        'icon' => 'fa fa-folder-open',
                                         'url' => 'array("view","id"=>$data->id)',
-                                        'options' => array(
-                                            'class' => 'badge badge-info',
-                                        ),
-                                    ),
-                                    'update' => array
-                                        (
-                                        'label' => 'Update Branch',
-                                        'icon' => 'fa fa-pencil',
-                                        'url' => 'array("update","id"=>$data->id)',
                                         'options' => array(
                                             'class' => 'badge badge-info',
                                         ),

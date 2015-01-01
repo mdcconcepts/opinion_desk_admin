@@ -68,26 +68,28 @@ class TestimonialsController extends Controller {
                                      GROUP BY `client_id`)AS DATA INNER JOIN `testimonial_response_table`
                                      ON DATA.`client_id`=`testimonial_response_table`.`client_id` 
                                      INNER JOIN `client_master` ON `client_master`.`client_id`=DATA.`client_id`
-                                      WHERE Total_AVG=";
+                                      ";
                 $Feddback_Val = $_GET['feedback'];
                 switch (true) {
                     case ($Feddback_Val == '0' || $Feddback_Val == null ) :
-                        $sqlStatement .= "0";
+                        $sqlStatement .= "WHERE Total_AVG=0";
                         break;
                     case ($Feddback_Val == '1') :
-                        $sqlStatement .= "1";
+                        $sqlStatement .= "WHERE Total_AVG=1";
                         break;
                     case ($Feddback_Val == '2') :
-                        $sqlStatement .= "2";
+                        $sqlStatement .= "WHERE Total_AVG=2";
                         break;
                     case ($Feddback_Val == '3') :
-                        $sqlStatement .= "3";
+                        $sqlStatement .= "WHERE Total_AVG=3";
                         break;
                     case ($Feddback_Val == '4'):
-                        $sqlStatement .= "4";
+                        $sqlStatement .= "WHERE Total_AVG=4";
                         break;
                     case ($Feddback_Val == '5'):
-                        $sqlStatement .= "5";
+                        $sqlStatement .= "WHERE Total_AVG=5";
+                        break;
+                    case ($Feddback_Val == 'all'):
                         break;
                 }
 
@@ -149,37 +151,40 @@ class TestimonialsController extends Controller {
                 $branch_id = $Branches[0]->id;
             }
             $sqlStatement = "Select * from  (SELECT `client_id`,
-`option_value`,
-`question_id`,
-ROUND(AVG(`option_value`), 0) AS Total_AVG
-FROM `responce_master`
-WHERE `question_id` IN
-( SELECT `id`
-FROM `question_master`
-WHERE `branch_id` = $branch_id) 
-GROUP BY `client_id`)AS DATA INNER JOIN `testimonial_response_table`
-ON DATA.`client_id`=`testimonial_response_table`.`client_id` 
-INNER JOIN `client_master` ON `client_master`.`client_id`=DATA.`client_id`
-WHERE Total_AVG=";
+                        `option_value`,
+                        `question_id`,
+                        ROUND(AVG(`option_value`), 0) AS Total_AVG
+                        FROM `responce_master`
+                        WHERE `question_id` IN
+                        ( SELECT `id`
+                        FROM `question_master`
+                        WHERE `branch_id` = $branch_id) 
+                        GROUP BY `client_id`)AS DATA INNER JOIN `testimonial_response_table`
+                        ON DATA.`client_id`=`testimonial_response_table`.`client_id` 
+                        INNER JOIN `client_master` ON `client_master`.`client_id`=DATA.`client_id`
+                        ";
             $Feddback_Val = $_GET['feedback'];
             switch (true) {
                 case ($Feddback_Val == '0' || $Feddback_Val == null ) :
-                    $sqlStatement .= "0";
+                    $sqlStatement .= "WHERE Total_AVG=0";
                     break;
                 case ($Feddback_Val == '1') :
-                    $sqlStatement .= "1";
+                    $sqlStatement .= "WHERE Total_AVG=1";
                     break;
                 case ($Feddback_Val == '2') :
-                    $sqlStatement .= "2";
+                    $sqlStatement .= "WHERE Total_AVG=2";
                     break;
                 case ($Feddback_Val == '3') :
-                    $sqlStatement .= "3";
+                    $sqlStatement .= "WHERE Total_AVG=3";
                     break;
                 case ($Feddback_Val == '4'):
-                    $sqlStatement .= "4";
+                    $sqlStatement .= "WHERE Total_AVG=4";
                     break;
                 case ($Feddback_Val == '5'):
-                    $sqlStatement .= "5";
+                    $sqlStatement .= "WHERE Total_AVG=5";
+                    break;
+                case ($Feddback_Val == 'all'):
+                    $sqlStatement .= "ORDER BY Total_AVG ";
                     break;
             }
 

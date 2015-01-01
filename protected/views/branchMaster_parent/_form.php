@@ -14,20 +14,19 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     <div class="alert alert-info"> 
 
         <?php
-        $this->widget('bootstrap.widgets.TbAlert', array(
-            'block' => false, // display a larger alert block?
-            'fade' => true, // use transitions?
-            'closeText' => '&times;', // close link text - if set to false, no close link is displayed
-            'alerts' => array(// configurations per alert type
-                'success' => array('block' => true, 'fade' => true, 'closeText' => '&times;', 'class' => 'alert alert-danger'), //success, info, warning, error or danger
-                'info' => array('block' => true, 'fade' => true, 'closeText' => '&times;', 'class' => 'alert alert-danger'), //success, info, warning, error or danger
-                'warning' => array('block' => true, 'fade' => true, 'closeText' => '&times;', 'class' => 'alert alert-danger'), //success, info, warning, error or danger
-                'error' => array('block' => true, 'fade' => true, 'closeText' => '&times;', 'class' => 'alert alert-danger'), //success, info, warning, error or danger
-                'danger' => array('block' => true, 'fade' => true, 'closeText' => '&times;', 'class' => 'alert alert-danger'), //success, info, warning, error or danger
-            ),
-        ));
+//        $this->widget('bootstrap.widgets.TbAlert', array(
+//            'block' => false, // display a larger alert block?
+//            'fade' => true, // use transitions?
+//            'closeText' => '&times;', // close link text - if set to false, no close link is displayed
+//            'alerts' => array(// configurations per alert type
+//                'success' => array('block' => true, 'fade' => true, 'closeText' => '&times;', 'class' => 'alert alert-danger'), //success, info, warning, error or danger
+//                'info' => array('block' => true, 'fade' => true, 'closeText' => '&times;', 'class' => 'alert alert-danger'), //success, info, warning, error or danger
+//                'warning' => array('block' => true, 'fade' => true, 'closeText' => '&times;', 'class' => 'alert alert-danger'), //success, info, warning, error or danger
+//                'error' => array('block' => true, 'fade' => true, 'closeText' => '&times;', 'class' => 'alert alert-danger'), //success, info, warning, error or danger
+//                'danger' => array('block' => true, 'fade' => true, 'closeText' => '&times;', 'class' => 'alert alert-danger'), //success, info, warning, error or danger
+//            ),
+//        ));
         ?>
-        <p class="note">Fields with <span class="required">*</span> are required.</p>
 
         <?php echo $form->errorSummary($model); ?>
 
@@ -35,18 +34,18 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 </div>
 <input style="display:none" class="span5" value="<?php echo Yii::app()->user->id; ?>" name="BranchMaster[customer_id]" id="BranchMaster_customer_id" type="text">
 <div class="form-group">
-    <?php echo $form->labelEx($model, 'branch_name', array('class' => 'col-sm-3 control-label')); ?>
+    <?php // echo $form->labelEx($model, 'branch_name', array('class' => 'col-sm-3 control-label')); ?>
     <div class="col-sm-9">
         <?php echo $form->textFieldRow($model, 'branch_name', array('class' => 'span5 form-control', 'maxlength' => 45)); ?>       
         <?php echo $form->error($model, 'branch_name', array('style' => 'color:red;')); ?>
     </div>
 </div><!--/form-group--> 
 <div class="form-group">
-    <?php echo $form->labelEx($model, 'branch_address', array('class' => 'col-sm-3 control-label')); ?>
-    <div class="col-sm-9">
+    <?php // echo $form->labelEx($model, 'branch_address', array('class' => 'col-sm-3 control-label')); ?>
+    <div class="col-sm-9" style="margin-bottom:  30px;">
         <?php echo $form->textFieldRow($model, 'branch_address', array('class' => 'span5 form-control', 'maxlength' => 45)); ?>       
         <?php echo $form->error($model, 'branch_address', array('style' => 'color:red;')); ?>
-    </div>
+    </div >
 </div><!--/form-group--> 
 <div class="bottom">
     <?php

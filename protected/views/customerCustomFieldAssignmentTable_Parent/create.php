@@ -58,7 +58,7 @@
                 <div class="block-web">
                     <div class="header">
                         <div class="actions"> <a href="#" class="minimize"><i class="fa fa-chevron-down"></i></a> <a href="#" class="refresh"><i class="fa fa-repeat"></i></a> </div>
-                        <h3 class="content-header">Create Client Fields</h3>
+                        <h3 class="content-header">Add Customer Fields</h3>
                     </div>
                     <!--                    <div class="porlets-content">
                                             <div class="alert alert-danger"> -->

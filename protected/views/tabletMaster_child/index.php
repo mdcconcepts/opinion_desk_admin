@@ -77,7 +77,7 @@
                                     (
                                     'detail' => array
                                         (
-                                        'label' => 'View Question',
+                                        'label' => 'View Details',
                                         'icon' => 'fa fa-folder-open',
                                         'url' => 'array("view","id"=>$data->id,"pId"=>$_GET["pId"])',
                                         'options' => array(

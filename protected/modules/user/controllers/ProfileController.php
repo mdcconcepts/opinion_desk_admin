@@ -127,8 +127,12 @@ class ProfileController extends Controller {
             } else
                 $profile->validate();
         }
-
-        $this->render('edit', array(
+//        $this->redirect(array('/user/profile'), array(
+//            'model' => $model,
+//            'profile' => $profile,
+////            'Uploadmodel' => $Uploadmodel
+//        ));
+        $this->render('profile', array(
             'model' => $model,
             'profile' => $profile,
 //            'Uploadmodel' => $Uploadmodel

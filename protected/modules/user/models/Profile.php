@@ -37,11 +37,22 @@ class Profile extends UActiveRecord {
             $float = array();
             $decimal = array();
             $rules = array();
+            $name = array();
+            $mobile = array();
+            $zipcode = array();
+            $pancard = array();
+            array_push($name, 'lastname');
+            array_push($name, 'firstname');
+
+            array_push($mobile, 'phone_no');
+            array_push($zipcode, 'zipcode');
+            array_push($pancard, 'pan_number');
 
             $model = $this->getFields();
 
             foreach ($model as $field) {
                 $field_rule = array();
+
                 if ($field->required == ProfileField::REQUIRED_YES_NOT_SHOW_REG || $field->required == ProfileField::REQUIRED_YES_SHOW_REG)
                     array_push($required, $field->varname);
                 if ($field->field_type == 'FLOAT')
@@ -96,6 +107,11 @@ class Profile extends UActiveRecord {
             array_push($rules, array(implode(',', $numerical), 'numerical', 'integerOnly' => true));
             array_push($rules, array(implode(',', $float), 'type', 'type' => 'float'));
             array_push($rules, array(implode(',', $decimal), 'match', 'pattern' => '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'));
+            array_push($rules, array(implode(',', $name), 'match', 'pattern' => '/^[A-Za-z][A-Za-z0-9]{5,31}$/'));
+            array_push($rules, array(implode(',', $mobile), 'match', 'pattern' => '/^\d{10}$/'));
+            array_push($rules, array(implode(',', $zipcode), 'match', 'pattern' => '/^\d{6}$/'));
+            array_push($rules, array(implode(',', $pancard), 'match', 'pattern' => '/^[A-Z]{5}\d{4}[A-Z]{1}/'));
+
             $this->_rules = $rules;
         }
         return $this->_rules;

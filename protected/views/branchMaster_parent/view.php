@@ -17,7 +17,7 @@
     </div><!--/col-md-12--> 
 </div><!--/row-->
 <div class="row">
-    <div class="col-sm-3 col-lg-2" style="position: relative;"> 
+    <div class="col-sm-3 col-lg-2" style="position: relative;margin-top: 30px;"> 
         <ul class="nav nav-pills nav-stacked nav-email" style="position: fixed;">
             <li class="active"> <a href="#"> <i class="glyphicon glyphicon-inbox"></i> Branch </a> </li>
             <li><a href="<?php echo Yii::app()->createUrl("questionMaster_Child?pId=" . $model->id); ?>"><i class="glyphicon glyphicon-star-empty"></i> Questions</a></li>
@@ -26,60 +26,172 @@
             <li> <a href="<?php echo Yii::app()->createUrl("branchMaster_parent"); ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>
         </ul>
     </div><!-- col-sm-3 -->
+    <div class="col-md-10">
+        <div class="porlets-content">
+            <?php echo CHtml::errorSummary($model, null, null, array('class' => 'alert alert-danger')); ?>
+        </div>
+        <div class="block-web full">
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a data-toggle="tab" href="#about"><i class="fa fa-user"></i> About</a></li>
+                <li><a data-toggle="tab" href="#edit-profile"><i class="fa fa-pencil"></i> Edit</a></li>
+                <li><a data-toggle="tab" href="#user-activities"><i class="fa fa-laptop"></i> Activities</a></li>
+                <li><a data-toggle="tab" href="#mymessage"><i class="fa fa-envelope"></i> Message</a></li>
+            </ul>
 
-    <div class="col-sm-9 col-lg-10">
+            <div class="tab-content"> 
+                <div id="about" class="tab-pane active animated fadeInRight">
+                    <strong><?php echo $model->branch_name; ?></strong>
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <a href="#" onclick="delete_data('Are you sure you want to DELETE this Field?', '<?php echo Yii::app()->createUrl("branchMaster_parent/delete/" . $model->id); ?>')" title="" data-toggle="tooltip" type="button" class="btn btn-white tooltips" data-original-title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
+                        </div>
+                    </div>
+                    <div class="user-profile-content">
+                        <div class="col-sm-6">
+                            <h5><strong>ABOUT</strong> <?php echo $model->branch_name; ?></h5>
+                            <address>
+                                <strong>Branch Unique Identity</strong><br>
+                                <abbr title="id"><?php echo $model->id; ?></abbr>
+                            </address>
+                            <address>
+                                <strong>Branch Address</strong><br>
+                                <abbr title="branch_address"><?php echo $model->branch_address; ?></abbr>
+                            </address>
 
+                        </div>
+                        <div class="col-sm-6">
+                            <h5><strong>ABOUT</strong> Tablets</h5>
+                            <address>
+                                <strong>Table Used for Branch <?php echo $model->branch_name; ?></strong><br>
+                                <abbr title="Tablet Consume"><?php echo BranchMaster::getTablet_count($model->id); ?></abbr>
+                            </address>
+                            <hr/>
+                            <address>
+                                <strong>Table Allowed for Branch <?php echo $model->branch_name; ?></strong><br>
+                                <abbr title="Date Of Birth"><?php echo $model->tablet_no; ?></abbr>
+                            </address>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="edit-profile" class="tab-pane animated fadeInRight">
+                    <div class="user-profile-content">
+                        <div class="porlets-content">
+                            <?php
+                            $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+                                'id' => 'branch-master-form',
+                                'action' => Yii::app()->request->baseUrl . '/index.php/branchMaster_parent/update/' . $model->id,
+                                // Please note: When you enable ajax validation, make sure the corresponding
+                                // controller action is handling ajax validation correctly.
+                                // There is a call to performAjaxValidation() commented in generated controller code.
+                                // See class documentation of CActiveForm for details on this.
+                                'enableAjaxValidation' => false,
+                                    // 'htmlOptions'=>array('enctype'=>'multipart/form-data'),
+                            ));
+                            ?>
+
+                            <input style="display:none" class="span5" value="<?php echo Yii::app()->user->id; ?>" name="BranchMaster[customer_id]" id="BranchMaster_customer_id" type="text">
+                            <div class="form-group">
+                                <?php // echo $form->labelEx($model, 'branch_name', array('class' => 'col-sm-3 control-label')); ?>
+                                <div class="col-sm-9">
+                                    <?php echo $form->textFieldRow($model, 'branch_name', array('class' => 'span5 form-control', 'maxlength' => 45)); ?>       
+                                    <?php echo $form->error($model, 'branch_name', array('style' => 'color:red;')); ?>
+                                </div>
+                            </div><!--/form-group--> 
+                            <div class="form-group">
+                                <?php // echo $form->labelEx($model, 'branch_address', array('class' => 'col-sm-3 control-label')); ?>
+                                <div class="col-sm-9" style="margin-bottom:  30px;">
+                                    <?php echo $form->textFieldRow($model, 'branch_address', array('class' => 'span5 form-control', 'maxlength' => 45)); ?>       
+                                    <?php echo $form->error($model, 'branch_address', array('style' => 'color:red;')); ?>
+                                </div >
+                            </div><!--/form-group--> 
+                            <div class="bottom">
+                                <?php
+                                $this->widget('bootstrap.widgets.TbButton', array(
+                                    'buttonType' => 'submit',
+                                    'type' => 'primary',
+                                    'label' => $model->isNewRecord ? 'Create' : 'Save',
+                                ));
+                                ?>
+                                <a href="<?php echo Yii::app()->request->getBaseUrl(); ?>/index.php/branchMaster_parent" class="btn btn-default" >Cancel</a>
+                            </div><!--/form-group-->
+                            <!--</form>-->
+                            <?php $this->endWidget(); ?>
+                        </div><!--/porlets-content-->
+                    </div>
+                </div>
+
+                <div id="user-activities" class="tab-pane">
+                    <ul class="media-list">
+                        <li class="media"> <a href="#">
+                                <p><strong>John Doe</strong> Uploaded a photo <strong>"DSC000254.jpg"</strong> <br>
+                                    <i>2 minutes ago</i></p>
+                            </a> </li>
+                        <li class="media"> <a href="#">
+                                <p><strong>Imran Tahir</strong> Created an photo album <strong>"Indonesia Tourism"</strong> <br>
+                                    <i>8 minutes ago</i></p>
+                            </a> </li>
+                        <li class="media"> <a href="#">
+                                <p><strong>Colin Munro</strong> Posted an article <strong>"London never ending Asia"</strong> <br>
+                                    <i>an hour ago</i></p>
+                            </a> </li>
+                        <li class="media"> <a href="#">
+                                <p><strong>Corey Anderson</strong> Added 3 products <br>
+                                    <i>3 hours ago</i></p>
+                            </a> </li>
+                        <li class="media"> <a href="#">
+                                <p><strong>Morne Morkel</strong> Send you a message <strong>"Lorem ipsum dolor..."</strong> <br>
+                                    <i>12 hours ago</i></p>
+                            </a> </li>
+                        <li class="media"> <a href="#">
+                                <p><strong>Imran Tahir</strong> Updated his avatar <br>
+                                    <i>Yesterday</i></p>
+                            </a> </li>
+                    </ul>
+                </div>
+                <div id="mymessage" class="tab-pane">
+                    <ul class="media-list">
+                        <li class="media"> <a href="#" class="pull-left"> <img alt="Avatar" src="images/avatar.jpg" class="media-object"> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="#fakelink">John Doe</a> <small>Just now</small></h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                            </div>
+                        </li>
+                        <li class="media"> <a href="#" class="pull-left"> <img alt="Avatar" src="images/avatar.jpg" class="media-object"> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="#fakelink">Tim Southee</a> <small>Yesterday at 04:00 AM</small></h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam rhoncus</p>
+                            </div>
+                        </li>
+                        <li class="media"> <a href="#" class="pull-left"> <img alt="Avatar" src="images/avatar.jpg" class="media-object"> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="#fakelink">Kane Williamson</a> <small>January 17, 2014 05:35 PM</small></h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                            </div>
+                        </li>
+                        <li class="media"> <a href="#" class="pull-left"> <img alt="Avatar" src="images/avatar.jpg" class="media-object"> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="#fakelink">Lonwabo Tsotsobe</a> <small>January 17, 2014 05:35 PM</small></h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                            </div>
+                        </li>
+                        <li class="media"> <a href="#" class="pull-left"> <img alt="Avatar" src="images/avatar.jpg" class="media-object"> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="#fakelink">Dale Steyn</a> <small>January 17, 2014 05:35 PM</small></h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                            </div>
+                        </li>
+                        <li class="media"> <a href="#" class="pull-left"> <img alt="Avatar" src="images/avatar.jpg" class="media-object"> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="#fakelink">John Doe</a> <small>Just now</small></h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div><!--/tab-content--> 
+        </div><!--/block-web--> 
         <div class="block-web">
-            <strong><?php echo $model->branch_name; ?></strong>
-            <div class="pull-right">
-                <div class="btn-group">
-                    <a href="<?php echo Yii::app()->createUrl("branchMaster_parent/update/" . $model->id); ?>" title="" data-toggle="tooltip" type="button" class="btn btn-white tooltips" data-original-title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                    <a href="<?php echo Yii::app()->createUrl("branchMaster_parent/delete/" . $model->id); ?>" title="" data-toggle="tooltip" type="button" class="btn btn-white tooltips" data-original-title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
-                </div>
-            </div> 
-            <div class="user-profile-content">
-                <div class="col-sm-6">
-                    <h5><strong>ABOUT</strong> <?php echo $model->branch_name; ?></h5>
-                    <address>
-                        <strong>Branch Unique Identity</strong><br>
-                        <abbr title="id"><?php echo $model->id; ?></abbr>
-                    </address>
-                    <address>
-                        <strong>Branch Address</strong><br>
-                        <abbr title="branch_address"><?php echo $model->branch_address; ?></abbr>
-                    </address>
-
-                </div>
-                <div class="col-sm-6">
-                    <h5><strong>ABOUT</strong> Tablets</h5>
-                    <address>
-                        <strong>Table Used for Branch <?php echo $model->branch_name; ?></strong><br>
-                        <abbr title="Tablet Consume"><?php echo BranchMaster::getTablet_count($model->id); ?></abbr>
-                    </address>
-                    <hr/>
-                    <address>
-                        <strong>Table Allowed for Branch <?php echo $model->branch_name; ?></strong><br>
-                        <abbr title="Date Of Birth"><?php echo $model->tablet_no; ?></abbr>
-                    </address>
-                </div>
-            </div>
-            <br/>
-            <br/>
-            <?php
-//            $this->widget('bootstrap.widgets.TbDetailView', array(
-//                'data' => $model,
-//                'attributes' => array(
-//                    'id',
-//                    'customer_id',
-//                    'branch_name',
-//                    'branch_address',
-//                    'tablet_no',
-//                    'created_at',
-//                    'updated_at',
-//                ),
-//            ));
-            ?>
-
             <div class="row">
                 <div class="col-md-6">
                     <div class="block-web">
@@ -182,7 +294,8 @@
                     </div><!--/panel-->
                 </div><!--/col-md-3-->
             </div><!--/row-->
-
+        </div>
+        <div class="block-web">
             <div class="row">
                 <div class="col-md-12">
                     <div class="block-web">
@@ -239,6 +352,8 @@
                     </div>
                 </div><!--/row end-->
             </div>
+        </div>
+        <div class="block-web">
             <div class="row">
                 <div class="col-md-12">
                     <div class="block-web">
@@ -266,6 +381,8 @@
                     </div><!--/block-web-->
                 </div><!--/col-md-6-->
             </div>
+        </div>
+        <div class="block-web">
             <div class="row">
                 <div class="col-md-12">
                     <div class="block-web">
@@ -290,7 +407,11 @@
                     </div><!--/block-web-->
                 </div><!--/col-md-6-->
             </div>
-        </div><!--/ block-web --> 
+        </div>
+    </div><!--/col-md-8--> 
+    <div class="col-sm-9 col-lg-10">
+
+
     </div><!-- /col-sm-9 --> 
 </div><!--/row--> 
 

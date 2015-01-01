@@ -79,7 +79,7 @@ Welcome, John!</li>
                     </div>
                 </li>
                 <!--<li class = "hidden-xs"> <form method = "post" action = "index.html" class = "searchform"><input type = "text" placeholder = "Search here..." name = "keyword" class = "form-control"></form> </li>-->
-                <li id = "last-one" style="margin-right: -41px;"> <a href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/logout">Log Out <i class = "fa fa-angle-double-right"></i></a> </li>
+                <li id = "last-one" style="margin-right: -41px;"> <a href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/logout">Logout <i class = "fa fa-angle-double-right"></i></a> </li>
                 <!--<li><a id = "show-right-info-bar" href = "javascript:;" class = ""><i class = "fa fa-bars"></i></a></li>-->
             </ul><!--/nav navbar-nav-->
         </div><!--/header-seperation-->

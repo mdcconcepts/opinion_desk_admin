@@ -35,28 +35,28 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 </div>
 <input style="display:none" class="span5" value="<?php echo $_GET['pId']; ?>" name="TabletMaster[branch_id]" id="TabletMaster_branch_id" type="text">
 <div class="form-group">
-    <?php echo $form->labelEx($model, 'first_name_user', array('class' => 'col-sm-3 control-label')); ?>
+    <?php // echo $form->labelEx($model, 'first_name_user', array('class' => 'col-sm-3 control-label')); ?>
     <div class="col-sm-9">
         <?php echo $form->textFieldRow($model, 'first_name_user', array('class' => 'span5 form-control', 'maxlength' => 45)); ?>       
         <?php echo $form->error($model, 'first_name_user', array('style' => 'color:red;')); ?>
     </div>
 </div><!--/form-group--> 
 <div class="form-group">
-    <?php echo $form->labelEx($model, 'last_name_user', array('class' => 'col-sm-3 control-label')); ?>
+    <?php // echo $form->labelEx($model, 'last_name_user', array('class' => 'col-sm-3 control-label')); ?>
     <div class="col-sm-9">
         <?php echo $form->textFieldRow($model, 'last_name_user', array('class' => 'span5 form-control', 'maxlength' => 45)); ?>       
         <?php echo $form->error($model, 'last_name_user', array('style' => 'color:red;')); ?>
     </div>
 </div><!--/form-group--> 
 <div class="form-group">
-    <?php echo $form->labelEx($model, 'username', array('class' => 'col-sm-3 control-label')); ?>
+    <?php // echo $form->labelEx($model, 'username', array('class' => 'col-sm-3 control-label')); ?>
     <div class="col-sm-9">
         <?php echo $form->textFieldRow($model, 'username', array('class' => 'span5 form-control', 'maxlength' => 45)); ?>       
         <?php echo $form->error($model, 'username', array('style' => 'color:red;')); ?>
     </div>
 </div><!--/form-group--> 
 <div class="form-group">
-    <?php echo $form->labelEx($model, 'password', array('class' => 'col-sm-3 control-label')); ?>
+    <?php // echo $form->labelEx($model, 'password', array('class' => 'col-sm-3 control-label')); ?>
     <div class="col-sm-9">
         <?php echo $form->textFieldRow($model, 'password', array('class' => 'span5 form-control', 'maxlength' => 45)); ?>       
         <?php echo $form->error($model, 'password', array('style' => 'color:red;')); ?>

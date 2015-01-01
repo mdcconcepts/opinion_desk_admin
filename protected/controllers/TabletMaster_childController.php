@@ -60,8 +60,8 @@ class TabletMaster_childController extends Controller {
 
             $model = new TabletMaster;
 
-            // Uncomment the following line if AJAX validation is needed
-            // $this->performAjaxValidation($model);
+// Uncomment the following line if AJAX validation is needed
+// $this->performAjaxValidation($model);
 
             if (isset($_POST['TabletMaster'])) {
                 $transaction = Yii::app()->db->beginTransaction();
@@ -77,7 +77,7 @@ class TabletMaster_childController extends Controller {
 
 
                     if ($count >= BranchMaster::getTablet_count($model->branch_id)) {
-                        Yii::app()->user->setFlash('error', "<strong>Your limit for Tablets for this Branch is expired !</strong></br>Please upgrade your package, kindly contact to our support !");
+                        Yii::app()->user->setFlash('error', "<strong>Your Tablets limit for this Branch is expired !</strong></br>Please upgrade your package, kindly contact to our support !");
 //                echo json_encode("error");
                         $this->render('create', array(
                             'model' => $model,
@@ -88,7 +88,7 @@ class TabletMaster_childController extends Controller {
                         Yii::app()->end();
                     }
 
-                    //$uploadFile=CUploadedFile::getInstance($model,'filename');
+//$uploadFile=CUploadedFile::getInstance($model,'filename');
                     if ($model->save()) {
                         $messageType = 'success';
                         $message = "<strong>Well done!</strong> You successfully create data ";
@@ -113,6 +113,9 @@ class TabletMaster_childController extends Controller {
                         Yii::app()->user->setFlash($messageType, $message);
                         $this->redirect(array('view', 'id' => $model->id, 'pId' => $pId));
                     }
+                } catch (CDbException $e) {
+                    $transaction->rollBack();
+                    Yii::app()->user->setFlash('error', "Please check your data for registration, or change username !");
                 } catch (Exception $e) {
                     $transaction->rollBack();
                     Yii::app()->user->setFlash('error', "{$e->getMessage()}");
@@ -217,7 +220,7 @@ class TabletMaster_childController extends Controller {
         } catch (Exception $exc) {
             Yii::app()->user->setFlash('error', "{$exc->getMessage()}");
         }
-        $this->redirect(Yii::app()->request->baseUrl . '/index.php/tabletMaster_child?pId=' . $_GET['pId']);
+        $this->redirect(Yii::app()->request->baseUrl . '/index.php/tabletMaster_child?pId = ' . $_GET['pId']);
 //        } else
 //            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
@@ -443,7 +446,7 @@ class TabletMaster_childController extends Controller {
             $items[] = array(
                 'id' => $value->id,
                 //'color'=>'#CC0000',
-                //'allDay'=>true,
+//'allDay'=>true,
                 'url' => '#',
             );
         }

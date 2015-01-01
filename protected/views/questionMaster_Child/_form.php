@@ -36,14 +36,14 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 <input style="display:none" class="span5" value="<?php echo $_GET['pId']; ?>" name="QuestionMaster[branch_id]" id="QuestionMaster_branch_id" type="text">
 <div class="form-group">
     <?php echo $form->labelEx($model, 'option_type_id', array('class' => 'col-sm-3 control-label')); ?>
-    <div class="col-sm-9">
+    <div class="col-sm-9" style="margin-bottom: 30px;" >
         <select name="QuestionMaster[option_type_id]" id="QuestionMaster_option_type_id">
             <?php OptionType::getOptionTypes(); ?>
         </select>
         <?php echo $form->error($model, 'option_type_id', array('style' => 'color:red;')); ?>
     </div>
 </div><!--/form-group--> 
-<div class="form-group">
+<div class="form-group" style="margin-bottom: 30px;">
     <?php echo $form->labelEx($model, 'category_id', array('class' => 'col-sm-3 control-label')); ?>
     <div class="col-sm-9">
         <select name="QuestionMaster[category_id]" id="QuestionMaster_option_type_id">
@@ -54,12 +54,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 </div><!--/form-group--> 
 <div class="form-group">
     <?php // echo $form->labelEx($model, 'question', array('class' => 'col-sm-3 control-label')); ?>
-    <div class="col-sm-12">
+    <div class="col-sm-12" style="margin-bottom:  30px;">
         <?php echo $form->textAreaRow($model, 'question', array('class' => 'span5 form-control', 'maxlength' => 500)); ?>       
         <?php echo $form->error($model, 'question', array('style' => 'color:red;')); ?>
     </div>
 </div><!--/form-group--> 
-<div class="bottom">
+<div class="bottom" > 
     <?php
     $this->widget('bootstrap.widgets.TbButton', array(
         'buttonType' => 'submit',

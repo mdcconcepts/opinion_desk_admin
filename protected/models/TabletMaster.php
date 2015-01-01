@@ -65,8 +65,8 @@ class TabletMaster extends CActiveRecord {
     public function attributeLabels() {
         return array(
             'id' => 'Tablet',
-            'first_name_user' => 'First Name User',
-            'last_name_user' => 'Last Name User',
+            'first_name_user' => 'First User Name',
+            'last_name_user' => 'Last User Name',
             'user_profile_image_url' => 'User Profile Image Url',
             'joining_date' => 'Joining Date',
             'is_login' => 'is_login',
@@ -132,7 +132,7 @@ class TabletMaster extends CActiveRecord {
             $userId = (int) Yii::app()->user->id;
 
         $this->update_token = TabletUpdateTokenHelper::generate_random_password();
-        TabletUpdateTokenHelper::updateTableToken($this->id);
+//        TabletUpdateTokenHelper::updateTableToken($this->id);
 //        if ($this->isNewRecord) {
 //            $this->password = $this->hashPassword($this->password);
 //        } else {

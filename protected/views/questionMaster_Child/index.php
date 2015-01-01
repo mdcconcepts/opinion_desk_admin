@@ -13,7 +13,7 @@
                 <div class="btn-group" style="margin-bottom: 20px;">
                     <ul class="demo-btns">
                         <li> <a class="btn btn-labeled btn-primary" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/branchMaster_parent/<?php echo $_GET['pId']; ?>"> <span class="btn-label"><i class="glyphicon glyphicon-chevron-left"></i></span>Back </a> </li>
-                        <li> <a class="btn btn-labeled btn-primary" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/questionMaster_Child/create?pId=<?php echo $_GET['pId']; ?>"> <span class="btn-label"><i class="glyphicon glyphicon-plus-sign"></i></span> Create Branch </a> </li>
+                        <li> <a class="btn btn-labeled btn-primary" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/questionMaster_Child/create?pId=<?php echo $_GET['pId']; ?>"> <span class="btn-label"><i class="glyphicon glyphicon-plus-sign"></i></span> Create Question </a> </li>
                     </ul>
                 </div>
                 <div class="table-responsive">

@@ -38,7 +38,7 @@
                                     </div>
                                 </div><!--/form-group--> 
                                 <div class="form-group"  style="padding-top:  30px;">
-                                    <?php echo $form->labelEx($model, 'password', array('class' => 'col-sm-4 control-label')); ?>
+                                    <?php echo $form->labelEx($model, 'New password *', array('class' => 'col-sm-4 control-label')); ?>
                                     <div class="col-sm-6">
                                         <?php echo $form->passwordField($model, 'password', array('class' => 'form-control')); ?>
                                         <?php echo $form->error($model, 'password', array('style' => 'color:red;')); ?>

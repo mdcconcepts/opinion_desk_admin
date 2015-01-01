@@ -2,7 +2,7 @@
     <div class="middle-login">
         <div class="block-web">
             <div class="head">
-                <h3 class="text-center">Opinion Desk</h3>
+                <h3 class="text-center">Opinion Desk : Forgot Password</h3>
             </div>
             <div style="background:#fff;">
 
@@ -12,27 +12,20 @@
                 <!--<form action="/opinion_desk_cap/index.php/user/login" method="post"  class="form-horizontal" style="margin-bottom: 0px !important;">-->
 
                 <div class="porlets-content">
-                    <div class="alert alert-info">
-                        <?php if (Yii::app()->user->hasFlash('recoveryMessage')): ?>
-                            <?php echo Yii::app()->user->getFlash('recoveryMessage'); ?>
-                        <?php endif; ?>
-
-                        <?php echo CHtml::errorSummary($form); ?></div>
+                    <?php echo CHtml::errorSummary($form, null, null, array('class' => 'alert alert-danger')); ?>
                 </div>
-
                 <div class="content">
-                    <fieldset>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <div class="input-group"> <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                                    <?php echo CHtml::activeTextField($form, 'login_or_email', array('class' => 'form-control', 'placeholder' => 'Email Address')) ?>
-                                </div>
-                                <div class="alert alert-info" style="margin: 10px;"><?php echo UserModule::t("Please enter your login or email addres."); ?></div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="input-group"> <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                <?php echo CHtml::activeTextField($form, 'login_or_email', array('class' => 'form-control', 'placeholder' => 'Email Address')) ?>
                             </div>
                         </div>
-                    </fieldset>
+                        <br/>
+                    </div>
                 </div>
-                <div class="foot">
+
+                <div class="register-bottom" style="margin-top: 30px;">
                     <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/login"><button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button></a>
                     <input type="submit" name="yt1" class="btn btn-primary" value="Restore">
                 </div>

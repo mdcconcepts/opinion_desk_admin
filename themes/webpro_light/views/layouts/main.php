@@ -66,6 +66,16 @@
                 checkout.hide();
             }).data('datepicker');
             $('.data_export').tokenize();
+            function delete_data(alert_msg, return_url) {
+                // Code...
+                if (confirm(alert_msg)) {
+                    // Save it!
+//                    console.log();
+                    window.location.replace(return_url);
+                } else {
+                    // Do nothing!
+                }
+            }
         </script>
         <?php AssetsHelperForCustomTemplate::getJSForController() ?>
     </body>

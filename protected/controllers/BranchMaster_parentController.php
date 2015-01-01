@@ -169,7 +169,7 @@ class BranchMaster_parentController extends Controller {
                 $this->redirect(array('view', 'id' => $model->id));
         }
 
-        $this->render('update', array(
+        $this->render('view', array(
             'model' => $model,
         ));
     }

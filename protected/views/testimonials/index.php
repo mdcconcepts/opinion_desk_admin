@@ -23,7 +23,7 @@ if (!isset($_GET['branch_id'])) {
 
 <div class="row">
     <div class="col-md-12">
-        <h2><i class="fa fa-dashboard"></i>Branch Home</h2>
+        <h2><i class="fa fa-dashboard"></i>View Testimonials</h2>
     </div><!--/col-md-12--> 
 </div><!--/row-->
 <div class="row">
@@ -140,6 +140,9 @@ if (!isset($_GET['branch_id'])) {
                                 ?> 
                             </a> 
                         </li>
+                        <li> <a href="<?php echo Yii::app()->request->baseUrl . '/index.php/testimonials?branch_id=' . $_GET['branch_id'] . '&feedback=all'; ?> "> All
+                            </a> 
+                        </li>
 
                     </ul>
                 </div>
@@ -163,7 +166,7 @@ if (!isset($_GET['branch_id'])) {
                                     } else {
 
 
-                                        switch ($_GET['feedback']) {
+                                        switch ($testimonial['Total_AVG']) {
                                             case 0:
                                                 for ($index = 0; $index < 5; $index++) {
                                                     ?>
@@ -232,58 +235,63 @@ if (!isset($_GET['branch_id'])) {
                         <div class="panel">
                             <div class="panel-body">
                                 <p><strong>Testimonials</strong></p>
-                                <p style="color: #515151;"> <?php echo $testimonial['responce_text'] ?><p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6" >
-                        <div class="panel" style="padding: 10px;">
-                            <iframe id="player" type="text/html" width="300" height="200"
-                                    src="http://www.youtube.com/embed/<?php echo $testimonial['responce_vedio_url'] ?>"
-                                    frameborder="0">
-                            </iframe>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="panel" style="padding-top: 10px;">
-                            <div id="jquery_jplayer_1" class="jp-jplayer"></div>
-                            <div id="jp_container_1" class="jp-audio" role="application" aria-label="media player">
-                                <div class="jp-type-single">
-                                    <div class="jp-gui jp-interface">
-                                        <div class="jp-controls">
-                                            <button class="jp-play" role="button" tabindex="0">play</button>
-                                            <button class="jp-stop" role="button" tabindex="0">stop</button>
-                                        </div>
-                                        <div class="jp-progress">
-                                            <div class="jp-seek-bar">
-                                                <div class="jp-play-bar"></div>
+                                <?php
+                                if ($testimonial['responce_text'] != "") {
+                                    ?>
+                                    <p style="color: #515151;"> <?php echo $testimonial['responce_text'] ?><p>
+                                        <?php
+                                    } elseif (isset($testimonial['responce_vedio_url'])) {
+                                        ?>
+                                    <div class="panel" style="padding: 10px;">
+                                        <iframe id="player" type="text/html" width="300" height="200"
+                                                src="http://www.youtube.com/embed/<?php echo $testimonial['responce_vedio_url'] ?>"
+                                                frameborder="0">
+                                        </iframe>
+                                    </div>
+                                    <?php
+                                } elseif (isset($testimonial['responce_audio_url'])) {
+                                    ?>
+                                    <div id="jquery_jplayer_1" class="jp-jplayer"></div>
+                                    <div id="jp_container_1" class="jp-audio" role="application" aria-label="media player">
+                                        <div class="jp-type-single">
+                                            <div class="jp-gui jp-interface">
+                                                <div class="jp-controls">
+                                                    <button class="jp-play" role="button" tabindex="0">play</button>
+                                                    <button class="jp-stop" role="button" tabindex="0">stop</button>
+                                                </div>
+                                                <div class="jp-progress">
+                                                    <div class="jp-seek-bar">
+                                                        <div class="jp-play-bar"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="jp-volume-controls">
+                                                    <button class="jp-mute" role="button" tabindex="0">mute</button>
+                                                    <button class="jp-volume-max" role="button" tabindex="0">max volume</button>
+                                                    <div class="jp-volume-bar">
+                                                        <div class="jp-volume-bar-value"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="jp-time-holder">
+                                                    <div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+                                                    <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+                                                    <div class="jp-toggles">
+                                                        <button class="jp-repeat" role="button" tabindex="0">repeat</button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="jp-volume-controls">
-                                            <button class="jp-mute" role="button" tabindex="0">mute</button>
-                                            <button class="jp-volume-max" role="button" tabindex="0">max volume</button>
-                                            <div class="jp-volume-bar">
-                                                <div class="jp-volume-bar-value"></div>
+                                            <div class="jp-details">
+                                                <div class="jp-title" aria-label="title">&nbsp;</div>
                                             </div>
-                                        </div>
-                                        <div class="jp-time-holder">
-                                            <div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
-                                            <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
-                                            <div class="jp-toggles">
-                                                <button class="jp-repeat" role="button" tabindex="0">repeat</button>
+                                            <div class="jp-no-solution">
+                                                <span>Update Required</span>
+                                                To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="jp-details">
-                                        <div class="jp-title" aria-label="title">&nbsp;</div>
-                                    </div>
-                                    <div class="jp-no-solution">
-                                        <span>Update Required</span>
-                                        To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
-                                    </div>
-                                </div>
+                                    <?php
+                                }
+                                ?>
+
                             </div>
                         </div>
                     </div>

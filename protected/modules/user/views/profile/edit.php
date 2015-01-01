@@ -56,11 +56,7 @@
                                                 <input class="form-control form-control-inline input-medium default-date-picker" name="Profile[annivarsary]" id="Profile_annivarsary" placeholder="Anniversary"  type="text" value="<?php if ($profile->annivarsary != '0000-00-00') echo $profile->annivarsary; ?>" />
                                                 <?php
                                             } elseif ($field->varname == "gender") {
-                                                echo '<select name="Profile[gender]" id="Profile_gender">
-                                                        <option value="male">male</option>
-                                                        <option value="female">female</option>
-                                                        <option value="other">other</option>
-                                                    </select>';
+                                                echo $form->dropDownList($profile, $field->varname, ['' => 'Select', 'male' => 'Male', 'female' => 'Female', 'other' => 'Other'], array('class' => 'form-control'));
                                             } elseif ($field->varname == "lob") {
                                                 ?>
                                                 <select name="Profile[lob]" id="lob_gender">

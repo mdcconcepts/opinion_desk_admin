@@ -22,6 +22,70 @@ class MobileServicesController extends Controller {
         );
     }
 
+    public function actionSyncAudio() {
+        $Tablet = $this->_checkAuth();
+
+        if ($this->isLogin($Tablet->id)) {
+            $Responce = [
+                'Status_code' => '401',
+                'Success' => 'False',
+                'Message' => 'Authentication Fail!',
+                'Error' => 'Already login into another device! Please contact Administrator.',
+            ];
+            $this->_sendResponse(401, $Responce);
+        }
+
+        if (!isset($_FILES['audio_post'])) {
+            $Responce = [
+                'Status_code' => '404',
+                'Success' => 'Fail',
+                'Message' => 'Bad Request Parameters',
+                'Error' => 'Audio File not found.'
+            ];
+            $this->_sendResponse(404, $Responce);
+        }
+        try {
+            $target = "upload/testimonials/audio/";
+
+            $target = $target . basename($_FILES['audio_post']['name']);
+
+            if (move_uploaded_file($_FILES['audio_post']['tmp_name'], $target)) {
+                $Responce = [
+                    'Status_code' => '200',
+                    'Success' => 'True',
+                    'Message' => 'Audio Uploaded Successfully',
+                    'Responce_Url' => $target
+                ];
+                $this->_sendResponse(200, $Responce);
+            } else {
+                $Responce = [
+                    'Status_code' => '403',
+                    'Success' => 'False',
+                    'Message' => 'Error Occure in Audio Upload',
+                ];
+                $this->_sendResponse(403, $Responce);
+            }
+        } catch (Exception $e) {
+
+            $Responce = [
+                'Status_code' => '403',
+                'Success' => 'False',
+                'Message' => 'Error Occure while uploading audio !',
+                'Error' => $e->getMessage()
+            ];
+            $this->_sendResponse(403, $Responce);
+            //$this->refresh();
+        }
+
+        $Responce = [
+            'Status_code' => '403',
+            'Success' => 'False',
+            'Message' => 'Upload Fail !',
+            'Error' => 'Unknown Error.',
+        ];
+        $this->_sendResponse(403, $Responce);
+    }
+
     /**
      * This method is used for authenticating user
      */

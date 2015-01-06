@@ -21,7 +21,7 @@
                     $this->widget('zii.widgets.grid.CGridView', array(
                         'dataProvider' => $model->getDataFromPK($pId),
                         'summaryText' => '',
-                        'itemsCssClass' => 'display table table-bordered table-striped question_master',
+                        'itemsCssClass' => 'display table table-striped question_master',
                         'htmlOptions' => array('class' => ''),
                         'columns' => array(
                             array('header' => 'No', 'value' => '($this->grid->dataProvider->pagination->currentPage*

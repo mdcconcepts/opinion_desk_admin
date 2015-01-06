@@ -55,10 +55,10 @@
                                 ?></strong> Branches</h5>
                     </div>
                     <div class="col-md-4">
-                        <h5><strong><?php echo TabletMaster::getAllTablet_Count_User(); ?></strong> Question</h5>
+                        <h5><strong><?php echo TabletMaster::getAllTablet_Count_User(); ?></strong>Tablets</h5>
                     </div>
                     <div class="col-md-4">
-                        <h5><strong><?php echo QuestionMaster::getAllQuestion_Count_User(); ?></strong> Tablets</h5>
+                        <h5><strong><?php echo QuestionMaster::getAllQuestion_Count_User(); ?></strong>Question</h5>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
             <ul class="nav nav-tabs nav-justified">
                 <li class="active"><a data-toggle="tab" href="#about"><i class="fa fa-user"></i> About</a></li>
                 <li><a data-toggle="tab" href="#edit-profile"><i class="fa fa-pencil"></i> Edit</a></li>
-                <li><a data-toggle="tab" href="#user-activities"><i class="fa fa-laptop"></i> Activities</a></li>
+                <li><a data-toggle="tab" href="#user-activities"><i class="fa fa-laptop"></i> Branches</a></li>
                 <li><a data-toggle="tab" href="#mymessage"><i class="fa fa-envelope"></i> Message</a></li>
             </ul>
 
@@ -560,7 +560,7 @@
   <td><?php echo CHtml::encode(User::itemAlias("UserStatus", $model->status)); ?></td>
   </tr>
   </table>
+ *
  * 
  */
 ?>
-       

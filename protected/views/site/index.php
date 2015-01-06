@@ -105,7 +105,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <h3 style="color: white;">Today</h3>
-                        <div class="col-xs-6"> <i class="fa fa-users"></i> Your Costomer </div>
+                        <div class="col-xs-6"> <i class="fa fa-users"></i> Your Customer </div>
                         <div class="col-xs-6">
                             <div class="degree"> <?php echo Dashboard_helper::getTodaysTotalCustomerForAllBranches(date('Y-m-d'), date('Y-m-d')); ?> </div>
                         </div>

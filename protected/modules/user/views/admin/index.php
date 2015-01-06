@@ -1,78 +1,62 @@
-<?php
-$this->breadcrumbs = array(
-    UserModule::t('Users') => array('/user'),
-    UserModule::t('Manage'),
-);
+<div class="row">
+    <div class="col-md-12">
+        <div class="block-web">
+            <div class="header">
+                <h3 class="content-header">All Customers</h3>
+            </div>
+            <div class="porlets-content">
+                <?php if (Yii::app()->user->hasFlash('error')): ?>
+                    <div class="alert alert-danger"> 
+                        <?php echo Yii::app()->user->getFlash('error'); ?>
+                    </div>
+                <?php endif; ?>
+                <div class="table-responsive">
+                    <table  class="display table table-bordered table-striped User_Table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Status(s)</th>
+                                <th>Registration Date</th>
+                                <th>Expire At</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $Users = User::model()->findAll();
+                            foreach ($Users as $user) {
+                                ?>
+                                <tr class="gradeX">
+                                    <td><?php echo $user->username; ?></td>
+                                    <td><?php echo $user->email; ?></td>
+                                    <td><a href="#" class="status" data-type="select" data-pk="<?php echo $user->id; ?>" data-value="" data-title="Select Status"><?php echo User::itemAlias('UserStatus', $user->status); ?></a></td>
+                                    <td><?php echo $user->create_at; ?></td>
+                                    <td><?php echo date("Y-m-d", strtotime($user->create_at) + (3.156e+7)); ?></td>
+                                    <td><a class="badge badge-info" title="View Profile" data-toggle="tooltip" href="/account/index.php/user/admin/view/id/<?php echo $user->id; ?>">
+                                            <i class="fa fa-user"></i></a>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
 
-$this->menu = array(
-//    array('label' => UserModule::t('Create User'), 'url' => array('create')),
-    array('label' => UserModule::t('Manage Users'), 'url' => array('admin')),
-    array('label' => UserModule::t('Manage Profile Field'), 'url' => array('profileField/admin')),
-    array('label' => UserModule::t('List User'), 'url' => array('/user')),
-);
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Registration Date</th>
+                                <th>Expire At</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div><!--/table-responsive-->
+            </div><!--/porlets-content-->
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-    $('.search-form').toggle();
-    return false;
-});	
-$('.search-form form').submit(function(){
-    $.fn.yiiGridView.update('user-grid', {
-        data: $(this).serialize()
-    });
-    return false;
-});
-");
-?>
-<h1><?php echo UserModule::t("Manage Users"); ?></h1>
 
-<p><?php echo UserModule::t("You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b> or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done."); ?></p>
-
-<?php echo CHtml::link(UserModule::t('Advanced Search'), '#', array('class' => 'search-button')); ?>
-<div class="search-form" style="display:none">
-    <?php
-    $this->renderPartial('_search', array(
-        'model' => $model,
-    ));
-    ?>
-</div><!-- search-form -->
-
-<?php
-$this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'user-grid',
-    'dataProvider' => $model->search(),
-    'filter' => $model,
-    'columns' => array(
-        array(
-            'name' => 'id',
-            'type' => 'raw',
-            'value' => 'CHtml::link(CHtml::encode($data->id),array("admin/update","id"=>$data->id))',
-        ),
-        array(
-            'name' => 'username',
-            'type' => 'raw',
-            'value' => 'CHtml::link(UHtml::markSearch($data,"username"),array("admin/view","id"=>$data->id))',
-        ),
-        array(
-            'name' => 'email',
-            'type' => 'raw',
-            'value' => 'CHtml::link(UHtml::markSearch($data,"email"), "mailto:".$data->email)',
-        ),
-        'create_at',
-        'lastvisit_at',
-        array(
-            'name' => 'superuser',
-            'value' => 'User::itemAlias("AdminStatus",$data->superuser)',
-            'filter' => User::itemAlias("AdminStatus"),
-        ),
-        array(
-            'name' => 'status',
-            'value' => 'User::itemAlias("UserStatus",$data->status)',
-            'filter' => User::itemAlias("UserStatus"),
-        ),
-        array(
-            'class' => 'CButtonColumn',
-        ),
-    ),
-));
-?>
+        </div><!--/block-web--> 
+    </div><!--/col-md-12--> 
+</div><!--/row-->

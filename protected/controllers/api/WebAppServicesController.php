@@ -19,6 +19,106 @@ class WebAppServicesController extends Controller {
 //        );
 //    }
 
+    public function actionpostTableNumberForBranch() {
+//        $customer_id = Yii::app()->request->getPost('username');
+
+        if (!isset($_POST['pk'])) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => 'Bad Request Parameters',
+                'Error' => 'pk not found.'
+            ];
+            $this->_sendResponse(200, $Responce);
+        } elseif (!isset($_POST['value'])) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => 'Bad Request Parameters',
+                'Error' => 'value not found.'
+            ];
+            $this->_sendResponse(200, $Responce);
+        } elseif ($_POST['value'] <= 0) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => 'Tablet number must be greater than 0!',
+                'Error' => 'value not found.'
+            ];
+            $this->_sendResponse(200, $Responce);
+        }
+
+        $Branch = BranchMaster::model()->findByPK($_POST['pk']);
+        $Branch->tablet_no = $_POST['value'];
+        if ($Branch->save()) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'True',
+                'Message' => 'Tablet Number Save'
+            ];
+            $this->_sendResponse(200, $Responce);
+        } else {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => $Branch->getErrors()['tablet_no'][0],
+            ];
+            $this->_sendResponse(200, $Responce);
+        }
+        $Responce = [
+            'Status_code' => '200',
+            'Success' => 'False',
+            'Message' => 'Unknown Responce',
+        ];
+        $this->_sendResponse(200, $Responce);
+    }
+
+    public function actionpostStatusForUser() {
+//        $customer_id = Yii::app()->request->getPost('username');
+
+        if (!isset($_POST['pk'])) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => 'Bad Request Parameters',
+                'Error' => 'pk not found.'
+            ];
+            $this->_sendResponse(200, $Responce);
+        } elseif (!isset($_POST['value'])) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => 'Bad Request Parameters',
+                'Error' => 'value not found.'
+            ];
+            $this->_sendResponse(200, $Responce);
+        }
+
+        $Branch = User::model()->findByPK($_POST['pk']);
+        $Branch->status = $_POST['value'];
+        if ($Branch->save()) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'True',
+                'Message' => 'Status saved'
+            ];
+            $this->_sendResponse(200, $Responce);
+        } else {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => $Branch->getErrors()['tablet_no'][0],
+            ];
+            $this->_sendResponse(200, $Responce);
+        }
+        $Responce = [
+            'Status_code' => '200',
+            'Success' => 'False',
+            'Message' => 'Unknown Responce',
+        ];
+        $this->_sendResponse(200, $Responce);
+    }
+
     /**
      * This method is used for getting totoal feedback for graph
      * In this 1 represent weekly , 2 Montly and 3 Yearly
@@ -51,7 +151,7 @@ class WebAppServicesController extends Controller {
                     $dataProvider = array();
 
                     $i = 1;
-                  
+
                     foreach ($reader as $row) {
                         $data = array();
                         $data['date'] = date("Y-m-d", strtotime(date("Y") . "W" . ($row['Week'] + 1)));
@@ -82,7 +182,7 @@ class WebAppServicesController extends Controller {
 
                     $connection = Yii::app()->db;
 
-                   echo $sqlStatement = "SELECT Month(`created_at`) AS Month,COUNT(`created_at`)
+                    echo $sqlStatement = "SELECT Month(`created_at`) AS Month,COUNT(`created_at`)
                 Total_Customer_Visit,AVG(`option_value`)
                 Average_Feedback_Value FROM `responce_master` WHERE YEAR(`created_at`)=YEAR(now()) 
                 AND `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id` in

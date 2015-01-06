@@ -36,6 +36,7 @@
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> 
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery.tokenize.js"></script> 
+        <script type="text/javascript"  src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/toggle-switch/toggles.min.js"></script> 
         <script type="text/javascript">
             $('.default-date-picker').datepicker({
                 format: 'yyyy-mm-dd'

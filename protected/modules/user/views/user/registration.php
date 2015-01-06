@@ -73,7 +73,9 @@
                                 <div class="form-group">
                                     <div class="col-sm-12">
                                         <div class="input-group"> <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                            <?php echo $form->passwordField($model, 'password', array('class' => 'form-control', 'placeholder' => 'Password')); ?>
+
+                                            <input class="form-control" placeholder="Password" name="RegistrationForm[password]" id="RegistrationForm_password" type="password" maxlength="128">
+                                            <?php // echo $form->passwordField($model, 'password', array('class' => 'form-control', 'placeholder' => 'Password')); ?>
 
                                         </div>
                                         <?php echo $form->error($model, 'password'); ?>
@@ -84,7 +86,8 @@
                                     <div class="col-sm-12">
                                         <div class="input-group"> 
                                             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                            <?php echo $form->passwordField($model, 'verifyPassword', array('class' => 'form-control', 'placeholder' => 'Verify Password')); ?>
+                                            <input class="form-control" placeholder="Verify Password" name="RegistrationForm[verifyPassword]" id="RegistrationForm_verifyPassword" type="password">
+                                            <?php // echo $form->passwordField($model, 'verifyPassword', array('class' => 'form-control', 'placeholder' => 'Verify Password')); ?>
 
                                         </div>
                                         <?php echo $form->error($model, 'verifyPassword'); ?>

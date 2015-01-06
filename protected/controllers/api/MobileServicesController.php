@@ -22,6 +22,96 @@ class MobileServicesController extends Controller {
         );
     }
 
+    public function actionHello() {
+        $Tablet = $this->_checkAuth();
+
+        if ($this->isLogin($Tablet->id)) {
+            $Responce = [
+                'Status_code' => '401',
+                'Success' => 'False',
+                'Message' => 'Authentication Fail!',
+                'Error' => 'Already login into another device! Please contact Administrator.',
+            ];
+            $this->_sendResponse(401, $Responce);
+        }
+        $Responce = [
+            'Status_code' => '200',
+            'Success' => 'True',
+            'Message' => 'Hello',
+        ];
+        $this->_sendResponse(401, $Responce);
+
+//        $Tablet = $this->_checkAuth();
+//        if (!isset($_FILES['audio_post'])) {
+//            $Responce = [
+//                'Status_code' => '403',
+//                'Success' => 'Fail',
+//                'Message' => 'Bad Request Parameters',
+//                'Error' => 'Audio File not found.'
+//            ];
+//            $this->_sendResponse(403, $Responce);
+//        }
+//        try {
+//            $target = "upload/testimonials/audio/";
+//
+//            $target = $target . basename($_FILES['audio_post']['name']);
+//
+//            if (move_uploaded_file($_FILES['audio_post']['tmp_name'], $target)) {
+//                $Responce = [
+//                    'Status_code' => '200',
+//                    'Success' => 'True',
+//                    'Message' => 'Audio Uploaded Successfully',
+//                    'Responce_Url' => $target
+//                ];
+//                $this->_sendResponse(200, $Responce);
+//            } else {
+//                $Responce = [
+//                    'Status_code' => '403',
+//                    'Success' => 'False',
+//                    'Message' => 'Error Occure in Audio Upload',
+//                ];
+//                $this->_sendResponse(403, $Responce);
+//            }
+//        } catch (Exception $e) {
+//
+//            $Responce = [
+//                'Status_code' => '403',
+//                'Success' => 'False',
+//                'Message' => 'Error Occure while uploading audio !',
+//                'Error' => $e->getMessage()
+//            ];
+//            $this->_sendResponse(403, $Responce);
+//            //$this->refresh();
+//        }
+//        $Responce = [
+//            'Status_code' => '403',
+//            'Success' => 'False',
+//            'Message' => 'Upload Fail !',
+//            'Error' => 'Unknown Error.',
+//        ];
+//        $this->_sendResponse(403, $Responce);
+    }
+
+    private function uploadAudio() {
+        if (!isset($_FILES['audio_post'])) {
+            return false;
+        }
+        try {
+            $target = "upload/testimonials/audio/";
+
+            $target = $target . basename($_FILES['audio_post']['name']);
+
+            if (move_uploaded_file($_FILES['audio_post']['tmp_name'], $target)) {
+                return $target;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+
+            return false;
+        }
+    }
+
     public function actionSyncAudio() {
         $Tablet = $this->_checkAuth();
 
@@ -34,15 +124,14 @@ class MobileServicesController extends Controller {
             ];
             $this->_sendResponse(401, $Responce);
         }
-
         if (!isset($_FILES['audio_post'])) {
             $Responce = [
-                'Status_code' => '404',
+                'Status_code' => '403',
                 'Success' => 'Fail',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'Audio File not found.'
             ];
-            $this->_sendResponse(404, $Responce);
+            $this->_sendResponse(403, $Responce);
         }
         try {
             $target = "upload/testimonials/audio/";
@@ -54,7 +143,8 @@ class MobileServicesController extends Controller {
                     'Status_code' => '200',
                     'Success' => 'True',
                     'Message' => 'Audio Uploaded Successfully',
-                    'Responce_Url' => $target
+                    'Responce_Url' => $target,
+                    'test_post' => $_SERVER['HTTP_API_' . self:: APPLICATION_ID . '_TEST']
                 ];
                 $this->_sendResponse(200, $Responce);
             } else {
@@ -76,14 +166,13 @@ class MobileServicesController extends Controller {
             $this->_sendResponse(403, $Responce);
             //$this->refresh();
         }
-
         $Responce = [
             'Status_code' => '403',
             'Success' => 'False',
             'Message' => 'Upload Fail !',
             'Error' => 'Unknown Error.',
         ];
-        $this->_sendResponse(403, $Responce);
+        $this->_sendResponse(200, $Responce);
     }
 
     /**
@@ -137,7 +226,7 @@ class MobileServicesController extends Controller {
                 'Error' => $e->getMessage()
             ];
             $this->_sendResponse(401, $Responce);
-            //$this->refresh();
+//$this->refresh();
         }
 
         $Responce = [
@@ -174,7 +263,7 @@ class MobileServicesController extends Controller {
         ));
 
         if ($Client[0] === null) {
-            // Error: Unauthorized
+// Error: Unauthorized
             $Responce = [
                 'Status_code' => '200',
                 'Success' => 'Success',
@@ -434,7 +523,7 @@ class MobileServicesController extends Controller {
 
         $Tablet = $this->_checkAuth();
 
-        $Post = Yii::app()->getRequest()->getRawBody();
+        $Post = $_SERVER['HTTP_API_' . self:: APPLICATION_ID . '_RESPONCE'];
 
         $Post_Feedback_Id = CJSON::decode($Post)['feedbackID'];
 
@@ -500,19 +589,18 @@ class MobileServicesController extends Controller {
 
         $Tablet = $this->_checkAuth();
 
+
+        $Post = $_SERVER['HTTP_API_' . self:: APPLICATION_ID . '_RESPONCE'];
+
         $Post_Feedback_Id = CJSON::decode($Post)['feedbackID'];
 
-        $Post_Client_Id = Yii::app()->request->getPost('Client_Id');
+        $Post_Client_Id = CJSON::decode($Post)['Client_Id'];
 
-        $Post_Questions = CJSON::decode(Yii::app()->request->getPost('Questions'));
+        $Post_Questions = CJSON::decode($Post)['Questions'];
 
-        $Post_Testimonial = CJSON::decode(Yii::app()->request->getPost('Testimonial'));
-
-//        $this->validateBasicClientPostResponce($Post_Client);
+        $Post_Testimonial = CJSON::decode($Post)['Testimonial'];
 
         $Post_Custom_Fields_Client = $Post_Client['Custom_Fields'];
-
-
 
 
         $transaction = Yii::app()->db->beginTransaction();
@@ -596,14 +684,16 @@ class MobileServicesController extends Controller {
     private function saveTestimonialResponceData($client_id, $Post_Testimonial, $branch_id) {
 
         if ($this->validateBasicTestimonialPostResponce($Post_Testimonial)) {
-//            if (!isset($Post_Testimonial['responce_text']) && 
-//            !isset($Post_Testimonial['responce_audio_url']) &&
-//             !isset($Post_Testimonial['responce_vedio_url'])) {
+
+            $Audio_URL = "";
+            if (isset($_FILES['audio_post'])) {
+                $Audio_URL = $this->uploadAudio();
+            }
 
             $query = "INSERT INTO `testimonial_response_table`(`id`, `responce_text`, "
                     . "`responce_audio_url`, `responce_vedio_url`,`branch_id`, `client_id`, `created_at`) VALUES "
                     . "(NULL, '" . $Post_Testimonial['responce_text'] . "', "
-                    . "'" . $Post_Testimonial['responce_audio_url'] . "', "
+                    . "'" . $Audio_URL . "', "
                     . "'" . $Post_Testimonial['responce_vedio_url'] . "'," . $branch_id . ","
                     . " '" . $client_id . "','" . date('Y-m-d H:i:s') . "')";
 
@@ -822,9 +912,9 @@ class MobileServicesController extends Controller {
 //        }
 //        echo json_encode($_SERVER['HTTP_API_OPINION_DESK_USERNAME']);
 //        Yii::app()->end();
-        // Check if we have the USERNAME and PASSWORD HTTP headers set?
+// Check if we have the USERNAME and PASSWORD HTTP headers set?
         if (!(isset($_SERVER['HTTP_API_' . self::APPLICATION_ID . '_USERNAME']) and isset($_SERVER['HTTP_API_' . self::APPLICATION_ID . '_PASSWORD']))) {
-            // Error: Unauthorized
+// Error: Unauthorized
             $this->_sendResponse(403);
         }
 
@@ -832,14 +922,14 @@ class MobileServicesController extends Controller {
 
         $password = $_SERVER['HTTP_API_' . self::APPLICATION_ID . '_PASSWORD'];
 
-        // Find the user
+// Find the user
         $Tablet_User = TabletMaster::model()->findAll(array(
             'condition' => 'username = :username',
             'params' => array(':username' => $username)
         ));
 
         if ($Tablet_User[0] === null) {
-            // Error: Unauthorized
+// Error: Unauthorized
             $Responce = [
                 'Status_code' => '401',
                 'Success' => 'Fail',
@@ -849,7 +939,7 @@ class MobileServicesController extends Controller {
             $this
                     ->_sendResponse(401, $Responce);
         } else if ($Tablet_User[0]->password != $password) {
-            // Error: Unauthorized
+// Error: Unauthorized
 
             $Responce = [
                 'Status_code' => '401',
@@ -873,24 +963,24 @@ class MobileServicesController extends Controller {
      * @return void
      */
     private function _sendResponse($status = 200, $body = '', $content_type = 'application/json') {
-        // set the status
+// set the status
         $status_header = 'HTTP/1.1 ' . $status . ' ' . $this->_getStatusCodeMessage($status);
         header($status_header);
-        // and the content type
+// and the content type
         header('Content-type: ' . $content_type);
 
-        // pages with body are easy
+// pages with body are easy
         if ($body != '') {
-            // send the body
+// send the body
             echo CJSON::encode($body);
         } else {
-            // create some body messages
+// create some body messages
             $message = '';
 
 
-            // this is purely optional, but makes the pages a little nicer to read
-            // for your users.  Since you won't likely send a lot of different status codes,
-            // this also shouldn't be too ponderous to maintain
+// this is purely optional, but makes the pages a little nicer to read
+// for your users.  Since you won't likely send a lot of different status codes,
+// this also shouldn't be too ponderous to maintain
             switch ($status) {
                 case 401:
                     $message = 'You must be authorized to use this service.';
@@ -929,9 +1019,9 @@ class MobileServicesController extends Controller {
      * @return string
      */
     private function _getStatusCodeMessage($status) {
-        // these could be stored in a .ini file and loaded
-        // via parse_ini_file()... however, this will suffice
-        // for an example
+// these could be stored in a .ini file and loaded
+// via parse_ini_file()... however, this will suffice
+// for an example
         $codes = Array(
             100 => 'Continue',
             101 => 'Switching Protocols',

@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12">
-        <h2>Profile</h2>
+        <h2><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/profile.png"/> Profile</h2>
     </div><!--/col-md-12--> 
 </div><!--/row-->
 <div class="row">

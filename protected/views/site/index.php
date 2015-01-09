@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2><i class="fa fa-dashboard"></i> Home</h2>
+        <h2><i class="fa fa-home"></i> Home</h2>
     </div><!--/col-md-12--> 
 </div><!--/row--> 
 <div class="row">
@@ -119,7 +119,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="block-web">
-            <h3 class="content-header"> Quick Stats
+            <h3 class="content-header"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/line_graph.png"/> Quick Stats
                 <div data-toggle="buttons" class="button-group pull-right"> 
                     <a class="btn active small border-gray" href="javascript:;"> <span class="button-content" style=" padding: 3px; ">
                             <input type="radio" name="dashboard_radio_feedback_index"  value="weekly">
@@ -142,30 +142,38 @@
     <div class="row">
         <div class="col-md-8">
             <div class="block-web">
-                <h3>Customer Count <strong><?php echo Dashboard_helper::getTotalCustomerForAllBranches(); ?></strong></h3>
+                <h3> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/calculator.png"/>Customer Count <strong><?php echo Dashboard_helper::getTotalCustomerForAllBranches(); ?></strong></h3>
                 <table class="table margin-top-20 today" width="100%" border="0" cellspacing="0" cellpadding="0" >
                     <tr>
-                        <td class="fa-border"><button class="btn btn-danger padd-adj" type="button"><?php echo Dashboard_helper::getTotalNewCustomersForALLBranches(); ?></button>
-                            New </td>
-                        <td class="fa-border"><button class="btn btn-primary padd-adj" type="button"><?php echo Dashboard_helper::getTotalMALECustomerForAllBranches(); ?></button>
-                            Male</td>
+                        <td class="fa-border">
+                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/plus.png"/> 
+                            <strong><?php echo Dashboard_helper::getTotalNewCustomersForALLBranches(); ?></strong>
+                        </td>
+                        <td class="fa-border">
+                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/male.png"/> 
+                            <strong><?php echo Dashboard_helper::getTotalNewCustomersForALLBranches(); ?></strong>
+                        </td>
 
                     </tr>
                     <tr>
-                        <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo Dashboard_helper::getTotalRepeateCustomersForALLBranches(); ?></button>
-                            Repeat</td>
-                        <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo Dashboard_helper::getTotalFEMALECustomerForAllBranches(); ?></button>
-                            Female</td>
+                        <td class="fa-border">
+                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/reload.png"/> 
+                            <strong><?php echo Dashboard_helper::getTotalRepeateCustomersForALLBranches(); ?></strong>
+                        </td>
+                        <td class="fa-border">
+                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/female.png"/> 
+                            <strong><?php echo Dashboard_helper::getTotalFEMALECustomerForAllBranches(); ?></strong>
+                        </td>
                     </tr>
                 </table>
             </div>
         </div><!--/col-md-6-->
         <div class="col-md-4">
             <div class="block-web">
-                <h3>Customer Age Bounds</h3>
+                <h3>Customer <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/age.png"/>  Bounds</h3>
                 <table class="table margin-top-20" width="100%" border="0" cellspacing="0" cellpadding="0" >
                     <tr>
-                        <?php Dashboard_helper::getAgeBoundsForCustomerForAllBranches('2013-08-29', '2015-08-29'); ?>
+                        <?php Dashboard_helper::getAgeBoundsForCustomerForAllBranches(); ?>
                     </tr>
                 </table>
             </div>

@@ -1,14 +1,9 @@
-<?php
-//$this->pageTitle = Yii::app()->name . ' - ' . UserModule::t("Registration");
-//$this->breadcrumbs = array(
-//    UserModule::t("Registration"),
-//);
-?>
 <div class="login-container">
     <div class="middle-login" style="top:30%;width: 700px;margin-left: -340px;">
         <div class="block-web">
-            <div class="head">
-                <h3 class="text-center">Opinion Desk : Registration</h3>
+            <div class="head" style=" height: 65px; ">
+                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/opinion_desk_logo_large.png" style=" position: absolute; left: 10px; " />
+                <h2 class="text-center"> Registration</h2>
             </div>
             <div class="porlets-content">
                 <?php if (Yii::app()->user->hasFlash('registration')): ?>
@@ -229,7 +224,7 @@
                     </div><!-- /tab-content -->
 
                     <ul class="pager wizard">
-                        <a style="float: left;margin-right: 20px;" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/login"><button type="button" data-dismiss="modal" class="btn btn-default">cancel</button></a>
+                        <a style="float: left;margin-right: 20px;" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/login"><button type="button" data-dismiss="modal" class="btn btn-default">Login</button></a>
                         <li class="previous"><a href="javascript:void(0)">Previous</a></li>
                         <li class="next"><a href="javascript:void(0)">Next</a></li>
                     </ul>

@@ -1,8 +1,46 @@
+<style>
+    .right_shadow{
+        position: absolute;
+        float: right; 
+        right: -46px;
+        top: -20px;
+        opacity: 0.6;  
+    }
+    .right_shadow img{
+        width: 89%; 
+    }
+    .left_shadow{
+        position: absolute; 
+        float: right; 
+        left: -40px; 
+        top: -34px;
+        opacity: 0.6 
+    }
+    .left_shadow img{
+        width: 89%; 
+    }
+    .login_input{
+
+    }
+    .login_footer{
+        position: absolute;
+        top: 135px;
+        z-index: 1;
+        font-size: 6px;
+    }
+</style>
 <div class="login-container">
+
     <div class="middle-login">
+        <div class="right_shadow">
+            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/right_shadow.png"/>
+        </div>
+        <div class="left_shadow">
+            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/left_shadow.png" />
+        </div>
         <div class="block-web">
             <div class="head">
-                <h3 class="text-center">Opinion Desk : Login</h3>
+                <h3 class="text-center"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/opinion_desk_logo_large.png"/></h3>
             </div>
             <div style="background:#fff;">
 
@@ -11,7 +49,7 @@
 
                     <div class="porlets-content">
                         <!--<div class="alert alert-info">--> 
-                            <?php echo CHtml::errorSummary($model, null, null, array('class' => 'alert alert-info')); ?>
+                        <?php echo CHtml::errorSummary($model, null, null, array('class' => 'alert alert-info')); ?>
                         <!--</div>-->
                     </div>
 
@@ -20,37 +58,34 @@
                         <div class="form-group">
                             <div class="col-sm-12">
                                 <div class="input-group">
-                                    <span class="input-group-addon">@</span>
-                                    <input type="text" class="form-control" name="UserLogin[username]" id="UserLogin_username" placeholder="Username">
-<!--                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                    <input type="text" class="form-control" name="UserLogin[username]" id="UserLogin_username" placeholder="Username">-->
+                                    <input type="text" class="form-control login_input" style="border-radius: 9px; padding: 6px 11px !important; border: 2px solid #E5E9EC; width: 224px;"  name="UserLogin[username]" id="UserLogin_username" placeholder="Username"/>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
                                 <div class="input-group"> 
-                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                    <input type="password" class="form-control" name="UserLogin[password]" id="UserLogin_password" placeholder="Password">
-                                    <div class="input-group-btn">
-                                        <button type="submit" name="yt1"  class="btn btn-danger" >Go!</button>
-                                    </div>
-
+                                    <input type="password" class="form-control login_input"  style="border-radius: 9px; padding: 6px 11px !important; border: 2px solid #E5E9EC; width: 224px;"  name="UserLogin[password]" id="UserLogin_password" placeholder="Password"/>
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <?php echo CHtml::link(UserModule::t("Forgot Password?"), Yii::app()->getModule('user')->recoveryUrl, array('style' => 'float:right;')); ?>
-                            <?php echo CHtml::link(UserModule::t("Registration"), Yii::app()->request->baseUrl . '/index.php/user/registration'); ?>
+                        <div style="padding-left: 10px;padding-right: 3px;">
+                            <?php echo CHtml::link(UserModule::t("Forgot Password?"), Yii::app()->getModule('user')->recoveryUrl, array('style' => 'color: #8e8e8e; font-size: 10px;')); ?>
+                            <?php echo CHtml::link(UserModule::t("Registration"), Yii::app()->request->baseUrl . '/index.php/user/registration', array('style' => 'color: #8e8e8e; font-size: 10px;margin-left: 68px;')); ?>
                         </div>
                     </div>
-                    <div class="foot">
-<!--                        <a href="<?php // echo Yii::app()->request->baseUrl;     ?>/index.php/user/registration"><button type="button" data-dismiss="modal" class="btn btn-default">Register</button></a>
-                        <input type="submit" name="yt1" class="btn btn-primary" value="Login">-->
+                    <div class="foot login_footer">
+                        <div class="input-group-btn">
+                            <button type="submit" name="yt1"  class="btn btn-primary" style="border-radius: 5px;font-size: 12px;padding: 3px;">Login</button>
+                        </div>
+
+<!--                        <a href="<?php // echo Yii::app()->request->baseUrl;                                       ?>/index.php/user/registration"><button type="button" data-dismiss="modal" class="btn btn-default">Register</button></a>
+<input type="submit" name="yt1" class="btn btn-primary" value="Login">-->
                     </div>
                 </form>
             </div>
         </div>
+
         <div class="text-center out-links"><a href="#">&copy;  Copyright Opinion Desk 2014. </a></div>
     </div>
 </div>

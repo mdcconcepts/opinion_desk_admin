@@ -43,9 +43,9 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     <label class="col-sm-2">Date Format</label>
     <div class="col-md-6">
         <div class="input-group input-large" data-date="2013-07-13" data-date-format="yyyy-mm-dd">
-            <input type="text" class="form-control dpd1" name="date_range_from">
+            <input type="text" class="form-control dpd1" required name="date_range_from">
             <span class="input-group-addon">To</span>
-            <input type="text" class="form-control dpd2" name="date_range_to">
+            <input type="text" class="form-control dpd2" required name="date_range_to">
         </div>
         <span class="help-block">Select date range</span> </div>
 </div><!--/form-group-->

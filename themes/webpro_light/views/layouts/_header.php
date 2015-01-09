@@ -1,41 +1,20 @@
 <div class = "header navbar navbar-inverse box-shadow navbar-fixed-top">
     <div class = "navbar-inner">
         <div class = "header-seperation">
-            <ul class = "nav navbar-nav">
+            <ul class = "nav navbar-nav ">
                 <li class = "sidebar-toggle-box"> <a href = "#"><i class = "fa fa-bars"></i></a> </li>
-                <li> <a href = "<?php echo Yii::app()->request->baseUrl ?>"><strong>Opinion Desk</strong></a> </li>
+                <li> <a href = "<?php echo Yii::app()->request->baseUrl ?>" style="padding: 0px;"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/opinion_desk_logo.gif"> </a> </li>
                 <!--<li class = "hidden-xs"> <a href = "#"><i class = "fa fa-angle-double-left"></i> Go to the front page</a> </li>-->
                 <li class = "hidden-xs">
                     <div class = "hov">
-                        <div class = "btn-group"> <a data-toggle = "dropdown" href = "" class = "con"><span class = "fa fa-bell"></span><span class = "label label-danger">33</span></a>
-                            <ul role = "menu" class = "dropdown-menu pull-right dropdown-alerts">
-                                <li class = "title"><span class = "icon icon-bell"></span>&nbsp;
-                                    &nbsp;
-                                    There are 5 new alerts in the system...</li>
-                                <li class = "alert">
-                                    <div class = "alert-icon alt-default"><span class = "fa fa-check-square"></span></div>
-                                    <div class = "alert-content">Quality check was successful</div>
-                                    <div class = "alert-time">32 sec ago</div>
-                                </li>
-                                <li class = "alert">
-                                    <div class = "alert-icon alt-primary"><span class = "fa fa-plus-square"></span></div>
-                                    <div class = "alert-content">New user added (John Doe)</div>
-                                    <div class = "alert-time">11 min ago</div>
-                                </li>
-                                <li class = "alert">
-                                    <div class = "alert-icon alt-warning"><span class = "fa fa-pencil-square"></span></div>
-                                    <div class = "alert-content">User profile updated (John Doe)</div>
-                                    <div class = "alert-time">3 hours ago</div>
-                                </li>
-                                <li class = "alert" style = "position:relative;">
-                                    <div class = "alert-icon alt-danger"><span class = "fa fa-warning"></span></div>
-                                    <div class = "alert-content">System failure reported</div>
-                                    <div class = "alert-time">2 days ago</div>
-                                </li>
+                        <div class = "btn-group nav-user"> <a data-toggle = "dropdown" href = "" class = "con"><span class = "fa fa-bell"></span><span class = "label label-danger count">0</span></a>
+                            <ul role = "menu" class = "dropdown-menu dropdown-alerts notification_holder">
+
+
                             </ul>
                         </div>
                         <div class = "btn-group"> <a data-toggle = "dropdown" href = "" class = "con"><span class = "fa fa-envelope"></span><span class = "label label-success">7</span></a>
-                            <ul role = "menu" class = "dropdown-menu pull-right dropdown-messages">
+                            <ul role = "menu" class = "dropdown-menu dropdown-messages">
                                 <li class = "title"><span class = "fa fa-envelope"></span>&nbsp;
                                     &nbsp;
                                     You have 13 new messages to read...</li>
@@ -65,17 +44,6 @@
                                 </li>
                             </ul>
                         </div>
-<!--                        <div class = "btn-group"> <a data-toggle = "dropdown" href = "" class = "con"><span class = "fa fa-user"></span><span class = "label label-primary">+5</span></a>
-<ul role = "menu" class = "dropdown-menu pull-right dropdown-profile">
-<li class = "title"><span class = "icon icon-user"></span>&nbsp;
-&nbsp;
-Welcome, John!</li>
-<li><a href = "#"><span class = "fa fa-gears"></span>Settings</a></li>
-<li><a href = "#"><span class = "fa fa-user"></span>Profile</a></li>
-<li><a href = "#"><span class = "fa fa-envelope"></span>Messages</a></li>
-<li><a href = "#"><span class = "fa fa-power-off"></span>Logout</a></li>
-</ul>
-</div>-->
                     </div>
                 </li>
                 <!--<li class = "hidden-xs"> <form method = "post" action = "index.html" class = "searchform"><input type = "text" placeholder = "Search here..." name = "keyword" class = "form-control"></form> </li>-->
@@ -85,3 +53,54 @@ Welcome, John!</li>
         </div><!--/header-seperation-->
     </div><!--/navbar-inner-->
 </div><!--/header-->
+<script type="text/javascript">
+    function addMsg($msg) {
+        var $el = $('.nav-user'), $n = $('.count:first', $el), $v = parseInt($n.text());
+        console.log($v);
+        $('.count', $el).fadeOut().fadeIn().text($v + 1);
+        $($msg).hide().prependTo($el.find('.notification_holder')).slideDown();
+    }
+
+    function clearNotification() {
+        var $el = $('.nav-user'), $n = $('.count:first', $el), $v = parseInt($n.text());
+        $('.count', $el).fadeOut().fadeIn().text(0);
+        $el.find('.notification_holder').html('<li class="alert" style="display: none;">\
+                                </li>');
+//        $($msg).hide().prependTo($el.find('.list-group')).slideDown().css('display', 'block');
+    }
+//    setInterval(function () {
+    var postTo = '/account/index.php/api/WebAppServices/getAllNotificationForUser';
+    var data = {
+        'customer_id': 50
+    };
+    jQuery.post(postTo, data,
+            function (data) {
+                clearNotification();
+                if (data.Success == "True") {
+
+                    for (i = 0; i < data.Notification_Count; i++)
+                    {
+                        if (data.Notification[i].notification_type_id == 4)
+                        {
+                            var $msg = '<li class = "alert" onclick="window.location.href = \'' + data.Notification[i].redirect_url + '\'">\
+                                    <div class = "alert-icon alt-default"><span class = "fa fa-check-square"></span></div>\
+                                    <div class = "alert-content">New Feedback Entered</div>\
+                                    <div class = "alert-time">' + data.Notification[i].created_at + '</div>\
+                                </li>'
+                            addMsg($msg);
+                        }
+
+                    }
+
+                } else if (data.success == "2") {
+
+
+                } else {
+
+                }
+
+
+            }, 'json');
+
+//    }, 5000);
+</script>

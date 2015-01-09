@@ -319,7 +319,7 @@ class Dashboard_helper {
         return 0;
     }
 
-    public static function getAgeBoundsForCustomerForAllBranches($from_Date, $to_Date) {
+    public static function getAgeBoundsForCustomerForAllBranches() {
         try {
 
 

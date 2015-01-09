@@ -2,6 +2,7 @@
 <html lang="en">
     <?php require(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_head.php'); ?>
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-datepicker/css/datepicker.css" />
+    <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery-2.0.2.min.js"></script> 
     <body class = "light-theme">
         <?php require(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_header.php'); ?>
         <?php require(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_right_sidebar.php'); ?>
@@ -19,7 +20,7 @@
         </div><!--/page-container end-->
 
         <!--jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-        <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery-2.0.2.min.js"></script> 
+
         <!-- Include all compiled plugins (below), or include individual files as needed --> 
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/bootstrap/js/bootstrap.min.js"></script> 
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/accordion.js"></script> 

@@ -13,16 +13,16 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2><i class="fa fa-dashboard"></i>Branch Home</h2>
+        <h2><i class="fa fa-sitemap" style="margin-right: 10px;"></i>Branch Home</h2>
     </div><!--/col-md-12--> 
 </div><!--/row-->
 <div class="row">
     <div class="col-sm-3 col-lg-2" style="position: relative;margin-top: 30px;"> 
-        <ul class="nav nav-pills nav-stacked nav-email" style="position: fixed;">
-            <li class="active"> <a href="#"> <i class="glyphicon glyphicon-inbox"></i> Branch </a> </li>
-            <li><a href="<?php echo Yii::app()->createUrl("questionMaster_Child?pId=" . $model->id); ?>"><i class="glyphicon glyphicon-star-empty"></i> Questions</a></li>
-            <li><a href="<?php echo Yii::app()->createUrl("tabletMaster_child?pId=" . $model->id); ?>"><i class="glyphicon glyphicon-phone"></i> Tablets </a></li>
-            <li><a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent?pId=" . $model->id); ?>"><i class="glyphicon glyphicon-phone"></i> Custom Fields</a></li>
+        <ul class="nav nav-pills nav-stacked nav-email" style="position: fixed;border: 2px solid #44AFB0;border-top-left-radius: 9px;border-top-right-radius: 9px;">
+            <li class="active"> <a href="#"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/selected/branches_menu.png"/> Branch </a> </li>
+            <li><a href="<?php echo Yii::app()->createUrl("questionMaster_Child?pId=" . $model->id); ?>">  <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_branch.png"/>  Questions</a></li>
+            <li><a href="<?php echo Yii::app()->createUrl("tabletMaster_child?pId=" . $model->id); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/tablet.png"/>  Tablets </a></li>
+            <li><a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent?pId=" . $model->id); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/custom_fields.png"/> Custom Fields</a></li>
             <li> <a href="<?php echo Yii::app()->createUrl("branchMaster_parent"); ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>
         </ul>
     </div><!-- col-sm-3 -->
@@ -195,7 +195,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="block-web">
-                        <h3 class="content-header"> Your Branch Statistics
+                        <h3 class="content-header"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/pie_graph.png"/>Your Branch Statistics
                             <br/>
                             <br/>
                             <div data-toggle="buttons" class="button-group " style="margin-left: 10px;"> 
@@ -299,7 +299,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="block-web">
-                        <h3 class="content-header"> Quick Stats
+                        <h3 class="content-header"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/line_graph.png"/> Quick Stats
                             <div data-toggle="buttons" class="button-group pull-right"> 
                                 <a class="btn active small border-gray" href="javascript:;"> <span class="button-content" style=" padding: 3px; ">
                                         <input type="radio" name="dashboard_radio_feedback_index"  value="weekly">
@@ -322,27 +322,35 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="block-web">
-                            <h3>Customer Count <strong><?php echo BranchDashboard_helper::getTotalCustomerForBranches($model->id); ?></strong></h3>
+                            <h3> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/calculator.png"/>Customer Count <strong><?php echo BranchDashboard_helper::getTotalCustomerForBranches($model->id); ?></strong></h3>
                             <table class="table margin-top-20 today" width="100%" border="0" cellspacing="0" cellpadding="0" >
                                 <tr>
-                                    <td class="fa-border"><button class="btn btn-danger padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalNewCustomers($model->id); ?></button>
-                                        New </td>
-                                    <td class="fa-border"><button class="btn btn-primary padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalMALECustomerForBranches($model->id); ?></button>
-                                        Male</td>
+                                    <td class="fa-border">
+                                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/plus.png"/> 
+                                        <strong><?php echo BranchDashboard_helper::getTotalNewCustomers($model->id); ?></strong>
+                                    </td>
+                                    <td class="fa-border">
+                                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/male.png"/> 
+                                        <strong><?php echo BranchDashboard_helper::getTotalMALECustomerForBranches($model->id); ?></strong>
+                                    </td>
 
                                 </tr>
                                 <tr>
-                                    <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalRepeateCustomers($model->id); ?></button>
-                                        Repeat</td>
-                                    <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalFEMALECustomerForBranches($model->id); ?></button>
-                                        Female</td>
+                                    <td class="fa-border">
+                                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/reload.png"/> 
+                                        <strong><?php echo BranchDashboard_helper::getTotalRepeateCustomers($model->id); ?></strong>
+                                    </td>
+                                    <td class="fa-border">
+                                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/female.png"/> 
+                                        <strong><?php echo BranchDashboard_helper::getTotalFEMALECustomerForBranches($model->id); ?></strong>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
                     </div><!--/col-md-6-->
                     <div class="col-md-4">
                         <div class="block-web">
-                            <h3>Customer Age Bounds</h3>
+                            <h3>Customer <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/age.png"/>  Bounds</h3>
                             <table class="table margin-top-20" width="100%" border="0" cellspacing="0" cellpadding="0" >
                                 <tr>
                                     <?php BranchDashboard_helper::getAgeBoundsForCustomerForBranches($model->id); ?>
@@ -357,7 +365,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="block-web">
-                        <h3 class="content-header"> Feedback Across Category
+                        <h3 class="content-header"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/report.png"/> Feedback Across Category
                             <div data-toggle="buttons" class="button-group pull-right"> 
                                 <a class="btn small active border-gray" href="javascript:;"> <span class="button-content" style=" padding: 3px; ">
                                         <input type="radio" name="dashboard_radio_category_index"  value="today">
@@ -386,7 +394,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="block-web">
-                        <h3 class="content-header"> Visitors Feedback Over Time
+                        <h3 class="content-header"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/report_time.png"/>Visitors Feedback Over Time
                             <div data-toggle="buttons" class="button-group pull-right"> 
                                 <a class="btn active small border-gray" href="javascript:;"> <span class="button-content" style=" padding: 3px; ">
                                         <input type="radio" name="dashboard_radio_Female_Male_index"  value="weekly">

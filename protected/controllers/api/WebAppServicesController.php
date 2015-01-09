@@ -19,6 +19,67 @@ class WebAppServicesController extends Controller {
 //        );
 //    }
 
+    public function actiongetAllNotificationForUser() {
+        if (!isset($_POST['customer_id'])) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => 'Bad Request Parameters',
+                'Error' => 'Customer Id not found.'
+            ];
+            $this->_sendResponse(200, $Responce);
+        }
+
+        $Notifications = NotificationMaster::model()->findAll(array(
+            'condition' => 'customer_id = :customer_id AND read_status = :read_status',
+            'params' => array(':customer_id' => $_POST['customer_id'], ':read_status' => 0)
+        ));
+        if (count($Notifications) != 0) {
+
+            $Responce_Notification = array();
+            foreach ($Notifications as $notification) {
+                $notification->created_at = $this->Time_Elapsed(strtotime($notification->created_at));
+                array_push($Responce_Notification, $notification);
+            }
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'True',
+                'Notification_Count' => count($Notifications),
+                'Notification' => $Responce_Notification,
+            ];
+            $this->_sendResponse(200, $Responce);
+        } else {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => 'Notification Not Found',
+            ];
+            $this->_sendResponse(200, $Responce);
+        }
+    }
+
+    private function Time_Elapsed($time) {
+        date_default_timezone_set("Asia/Kolkata");
+        $time = time() - $time; // to get the time since that moment
+
+        $tokens = array(
+            31536000 => 'year',
+            2592000 => 'month',
+            604800 => 'week',
+            86400 => 'day',
+            3600 => 'hour',
+            60 => 'minute',
+            1 => 'second'
+        );
+
+        foreach ($tokens as $unit => $text) {
+            if ($time < $unit)
+                continue;
+            $numberOfUnits = floor($time / $unit);
+            return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's ago' : ' ago');
+        }
+    }
+
     public function actionpostTableNumberForBranch() {
 //        $customer_id = Yii::app()->request->getPost('username');
 
@@ -555,27 +616,27 @@ class WebAppServicesController extends Controller {
      * @return void
      */
     private function _sendResponse($status = 200, $body = '', $content_type = 'application/json') {
-        // set the status
+// set the status
         $status_header = 'HTTP/1.1 ' . $status . ' ' . $this->_getStatusCodeMessage($status);
         header($status_header);
-        // and the content type
+// and the content type
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
         header("Access-Control-Allow-Headers: Authorization");
         header('Content-type: ' . $content_type);
 
-        // pages with body are easy
+// pages with body are easy
         if ($body != '') {
-            // send the body
+// send the body
             echo CJSON::encode($body);
         } else {
-            // create some body messages
+// create some body messages
             $message = '';
 
 
-            // this is purely optional, but makes the pages a little nicer to read
-            // for your users.  Since you won't likely send a lot of different status codes,
-            // this also shouldn't be too ponderous to maintain
+// this is purely optional, but makes the pages a little nicer to read
+// for your users.  Since you won't likely send a lot of different status codes,
+// this also shouldn't be too ponderous to maintain
             switch ($status) {
                 case 401:
                     $message = 'You must be authorized to use this service.';
@@ -794,9 +855,9 @@ class WebAppServicesController extends Controller {
      * @return string
      */
     private function _getStatusCodeMessage($status) {
-        // these could be stored in a .ini file and loaded
-        // via parse_ini_file()... however, this will suffice
-        // for an example
+// these could be stored in a .ini file and loaded
+// via parse_ini_file()... however, this will suffice
+// for an example
         $codes = Array(
             100 => 'Continue',
             101 => 'Switching Protocols',

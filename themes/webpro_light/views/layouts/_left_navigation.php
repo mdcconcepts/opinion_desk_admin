@@ -19,7 +19,11 @@
                 echo 'class = "active"';
             }
             ?>>
-                <i class = "fa fa-dashboard"></i> <span>Home</span> </a> 
+                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/left_menu/<?php
+                if (Yii::app()->controller->id == 'site') {
+                    echo 'selected/';
+                }
+                ?>home.png"/> <span>Home</span> </a> 
         </li>
         <?php
         if (UserModule::isAdmin()) {
@@ -32,25 +36,6 @@
                     <i class = "fa fa-dashboard"></i> <span>Manage User</span> </a> 
             </li>
 
-            <?php /* <li class="sub-menu dcjq-parent-li"> <a href="javascript:;" class="dcjq-parent <?php
-              if (Yii::app()->controller->id == 'profileField') {
-              echo 'active';
-              }
-              ?>"> <i class="fa fa-book"></i> <span>Profile Fields</span></a>
-              <ul class="sub">
-              <li class="<?php
-              if (Yii::app()->controller->action->id == 'admin') {
-              echo 'active';
-              }
-              ?>"><a  href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/profileField/admin"><i class="fa fa-angle-right"></i> Manage Fields</a></li>
-              <li class="<?php
-              if (Yii::app()->controller->action->id == 'create') {
-              echo 'active';
-              }
-              ?>"><a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/profileField/create"><i class="fa fa-angle-right"></i> Create Fields</a></li>
-              </ul>
-              </li>
-             */ ?>
             <?php
         } else {
             ?>
@@ -58,7 +43,11 @@
                 if (Yii::app()->controller->id == 'branchMaster_parent') {
                     echo 'active';
                 }
-                ?>"> <i class="fa fa-book"></i> <span>My Branches</span></a>
+                ?>"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/left_menu/<?php
+                                                        if (Yii::app()->controller->id == 'branchMaster_parent') {
+                                                            echo 'selected/';
+                                                        }
+                                                        ?>branch.png"/> <span>My Branches</span></a>
                 <ul class="sub">
 
                     <?php
@@ -76,7 +65,11 @@
                 if (Yii::app()->controller->id == 'responceMaster_child') {
                     echo 'active';
                 }
-                ?>"> <i class="fa fa-book"></i> <span>Reports</span></a>
+                ?>"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/left_menu/<?php
+                                                        if (Yii::app()->controller->id == 'responceMaster_child') {
+                                                            echo 'selected/';
+                                                        }
+                                                        ?>report.png"/><span>Reports</span></a>
                 <ul class="sub">
 
                     <?php
@@ -88,12 +81,25 @@
                     ?>
                 </ul>
             </li>
-            <li> <a href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php/testimonials" <?php
-                if (Yii::app()->controller->id == '#') {
-                    echo 'class = "active"';
+            <li class="sub-menu dcjq-parent-li"> <a href="javascript:;" class="dcjq-parent <?php
+                if (Yii::app()->controller->id == 'testimonials') {
+                    echo 'active';
                 }
-                ?>>
-                    <i class = "fa fa-video-camera"></i> <span>Testimonials</span> </a> 
+                ?>"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/left_menu/<?php
+                                                        if (Yii::app()->controller->id == 'testimonials') {
+                                                            echo 'selected/';
+                                                        }
+                                                        ?>testi.png"/><span>Testimonials</span></a>
+                <ul class="sub">
+
+                    <?php
+                    foreach ($Branches as $Branch) {
+                        ?>
+                        <li><a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/testimonials?branch_id=<?php echo $Branch->id; ?>"><i class="fa fa-angle-right"></i> <?php echo $Branch->branch_name; ?></a></li>
+                            <?php
+                        }
+                        ?>
+                </ul>
             </li>
 
             <?php

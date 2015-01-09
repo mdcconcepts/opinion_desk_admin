@@ -70,6 +70,9 @@ class TestimonialsController extends Controller {
                                      INNER JOIN `client_master` ON `client_master`.`client_id`=DATA.`client_id`
                                       ";
                 $Feddback_Val = $_GET['feedback'];
+                if (!isset($Feddback_Val)) {
+                    $Feddback_Val = 'all';
+                }
                 switch (true) {
                     case ($Feddback_Val == '0' || $Feddback_Val == null ) :
                         $sqlStatement .= "WHERE Total_AVG=0";
@@ -164,6 +167,9 @@ class TestimonialsController extends Controller {
                         INNER JOIN `client_master` ON `client_master`.`client_id`=DATA.`client_id`
                         ";
             $Feddback_Val = $_GET['feedback'];
+            if (!isset($Feddback_Val)) {
+                $Feddback_Val = 'all';
+            }
             switch (true) {
                 case ($Feddback_Val == '0' || $Feddback_Val == null ) :
                     $sqlStatement .= "WHERE Total_AVG=0";

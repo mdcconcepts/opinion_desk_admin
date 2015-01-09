@@ -1,5 +1,14 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-3 col-lg-2" style="position: relative;margin-top: 30px;"> 
+        <ul class="nav nav-pills nav-stacked nav-email" style="position: fixed;border: 2px solid #44AFB0;border-top-left-radius: 9px;border-top-right-radius: 9px;">
+            <li> <a href="#"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/branches_menu.png"/> Branch </a> </li>
+            <li ><a href="<?php echo Yii::app()->createUrl("questionMaster_Child?pId=" . $_GET['pId']); ?>">  <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_branch.png"/>  Questions</a></li>
+            <li><a href="<?php echo Yii::app()->createUrl("tabletMaster_child?pId=" . $_GET['pId']); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/tablet.png"/>  Tablets </a></li>
+            <li class="active"><a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent?pId=" . $_GET['pId']); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/selected/custom_fields.png"/> Custom Fields</a></li>
+            <li> <a href="<?php echo Yii::app()->createUrl("branchMaster_parent"); ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>
+        </ul>
+    </div><!-- col-sm-3 -->
+    <div class="col-md-10">
         <div class="block-web">
             <div class="header">
                 <h3 class="content-header">All Customer Fields</h3>

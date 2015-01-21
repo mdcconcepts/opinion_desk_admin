@@ -25,6 +25,7 @@ table.table {
 	clear: both;
 	margin-bottom: 6px !important;
 	max-width: none !important;
+	border: 1px solid FFF;
 }
 
 table.table thead .sorting,

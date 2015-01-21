@@ -42,16 +42,6 @@
                             ?>
 
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Status</th>
-                                <th>Registration Date</th>
-                                <th>Expire At</th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div><!--/table-responsive-->
             </div><!--/porlets-content-->

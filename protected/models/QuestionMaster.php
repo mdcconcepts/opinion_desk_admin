@@ -181,4 +181,13 @@ class QuestionMaster extends CActiveRecord {
         return $Tablet_count;
     }
 
+    public static function getQuestionAverageFeedback($id) {
+        $list = Yii::app()->db->createCommand('SELECT AVG(`option_value`) Average_Feedback_Value FROM `responce_master` WHERE  `question_id`=' . $id)->queryAll();
+        $Question_Average_Feedback = "";
+        foreach ($list as $item) {
+            $Question_Average_Feedback = round($item['Average_Feedback_Value'], 2);
+        }
+        return $Question_Average_Feedback;
+    }
+
 }

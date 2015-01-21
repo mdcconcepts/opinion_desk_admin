@@ -73,7 +73,8 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
             }
             ?>
         </select>
-        <span class="help-block">Select date range</span> 
+        <!-- select date range removed KK--> 
+        <span class="help-block"></span> 
     </div>
 </div>
 <div class="form-group">
@@ -167,6 +168,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
             }
             ?> </label>
         <label class="radio-inline">
+            <!-- default checked values removed KK-->
             <input type="radio" name="feedback" value="all" checked>
             <span class="custom-radio"></span> All </label>
     </div>
@@ -206,7 +208,8 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
             ?>
 
         </select>
-        <span class="help-block">Select Age range</span> 
+
+        <!-- select age range span removed --KK -->
     </div>
 </div>
 <?php

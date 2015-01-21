@@ -159,12 +159,6 @@
                             ));
                             ?>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Super Admin</label>
-                                <div class="col-sm-9">
-                                    <?php echo $form->dropDownList($model, 'superuser', User::itemAlias('AdminStatus')); ?>
-                                </div>
-                            </div><!--/form-group--> 
-                            <div class="form-group">
                                 <label class="col-sm-3 control-label">Status</label>
                                 <div class="col-sm-9">
                                     <?php echo $form->dropDownList($model, 'status', User::itemAlias('UserStatus')); ?>
@@ -257,6 +251,7 @@
                                             <tr>
                                                 <th>Branch Name</th>
                                                 <th>Tablet Number</th>
+                                                <th>Branch Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -270,6 +265,7 @@
                                                 <tr>
                                                     <td width="50%"><?php echo $Branch->branch_name; ?></td>
                                                     <td width="50%"><a href="#" class="tablet_no" data-type="text" data-placeholder="Required" data-pk="<?php echo $Branch->id; ?>" data-title="Enter Tablet Number"><?php echo $Branch->tablet_no; ?></a></td>
+                                                    <td><a href="#" class="branch_status" data-type="select" data-pk="<?php echo $Branch->id; ?>" data-value="" data-title="Select Status"><?php echo BranchMaster::itemAlias('status', $Branch->status); ?></a></td>
                                                 </tr>
                                                 <?php
                                             }

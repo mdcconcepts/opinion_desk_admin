@@ -94,7 +94,7 @@ class MobileServicesController extends Controller {
                 'Error' => $e->getMessage()
             ];
             $this->_sendResponse(403, $Responce);
-            //$this->refresh();
+//$this->refresh();
         }
         $Responce = [
             'Status_code' => '403',
@@ -183,30 +183,36 @@ class MobileServicesController extends Controller {
             ];
             $this->_sendResponse(401, $Responce);
         }
+        $Post = Yii::app()->getRequest()->getRawBody();
 
-
-        $Post_Mobile = Yii::app()->request->getPost('Mobile_No');
+        $Post_Mobile = CJSON::decode($Post)['Mobile_No'];
 
         $Client = ClientMaster::model()->findAll(array(
             'condition' => 'mobile_no = :mobile_no',
-            'params' => array(':mobile_no' => $Post_Mobile)
+            'params' => array(':mobile_no' => '' . $Post_Mobile)
         ));
 
         if ($Client[0] === null) {
 // Error: Unauthorized
             $Responce = [
-                'Status_code' => '200',
-                'Success' => 'Success',
+                'Status_code' => '400',
+                'Success' => 'False',
                 'Message' => 'Customer of this number not found !',
             ];
-            $this->_sendResponse(200, $Responce);
+            $this->_sendResponse(400, $Responce);
         }
 
         $Responce = [
             'Status_code' => '200',
-            'Success' => 'False',
+            'Success' => 'True',
             'Message' => 'Customer found !',
             'client_id' => $Client[0]->client_id,
+            'name' => $Client[0]->name,
+            'email' => $Client[0]->email,
+            'gender' => $Client[0]->gender,
+            'dob' => $Client[0]->dob,
+            'ref_name' => $Client[0]->ref_name,
+            'ref_mobile_no' => $Client[0]->ref_mobile_no,
         ];
         $this->_sendResponse(200, $Responce);
     }
@@ -481,15 +487,16 @@ class MobileServicesController extends Controller {
             $Client->email = $Post_Client['email'];
             $Client->gender = $Post_Client['gender'];
             $Client->dob = $Post_Client['dob'];
+            $Client->ref_name = $Post_Client['ref_name'];
+            $Client->ref_mobile_no = $Post_Client['ref_mobile_no'];
             if ($Client->save()) {
 
-                $this->saveCustomFieldData($Client->getPrimaryKey(), $Post_Custom_Fields_Client);
+                $Feedback_id = $this->saveFeedbackResponce($Client->client_id);
 
-                $this->saveQuestionResponceData($Client->getPrimaryKey(), $Post_Questions);
+                $this->saveQuestionResponceData($Client->client_id, $Post_Questions, $Feedback_id);
 
                 if (isset($Post_Testimonial))
-                    $this->saveTestimonialResponceData($Client->getPrimaryKey(), $Post_Testimonial, $Tablet->branch_id);
-
+                    $this->saveTestimonialResponceData($Client->client_id, $Post_Testimonial, $Tablet->branch_id, $Feedback_id);
 
                 $this->generateNotification($Tablet->id, $Tablet->branch_id, 'http://opiniondesk.in/account/index.php');
 
@@ -510,7 +517,8 @@ class MobileServicesController extends Controller {
                 'Status_code' => $e->getCode(),
                 'Success' => 'False',
                 'Message' => 'Exception On Save',
-                'Error' => $e->getMessage()
+                'Error' => $e->getMessage(),
+                'feedbackID' => $Post_Feedback_Id
             ];
             $this->_sendResponse(404, $Responce);
         }
@@ -555,6 +563,10 @@ class MobileServicesController extends Controller {
 
         $Post_Feedback_Id = CJSON::decode($Post)['feedbackID'];
 
+        $Post_Client = CJSON::decode($Post)['Client'];
+
+        $this->validateBasicClientPostResponce($Post_Client);
+
         $Post_Client_Id = CJSON::decode($Post)['Client_Id'];
 
         $Post_Questions = CJSON::decode($Post)['Questions'];
@@ -563,32 +575,45 @@ class MobileServicesController extends Controller {
 
         $Post_Custom_Fields_Client = $Post_Client['Custom_Fields'];
 
+        $Client = ClientMaster::model()->findByPk($Post_Client_Id);
+
 
         $transaction = Yii::app()->db->beginTransaction();
         try {
+            $Client->name = $Post_Client['name'];
+            $Client->mobile_no = $Post_Client['mobile_no'];
+            $Client->email = $Post_Client['email'];
+            $Client->gender = $Post_Client['gender'];
+            $Client->dob = $Post_Client['dob'];
+            $Client->ref_name = $Post_Client['ref_name'];
+            $Client->ref_mobile_no = $Post_Client['ref_mobile_no'];
+            if ($Client->save()) {
 
-            $this->saveCustomFieldData($Post_Client_Id, $Post_Custom_Fields_Client);
+                $this->saveCustomFieldData($Post_Client_Id, $Post_Custom_Fields_Client);
 
-            $this->saveQuestionResponceData($Post_Client_Id, $Post_Questions);
+                $Feedback_id = $this->saveFeedbackResponce($Post_Client_Id);
 
-            if (isset($Post_Testimonial))
-                $this->saveTestimonialResponceData($Post_Client_Id, $Post_Testimonial, $Tablet->branch_id);
+                $this->saveQuestionResponceData($Post_Client_Id, $Post_Questions, $Feedback_id);
 
-            $transaction->commit();
+                if (isset($Post_Testimonial))
+                    $this->saveTestimonialResponceData($Post_Client_Id, $Post_Testimonial, $Tablet->branch_id, $Feedback_id);
 
-            $Responce = [
-                'Status_code' => '200',
-                'Success' => 'True',
-                'Message' => 'Client Response Saved !',
-                'feedbackID' => $Post_Feedback_Id
-            ];
+                $transaction->commit();
 
-            $this->_sendResponse(200, $Responce);
+                $Responce = [
+                    'Status_code' => '200',
+                    'Success' => 'True',
+                    'Message' => 'Client Response Saved !',
+                    'feedbackID' => $Post_Feedback_Id
+                ];
+
+                $this->_sendResponse(200, $Responce);
+            }
         } catch (Exception $e) {
             $transaction->rollBack();
             $Responce = [
                 'Status_code' => $e->getCode(),
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Exception On Save',
                 'Error' => $e->getMessage()
             ];
@@ -596,7 +621,7 @@ class MobileServicesController extends Controller {
         }
         $Responce = [
             'Status_code' => '400',
-            'Success' => 'Fail',
+            'Success' => 'False',
             'Message' => 'Unknown Responce',
         ];
         $this->_sendResponse(400, $Responce);
@@ -607,25 +632,26 @@ class MobileServicesController extends Controller {
      * @param type $client_id Client id of user just enter into the system.
      * @param type $Post_Questions This is Post Question Responce Array
      */
-    private function saveQuestionResponceData($client_id, $Post_Questions) {
+    private function saveQuestionResponceData($client_id, $Post_Questions, $Feedback_id) {
         if (count($Post_Questions) >= 1) {
 
             $isFirst = true;
             $query = "";
+
             for ($index = 0; $index < count($Post_Questions); $index++) {
                 $this->validateBasicQuestionsPostResponce($Post_Questions[$index]);
 
                 if ($isFirst) {
                     $query = "INSERT INTO `opinion_desk_db`.`responce_master` "
-                            . "(`id`, `option_value`, `question_id`, `client_id`,`created_at`) "
+                            . "(`id`, `option_value`, `question_id`, `feedback_id`,`created_at`) "
                             . "VALUES (NULL, " . $Post_Questions[$index]['option_value'] . ", "
                             . "'" . $Post_Questions[$index]['question_id'] . "',"
-                            . " '" . $client_id . "','" . date('Y-m-d H:i:s') . "')";
+                            . " '" . $Feedback_id . "','" . date('Y-m-d H:i:s') . "')";
                     $isFirst = false;
                 } else {
                     $query.=" , (NULL, " . $Post_Questions[$index]['option_value'] . ", "
                             . "'" . $Post_Questions[$index]['question_id'] . "',"
-                            . " '" . $client_id . "','" . date('Y-m-d H:i:s') . "')";
+                            . " '" . $Feedback_id . "','" . date('Y-m-d H:i:s') . "')";
                 }
             }
 
@@ -637,12 +663,26 @@ class MobileServicesController extends Controller {
         }
     }
 
+    private function saveFeedbackResponce($client_id) {
+        $query = "INSERT INTO `feedback_master`"
+                . "(`id`, `client_id`, `created_at`) "
+                . "VALUES (NULL," . $client_id . ",'" . date('Y-m-d H:i:s') . "')";
+
+        $connection = Yii::app()->db;
+
+        $command = $connection->createCommand($query);
+
+        $command->execute();
+
+        return Yii::app()->db->getLastInsertId();
+    }
+
     /**
      * This method is used for saving question responce in database.
      * @param type $client_id Client id of user just enter into the system.
      * @param type $Post_Questions This is Post Question Responce Array
      */
-    private function saveTestimonialResponceData($client_id, $Post_Testimonial, $branch_id) {
+    private function saveTestimonialResponceData($client_id, $Post_Testimonial, $branch_id, $Feedback_id) {
 
         if ($this->validateBasicTestimonialPostResponce($Post_Testimonial)) {
 
@@ -652,10 +692,10 @@ class MobileServicesController extends Controller {
             }
 
             $query = "INSERT INTO `testimonial_response_table`(`id`, `responce_text`, "
-                    . "`responce_audio_url`, `responce_vedio_url`,`branch_id`, `client_id`, `created_at`) VALUES "
+                    . "`responce_audio_url`, `responce_vedio_url`,`feedback_id`,`branch_id`, `client_id`, `created_at`) VALUES "
                     . "(NULL, '" . $Post_Testimonial['responce_text'] . "', "
                     . "'" . $Audio_URL . "', "
-                    . "'" . $Post_Testimonial['responce_vedio_url'] . "'," . $branch_id . ","
+                    . "'" . $Post_Testimonial['responce_vedio_url'] . "'," . $Feedback_id . "," . $branch_id . ","
                     . " '" . $client_id . "','" . date('Y-m-d H:i:s') . "')";
 
             $connection = Yii::app()->db;
@@ -710,7 +750,7 @@ class MobileServicesController extends Controller {
         if (!isset($Post_Client['name'])) {
             $Responce = [
                 'Status_code' => '404',
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'Client Name not found.'
             ];
@@ -718,7 +758,7 @@ class MobileServicesController extends Controller {
         } elseif (!isset($Post_Client['mobile_no'])) {
             $Responce = [
                 'Status_code' => '404',
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'Client Mobile Number not found.'
             ];
@@ -726,7 +766,7 @@ class MobileServicesController extends Controller {
         } elseif (!isset($Post_Client['email'])) {
             $Responce = [
                 'Status_code' => '404',
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'Client Email not found.'
             ];
@@ -734,7 +774,7 @@ class MobileServicesController extends Controller {
         } elseif (!isset($Post_Client['gender'])) {
             $Responce = [
                 'Status_code' => '404',
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'Client Gender not found.'
             ];
@@ -742,7 +782,7 @@ class MobileServicesController extends Controller {
         } elseif (!isset($Post_Client['dob'])) {
             $Responce = [
                 'Status_code' => '404',
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'Client Date Of Birth not found.'
             ];
@@ -759,7 +799,7 @@ class MobileServicesController extends Controller {
         if (!isset($Post_Question['question_id'])) {
             $Responce = [
                 'Status_code' => '404',
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'question_id not found.'
             ];
@@ -767,7 +807,7 @@ class MobileServicesController extends Controller {
         } elseif (!isset($Post_Question['option_value'])) {
             $Responce = [
                 'Status_code' => '404',
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'option_value not found.'
             ];
@@ -795,7 +835,7 @@ class MobileServicesController extends Controller {
         if (!isset($Post_Custom_Field_Client['customer_custom_field_assignment_id'])) {
             $Responce = [
                 'Status_code' => '404',
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'Client customer_custom_field_assignment_id not found.'
             ];
@@ -803,7 +843,7 @@ class MobileServicesController extends Controller {
         } elseif (!isset($Post_Custom_Field_Client['value'])) {
             $Responce = [
                 'Status_code' => '404',
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Bad Request Parameters',
                 'Error' => 'Client custom field value not found.'
             ];
@@ -904,14 +944,53 @@ class MobileServicesController extends Controller {
 
             $Responce = [
                 'Status_code' => '401',
-                'Success' => 'Fail',
+                'Success' => 'False',
                 'Message' => 'Authentication Fail !',
                 'Error' => 'Password is invalid.'
             ];
             $this->_sendResponse(401, $Responce);
         }
 
-        return $Tablet_User[0];
+        $Tablet = $Tablet_User[0];
+        $this->isTabletValied($Tablet);
+        return $Tablet;
+    }
+
+    private function isTabletValied($Tablet) {
+        $this->isBranchValied($Tablet);
+        $Status = User::model()->findAll(array(
+                    'condition' => 'id = :customer_id',
+                    'params' => array(':customer_id' => BranchMaster::model()->findAll(array(
+                            'condition' => 'id = :branch_id',
+                            'params' => array(':branch_id' => $Tablet->branch_id)
+                        ))[0]->customer_id)
+                ))[0]->status;
+        if ($Status != 1) {
+            $Responce = [
+                'Status_code' => '401',
+                'Success' => 'False',
+                'Message' => 'Authentication Fail !',
+                'Error' => 'Customer is not active for service.'
+            ];
+            $this->_sendResponse(401, $Responce);
+        }
+    }
+
+    private function isBranchValied($Tablet) {
+
+        $Status = BranchMaster::model()->findAll(array(
+                    'condition' => 'id = :branch_id',
+                    'params' => array(':branch_id' => $Tablet->branch_id)
+                ))[0]->status;
+        if ($Status != 1) {
+            $Responce = [
+                'Status_code' => '401',
+                'Success' => 'False',
+                'Message' => 'Authentication Fail !',
+                'Error' => 'Branch is inactive.'
+            ];
+            $this->_sendResponse(401, $Responce);
+        }
     }
 
     /**

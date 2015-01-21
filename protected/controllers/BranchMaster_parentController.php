@@ -242,8 +242,12 @@ class BranchMaster_parentController extends Controller {
      */
     public function loadModel($id) {
         $model = BranchMaster::model()->findByPk($id);
-        if ($model === null)
+
+        if ($model === null) {
             throw new CHttpException(404, 'The requested page does not exist.');
+        } else if ($model->customer_id != Yii::app()->user->id) {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
         return $model;
     }
 

@@ -37,6 +37,12 @@ class RegistrationController extends Controller {
             if (isset($_POST['RegistrationForm'])) {
                 $model->attributes = $_POST['RegistrationForm'];
                 $profile->attributes = ((isset($_POST['Profile']) ? $_POST['Profile'] : array()));
+                $profile->terms_and_conditions = 'The content of the pages of this website is for your general information and use only. It is subject to change without notice.
+                                                All trade marks reproduced in this website which are not the property of, or licensed to, the operator are acknowledged on the website.
+
+                                                Unauthorised use of this website may give rise to a claim for damages and/or be a criminal offence
+
+                                                By Opinion Desk';
                 if ($model->validate() && $profile->validate()) {
                     try {
                         $transaction = Yii::app()->db->beginTransaction();

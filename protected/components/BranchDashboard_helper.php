@@ -22,7 +22,7 @@ class BranchDashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT COUNT(`option_value`) AS Total_Feedback FROM "
+            $sqlStatement = "SELECT COUNT(DISTINCT `feedback_id`) AS Total_Feedback FROM "
                     . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
                     . " WHERE `branch_id`= :branch_id )  AND DATE(`created_at`) BETWEEN DATE(:FROM_DATE)"
                     . " AND DATE(:TO_DATE)";
@@ -91,11 +91,18 @@ class BranchDashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT COUNT(`option_value`) AS Total_Positive_Feedback FROM "
-                    . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
-                    . " WHERE `branch_id` = :branch_id )"
-                    . " AND `option_value`>2 AND DATE(`created_at`) BETWEEN DATE(:FROM_DATE)"
-                    . " AND DATE(:TO_DATE)";
+            $sqlStatement = "SELECT COUNT(*) AS Total_Positive_Feedback FROM  (SELECT `feedback_id`,
+                                      `option_value`,
+                                      `question_id`,
+                                      ROUND(AVG(`option_value`), 0) AS Total_AVG
+                               FROM `responce_master`
+                               WHERE `question_id` IN
+                                   (SELECT `id`
+                                    FROM `question_master`
+                                    WHERE `branch_id` =:branch_id)
+                               GROUP BY `feedback_id`) AS Feedback
+                            INNER JOIN `feedback_master` ON `feedback_master`.`id`=Feedback.`feedback_id`
+                            WHERE Total_AVG>2 AND DATE(`feedback_master`.`created_at`) BETWEEN :FROM_DATE AND :TO_DATE";
 
 
             $command = $connection->createCommand($sqlStatement);
@@ -126,12 +133,18 @@ class BranchDashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT COUNT(`option_value`) AS Total_Negative_Feedback FROM "
-                    . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
-                    . " WHERE `branch_id` = :branch_id )"
-                    . " AND `option_value`<=2 AND DATE(`created_at`) BETWEEN DATE(:FROM_DATE)"
-                    . " AND DATE(:TO_DATE)";
-
+              $sqlStatement = "SELECT COUNT(*) AS Total_Negative_Feedback FROM  (SELECT `feedback_id`,
+                                      `option_value`,
+                                      `question_id`,
+                                      ROUND(AVG(`option_value`), 0) AS Total_AVG
+                               FROM `responce_master`
+                               WHERE `question_id` IN
+                                   (SELECT `id`
+                                    FROM `question_master`
+                                    WHERE `branch_id` =:branch_id)
+                               GROUP BY `feedback_id`) AS Feedback
+                            INNER JOIN `feedback_master` ON `feedback_master`.`id`=Feedback.`feedback_id`
+                            WHERE Total_AVG<=2 AND DATE(`feedback_master`.`created_at`) BETWEEN :FROM_DATE AND :TO_DATE";
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -159,10 +172,11 @@ class BranchDashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer FROM "
-                    . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
+            $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer "
+                    . " FROM `feedback_master` WHERE `id` in ( SELECT `feedback_id` FROM "
+                    . "`responce_master` WHERE `question_id` in  (SELECT `id` FROM `question_master`"
                     . " WHERE `branch_id`=:branch_id) "
-                    . "AND DATE(`created_at`) BETWEEN :FROM_DATE AND :TO_DATE";
+                    . "AND DATE(`created_at`) BETWEEN :FROM_DATE AND :TO_DATE)";
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -190,9 +204,11 @@ class BranchDashboard_helper {
         try {
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer FROM "
-                    . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
-                    . " WHERE `branch_id` = :branch_id) ";
+            $sqlStatement = "SELECT COUNT(DISTINCT `client_id`)"
+                    . " AS Total_Customer  FROM `feedback_master` WHERE `id`"
+                    . " in ( SELECT `feedback_id` FROM `responce_master` WHERE "
+                    . "`question_id` in (SELECT `id` FROM `question_master`"
+                    . " WHERE `branch_id` = :branch_id)) ";
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -221,9 +237,11 @@ class BranchDashboard_helper {
             $connection = Yii::app()->db;
 
             $sqlStatement = "SELECT COUNT(`gender`) AS Total_Male_Customer FROM `client_master` WHERE "
-                    . "`client_id` in (SELECT `client_id` FROM `responce_master` "
+                    . "`client_id` in (SELECT `client_id` AS "
+                    . "Total_Customer  FROM `feedback_master` WHERE `id` in "
+                    . "(SELECT `feedback_id` FROM  `responce_master` "
                     . "WHERE `question_id` in (SELECT `id` FROM `question_master` "
-                    . "WHERE `branch_id` = :branch_id )) AND `gender`=1";
+                    . "WHERE `branch_id` = :branch_id ))) AND `gender`=1";
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -249,9 +267,12 @@ class BranchDashboard_helper {
             $connection = Yii::app()->db;
 
             $sqlStatement = "SELECT COUNT(`gender`) AS Total_Male_Customer FROM `client_master` WHERE "
-                    . "`client_id` in (SELECT `client_id` FROM `responce_master` "
+                    . "`client_id` in (SELECT `client_id` AS "
+                    . "Total_Customer  FROM `feedback_master` WHERE `id` in "
+                    . "(SELECT `feedback_id` FROM  `responce_master` "
                     . "WHERE `question_id` in (SELECT `id` FROM `question_master` "
-                    . "WHERE `branch_id` = :branch_id )) AND `gender`=0";
+                    . "WHERE `branch_id` = :branch_id ))) AND `gender`=0";
+
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -287,9 +308,11 @@ class BranchDashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "select COUNT(*) AS TotalReapet from (SELECT `client_id` FROM `responce_master`"
-                    . " WHERE `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id` = :branch_id) "
-                    . "GROUP BY `client_id` HAVING COUNT(`client_id`)>1) AS Repeate_Customer ";
+            $sqlStatement = "select COUNT(*) AS TotalReapet from ( SELECT `client_id`  "
+                    . "FROM `feedback_master` WHERE `id` in (SELECT `feedback_id`  "
+                    . "FROM `responce_master` WHERE `question_id` in (SELECT `id` "
+                    . "FROM `question_master` WHERE `branch_id` = :branch_id)) GROUP BY `client_id` "
+                    . "HAVING COUNT(`client_id`)>1) AS Repeate_Customer ";
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -325,8 +348,9 @@ class BranchDashboard_helper {
                             SELECT DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(`dob`, '%Y') - 
                             (DATE_FORMAT(NOW(), '00-%m-%d') < DATE_FORMAT(`dob`, '00-%m-%d')) 
                             AS age FROM `client_master` WHERE `client_id` IN 
-                            (SELECT `client_id` FROM `responce_master` WHERE `question_id` in 
-                            (SELECT `id` FROM `question_master` WHERE `branch_id`=:branch_id )))
+                            (SELECT `client_id` "
+                    . " FROM `feedback_master` WHERE `id` in (SELECT  `feedback_id`  FROM `responce_master` WHERE `question_id` in 
+                            (SELECT `id` FROM `question_master` WHERE `branch_id`=:branch_id ))))
                             AS TBL GROUP BY ageband";
 
             $command = $connection->createCommand($sqlStatement);

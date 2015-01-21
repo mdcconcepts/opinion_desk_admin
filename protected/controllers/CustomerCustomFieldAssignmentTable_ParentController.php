@@ -190,7 +190,7 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index', 'pId' => $_GET['pId'],));
         } catch (Exception $exc) {
-            Yii::app()->user->setFlash('error', "{$exc->getMessage()}");
+            Yii::app()->user->setFlash('error', "Custom Field Can't be deleted, Reason may be data present in custom field !");
         }
         $this->redirect(Yii::app()->request->baseUrl . '/index.php/customerCustomFieldAssignmentTable_Parent');
     }
@@ -208,6 +208,12 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
         if (isset($_GET['pId']) and $_GET['pId'] > 0) {
             $pId = (int) $_GET['pId'];
             $model = new CustomerCustomFieldAssignmentTable('search');
+
+            $branch_model = BranchMaster::model()->findByPk($_GET['pId']);
+
+            if ($branch_model->customer_id != Yii::app()->user->id) {
+                throw new CHttpException(404, 'The requested page does not exist.');
+            }
             $model->unsetAttributes();  // clear any default values
             if (isset($_GET['CustomerCustomFieldAssignmentTable']))
                 $model->attributes = $_GET['CustomerCustomFieldAssignmentTable'];
@@ -258,8 +264,13 @@ class CustomerCustomFieldAssignmentTable_ParentController extends Controller {
      */
     public function loadModel($id) {
         $model = CustomerCustomFieldAssignmentTable::model()->findByPk($id);
-        if ($model === null)
+        $branch_model = BranchMaster::model()->findByPk($_GET['pId']);
+
+        if ($model === null) {
             throw new CHttpException(404, 'The requested page does not exist.');
+        } else if ($branch_model->customer_id != Yii::app()->user->id) {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
         return $model;
     }
 

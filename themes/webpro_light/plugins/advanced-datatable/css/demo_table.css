@@ -53,12 +53,12 @@
 }
 
 .dataTables_length {
-	width: 40%;
+	width: 46%;
 	float: left;
 }
 
 .dataTables_filter {
-	width: 50%;
+	width: 60%;
 	float: right;
 	text-align: right;
 }
@@ -173,6 +173,7 @@ table.display td {
 
 table.display td.center {
 	text-align: center;
+	display: none;
 }
 
 
@@ -246,11 +247,11 @@ table.display tr.even.gradeU {
 
 
 tr.odd {
-	background-color: #E2E4FF;
+	/* background-color: #E2E4FF; */
 }
 
 tr.even {
-	background-color: white;
+	/* background-color: white; */
 }
 
 
@@ -366,7 +367,7 @@ table.display tr.odd.row_selected td {
  */
 /* For the standard odd/even */
 tr.odd td.sorting_1 {
-	background-color: #D3D6FF;
+	/* background-color: #D3D6FF; */
 }
 
 tr.odd td.sorting_2 {

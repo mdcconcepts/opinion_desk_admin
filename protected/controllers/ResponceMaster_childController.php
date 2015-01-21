@@ -57,7 +57,7 @@ class ResponceMaster_childController extends Controller {
 
                     $connection = Yii::app()->db;
                     $customer_id = Yii::app()->user->id;
-                    $sqlStatement = "SELECT DISTINCT `client_master`.`client_id` ";
+                    $sqlStatement = "SELECT DISTINCT FeedbackMaster.`client_id`,Total_AVG,`feedback_id` ";
                     $objWorksheet->setCellValue('A1', 'Id');
                     $Cell = ['B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'I1', 'J1', 'K1', 'L1', 'M1', 'N1', 'O1', 'P1'];
                     $index = 0;
@@ -93,118 +93,85 @@ class ResponceMaster_childController extends Controller {
                         $objWorksheet
                                 ->setCellValue($Cell[$index++], 'Testimonials');
                     }
-                    $sqlStatement .= " FROM `responce_master`
-                                INNER JOIN `client_master` ON `client_master`.client_id=`responce_master`.`client_id`
-                                WHERE `question_id` IN
-                                    (SELECT `id`
-                                     FROM `question_master`
-                                     WHERE `branch_id`= $branch_id )
-                                  AND DATE(`responce_master`.`created_at`) BETWEEN  DATE('" . $_POST['date_range_from'] . "') AND DATE('" . $_POST['date_range_to'] . "') 
-                                  AND YEAR(CURDATE())-YEAR(`dob`) BETWEEN " . $_POST['age_range_from'] . " AND " . $_POST['age_range_to'] . ' ';
 
+                    $Gender_Query = "";
                     switch ($_POST['gender']) {
                         case 'both':
 
                             break;
                         default :
-                            $sqlStatement.='  AND `gender`=' . $_POST['gender'];
+                            $Gender_Query = ' AND `gender`=' . $_POST['gender'] . ' ';
                             break;
                     }
+
+                    $sqlStatement.=" FROM (SELECT `feedback_id`,
+                                    `option_value`,
+                                    `question_id`,
+                                    ROUND(AVG(`option_value`), 0) AS Total_AVG
+                             FROM `responce_master`
+                             WHERE `question_id` IN
+                                 (SELECT `id`
+                                  FROM `question_master`
+                                  WHERE `branch_id` = $branch_id)
+                             GROUP BY `feedback_id`) AS AVERAGE
+                             INNER JOIN
+                               (SELECT `id`,
+                                       `client_id`,
+                                       `created_at`
+                                FROM `feedback_master`) AS FeedbackMaster ON AVERAGE.`feedback_id`=FeedbackMaster.`id` $Reapet_Query
+                                  INNER JOIN `client_master` ON `client_master`.`client_id`=FeedbackMaster.`client_id`
+                                  AND DATE(FeedbackMaster.`created_at`) BETWEEN DATE('" . $_POST['date_range_from'] . "') AND DATE('" . $_POST['date_range_to'] . "')
+                                  AND YEAR(CURDATE()) - YEAR(`dob`) BETWEEN  " . $_POST['age_range_from'] . "  AND  " . $_POST['age_range_to'] . ""
+                            . "   $Gender_Query ";
+//                    $sqlStatement .= "FROM
+//                                        ( SELECT *
+//                                         FROM `feedback_master`
+//                                         WHERE `id` IN
+//                                             ( SELECT `feedback_id`
+//                                              FROM `responce_master`
+//                                              WHERE `question_id` IN
+//                                                  ( SELECT `id`
+//                                                   FROM `question_master`
+//                                                   WHERE `branch_id` =" . $branch_id . "))) AS responce_master1
+//                                      INNER JOIN `client_master` ON `client_master`.client_id = `responce_master1`.`client_id`
+//                                      AND DATE(`responce_master1`.`created_at`) BETWEEN DATE('" . $_POST['date_range_from'] . "') AND DATE('" . $_POST['date_range_to'] . "') 
+//                                      AND YEAR(CURDATE()) - YEAR(`dob`) BETWEEN  " . $_POST['age_range_from'] . "  AND  " . $_POST['age_range_to'] . " ";
+
+
+
+                    switch ($Feddback_Val) {
+                        case '0':
+                            $sqlStatement.= ' AND `Total_AVG`=' . 0 . ' ';
+                            break;
+                        case '1':
+                            $sqlStatement.= ' AND `Total_AVG`=' . 1 . ' ';
+                            break;
+                        case '2':
+                            $sqlStatement.= ' AND `Total_AVG`=' . 2 . ' ';
+                            break;
+                        case '3':
+                            $sqlStatement.= ' AND `Total_AVG`=' . 3 . ' ';
+                            break;
+                        case '4':
+                            $sqlStatement.= ' AND `Total_AVG`=' . 4 . ' ';
+                            break;
+                        case '5':
+                            $sqlStatement.= ' AND `Total_AVG`=' . 5 . ' ';
+                            break;
+                        case '6':
+                            $sqlStatement.= ' AND `Total_AVG`=' . 6 . ' ';
+                            break;
+                    }
+
                     switch ($_POST['repeat_new']) {
                         case 'both':
 
                             break;
                         case 'repeat' :
-                            $sqlStatement.=' AND `client_master`.`client_id` in '
-                                    . '((SELECT `client_id` FROM `responce_master` '
-                                    . 'WHERE `question_id` in (SELECT `id` FROM '
-                                    . '`question_master` WHERE `branch_id`  = ' . $branch_id . ') GROUP BY `client_id` '
-                                    . 'HAVING COUNT(`client_id`)>1))';
+                            $sqlStatement.= ' GROUP BY FeedbackMaster.`client_id` HAVING COUNT(FeedbackMaster.`client_id`)<=1 ';
                             break;
                         case 'new' :
-                            $sqlStatement.=' AND `client_master`.`client_id` in '
-                                    . '((SELECT `client_id` FROM `responce_master` '
-                                    . 'WHERE `question_id` in (SELECT `id` FROM '
-                                    . '`question_master` WHERE `branch_id`  = ' . $branch_id . ') GROUP BY `client_id` '
-                                    . 'HAVING COUNT(`client_id`)<=1))';
-                            break;
-                    }
-
-                    switch ($Feddback_Val) {
-                        case 'all':
-
-                            break;
-                        case '0' :
-                            $sqlStatement.=" AND `client_master`.`client_id` in (Select `client_id` from  (SELECT `client_id`,
-                                            `option_value`,
-                                            `question_id`,
-                                            ROUND(AVG(`option_value`), 0) AS Total_AVG
-                                     FROM `responce_master`
-                                     WHERE `question_id` IN
-                                         ( SELECT `id`
-                                          FROM `question_master`
-                                          WHERE `branch_id` = $branch_id) AND DATE(`responce_master`.`created_at`) BETWEEN DATE('" . $_POST['date_range_from'] . "') AND DATE('" . $_POST['date_range_to'] . "')
-                                     GROUP BY `client_id`) AS DATA WHERE Total_AVG=0)";
-                            break;
-                        case '1' :
-                            $sqlStatement.=" AND `client_master`.`client_id` in (Select `client_id` from  (SELECT `client_id`,
-                                            `option_value`,
-                                            `question_id`,
-                                            ROUND(AVG(`option_value`), 0) AS Total_AVG
-                                     FROM `responce_master`
-                                     WHERE `question_id` IN
-                                         ( SELECT `id`
-                                          FROM `question_master`
-                                          WHERE `branch_id` = $branch_id ) AND DATE(`responce_master`.`created_at`) BETWEEN DATE('" . $_POST['date_range_from'] . "') AND DATE('" . $_POST['date_range_to'] . "')
-                                     GROUP BY `client_id`) AS DATA WHERE Total_AVG=1)";
-                            break;
-                        case '2' :
-                            $sqlStatement.=" AND `client_master`.`client_id` in (Select `client_id` from  (SELECT `client_id`,
-                                            `option_value`,
-                                            `question_id`,
-                                            ROUND(AVG(`option_value`), 0) AS Total_AVG
-                                     FROM `responce_master`
-                                     WHERE `question_id` IN
-                                         ( SELECT `id`
-                                          FROM `question_master`
-                                          WHERE `branch_id` = $branch_id ) AND DATE(`responce_master`.`created_at`) BETWEEN DATE('" . $_POST['date_range_from'] . "') AND DATE('" . $_POST['date_range_to'] . "')
-                                     GROUP BY `client_id`) AS DATA WHERE Total_AVG=2)";
-                            break;
-                        case '3' :
-                            $sqlStatement.=" AND `client_master`.`client_id` in (Select `client_id` from  (SELECT `client_id`,
-                                            `option_value`,
-                                            `question_id`,
-                                            ROUND(AVG(`option_value`), 0) AS Total_AVG
-                                     FROM `responce_master`
-                                     WHERE `question_id` IN
-                                         ( SELECT `id`
-                                          FROM `question_master`
-                                          WHERE `branch_id` =  $branch_id ) AND DATE(`responce_master`.`created_at`) BETWEEN DATE('" . $_POST['date_range_from'] . "') AND DATE('" . $_POST['date_range_to'] . "')
-                                     GROUP BY `client_id`) AS DATA WHERE Total_AVG=3)";
-                            break;
-                        case '4' :
-                            $sqlStatement.=" AND `client_master`.`client_id` in (Select `client_id` from  (SELECT `client_id`,
-                                            `option_value`,
-                                            `question_id`,
-                                            ROUND(AVG(`option_value`), 0) AS Total_AVG
-                                     FROM `responce_master`
-                                     WHERE `question_id` IN
-                                         ( SELECT `id`
-                                          FROM `question_master`
-                                          WHERE `branch_id` = $branch_id) AND DATE(`responce_master`.`created_at`) BETWEEN DATE('" . $_POST['date_range_from'] . "') AND DATE('" . $_POST['date_range_to'] . "')
-                                     GROUP BY `client_id`) AS DATA WHERE Total_AVG=4)";
-                            break;
-                        case '5' :
-                            $sqlStatement.=" AND `client_master`.`client_id` in (Select `client_id` from  (SELECT `client_id`,
-                                            `option_value`,
-                                            `question_id`,
-                                            ROUND(AVG(`option_value`), 0) AS Total_AVG
-                                     FROM `responce_master`
-                                     WHERE `question_id` IN
-                                         ( SELECT `id`
-                                          FROM `question_master`
-                                          WHERE `branch_id` = $branch_id) AND DATE(`responce_master`.`created_at`) BETWEEN DATE('" . $_POST['date_range_from'] . "') AND DATE('" . $_POST['date_range_to'] . "')
-                                     GROUP BY `client_id`) AS DATA WHERE Total_AVG=5)";
+                            $sqlStatement.= ' GROUP BY FeedbackMaster.`client_id` HAVING COUNT(FeedbackMaster.`client_id`)>1';
                             break;
                     }
 
@@ -221,7 +188,8 @@ class ResponceMaster_childController extends Controller {
 //                        break;
 //                }
 //                //                $command->bindParam(':from_date', '2013-12-08');
-//                echo $sqlStatement . "<br/>";
+//                    echo $sqlStatement . "<br/>";
+//                    Yii::app()->end();
                     $command->execute();
 
                     $reader = $command->query();
@@ -260,10 +228,15 @@ class ResponceMaster_childController extends Controller {
                             }
                         }
 
+//                        if (isset($_POST['testimonies'])) {
+//
+//                            $objWorksheet
+//                                    ->setCellValue($Cell[$index], $this->getCustomFieldsDataForCustomers($row['client_id']));
+//                            $objWorksheet->getStyle($Cell[$index++])->getAlignment()->setWrapText(true);
+//                        }
                         if (isset($_POST['testimonies'])) {
-
                             $objWorksheet
-                                    ->setCellValue($Cell[$index], $this->getCustomFieldsDataForCustomers($row['client_id']));
+                                    ->setCellValue($Cell[$index], $this->getTestimonialsForClient($row['feedback_id']));
                             $objWorksheet->getStyle($Cell[$index++])->getAlignment()->setWrapText(true);
                         }
 //                    echo json_encode($row);
@@ -274,6 +247,8 @@ class ResponceMaster_childController extends Controller {
 
 //                    $objPHPExcel->setActiveSheetIndex($index1);
                 }
+
+                $objPHPExcel->removeSheetByIndex(0);
 
                 header('Content-Type: application/vnd.ms-excel');
                 header('Content-Disposition: attachment;
@@ -889,15 +864,15 @@ filename = "OpinionDeskReport' . date('Ymd') . '.xls"');
 //        }
     }
 
-    public function getTestimonialsForClient($client_id) {
+    public function getTestimonialsForClient($feedback_id) {
         try {
 
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT `responce_text` FROM `testimonial_response_table` WHERE "
-                    . "`branch_id` in (SELECT `id` FROM `branch_master` WHERE "
-                    . "`customer_id`=:customer_id) AND `client_id` = :client_id";
+            $sqlStatement = "SELECT `responce_text` FROM "
+                    . "`testimonial_response_table` WHERE "
+                    . "`branch_id`=" . $_POST['branch_id'] . "  AND `feedback_id` = $feedback_id";
 
 
             $command = $connection->createCommand($sqlStatement);

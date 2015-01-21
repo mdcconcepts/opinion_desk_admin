@@ -238,7 +238,11 @@ class TabletMaster_childController extends Controller {
 
         if (isset($_GET['pId']) and $_GET['pId'] > 0) {
             $pId = (int) $_GET['pId'];
+            $branch_model = BranchMaster::model()->findByPk($_GET['pId']);
 
+            if ($branch_model->customer_id != Yii::app()->user->id) {
+                throw new CHttpException(404, 'The requested page does not exist.');
+            }
 
             $model = new TabletMaster('search');
             $model->unsetAttributes();  // clear any default values
@@ -292,8 +296,13 @@ class TabletMaster_childController extends Controller {
      */
     public function loadModel($id) {
         $model = TabletMaster::model()->findByPk($id);
-        if ($model === null)
+        $branch_model = BranchMaster::model()->findByPk($_GET['pId']);
+
+        if ($model === null) {
             throw new CHttpException(404, 'The requested page does not exist.');
+        } else if ($branch_model->customer_id != Yii::app()->user->id) {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
         return $model;
     }
 

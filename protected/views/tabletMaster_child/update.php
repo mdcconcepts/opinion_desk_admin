@@ -5,7 +5,7 @@
                 <div class="block-web">
                     <div class="header">
                         <div class="actions"> <a href="#" class="minimize"><i class="fa fa-chevron-down"></i></a> <a href="#" class="refresh"><i class="fa fa-repeat"></i></a> </div>
-                        <h3 class="content-header">Update Branch</h3>
+                        <h3 class="content-header">Update Tablets</h3>
                     </div>
                     <div class="porlets-content">
                         <?php echo $this->renderPartial('_form', array('model' => $model)); ?>

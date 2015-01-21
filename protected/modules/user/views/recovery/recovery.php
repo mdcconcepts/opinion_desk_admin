@@ -1,8 +1,14 @@
 <div class="login-container">
     <div class="middle-login">
+        <div class="right_shadow">
+            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/right_shadow.png"/>
+        </div>
+        <div class="left_shadow">
+            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/left_shadow.png" />
+        </div>
         <div class="block-web">
             <div class="head">
-                <h3 class="text-center">Opinion Desk : Forgot Password</h3>
+                <h3 class="text-center"> Forgot Password</h3>
             </div>
             <div style="background:#fff;">
 
@@ -26,7 +32,7 @@
                 </div>
 
                 <div class="register-bottom" style="margin-top: 30px;">
-                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/login"><button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button></a>
+                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/login"><button type="button" data-dismiss="modal" class="btn btn-default">Login</button></a>
                     <input type="submit" name="yt1" class="btn btn-primary" value="Restore">
                 </div>
                 <?php echo CHtml::endForm(); ?>

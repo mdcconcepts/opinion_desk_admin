@@ -211,7 +211,6 @@
                                                 <?php $this->widget('CCaptcha'); ?>
                                                 <?php echo $form->textField($model, 'verifyCode'); ?>
                                                 <?php echo $form->error($model, 'verifyCode'); ?>
-
                                             </div>
                                         <?php endif; ?>
                                     </div>

@@ -9,6 +9,11 @@ class TestimonialsController extends Controller {
     public $menuCaption = "Sub Menu";
     public $layout = '//layouts/column2';
 
+    public function actionHome() {
+        $this->render('home', array(
+        ));
+    }
+
     /**
      * Lists all models.
      */
@@ -36,7 +41,7 @@ class TestimonialsController extends Controller {
 
                 $connection = Yii::app()->db;
                 $customer_id = Yii::app()->user->id;
-                $sqlStatement = "SELECT DISTINCT `client_master`.`client_id` ";
+//                $sqlStatement = "SELECT DISTINCT `client_master`.`client_id` ";
                 $objWorksheet->setCellValue('A1', 'Customer Name');
                 $objWorksheet->setCellValue('B1', 'Customer Phone');
                 $objWorksheet->setCellValue('C1', 'Text Testimonials');
@@ -56,19 +61,26 @@ class TestimonialsController extends Controller {
                     ));
                     $branch_id = $Branches[0]->id;
                 }
-                $sqlStatement = "Select * from  (SELECT `client_id`,
-                                            `option_value`,
-                                            `question_id`,
-                                            ROUND(AVG(`option_value`), 0) AS Total_AVG
-                                     FROM `responce_master`
-                                     WHERE `question_id` IN
-                                         ( SELECT `id`
-                                          FROM `question_master`
-                                          WHERE `branch_id` = $branch_id) 
-                                     GROUP BY `client_id`)AS DATA INNER JOIN `testimonial_response_table`
-                                     ON DATA.`client_id`=`testimonial_response_table`.`client_id` 
-                                     INNER JOIN `client_master` ON `client_master`.`client_id`=DATA.`client_id`
-                                      ";
+
+                $sqlStatement = "SELECT *
+                            FROM
+                              (SELECT `feedback_id`,
+                                      `option_value`,
+                                      `question_id`,
+                                      ROUND(AVG(`option_value`), 0) AS Total_AVG
+                               FROM `responce_master`
+                               WHERE `question_id` IN
+                                   (SELECT `id`
+                                    FROM `question_master`
+                                    WHERE `branch_id` = $branch_id)
+                               GROUP BY `feedback_id`) AS AVERAGE
+                            INNER JOIN
+                              (SELECT `id`,
+                                      `client_id`
+                               FROM `feedback_master`) AS FeedbackMaster ON AVERAGE.`feedback_id`=FeedbackMaster.`id`
+                            INNER JOIN (SELECT `responce_text`,`responce_audio_url`,`responce_vedio_url`,`feedback_id` FROM `testimonial_response_table` ) AS testimonialresponsetable ON FeedbackMaster.`id`=testimonialresponsetable.`feedback_id`
+                            INNER JOIN `client_master` ON `client_master`.`client_id`=FeedbackMaster.`client_id`";
+
                 $Feddback_Val = $_GET['feedback'];
                 if (!isset($Feddback_Val)) {
                     $Feddback_Val = 'all';
@@ -100,8 +112,8 @@ class TestimonialsController extends Controller {
 //            Yii::app()->end();
                 $command = $connection->createCommand($sqlStatement);
 
-                $command->bindParam(':client_id', $client_id, PDO::PARAM_INT);
-                $command->bindParam(':customer_custom_field_assignment_id', $customer_custom_field_assignment_id, PDO::PARAM_INT);
+//                $command->bindParam(':client_id', $client_id, PDO::PARAM_INT);
+//                $command->bindParam(':customer_custom_field_assignment_id', $customer_custom_field_assignment_id, PDO::PARAM_INT);
 
                 $command->execute();
 
@@ -153,19 +165,26 @@ class TestimonialsController extends Controller {
                 ));
                 $branch_id = $Branches[0]->id;
             }
-            $sqlStatement = "Select * from  (SELECT `client_id`,
-                        `option_value`,
-                        `question_id`,
-                        ROUND(AVG(`option_value`), 0) AS Total_AVG
-                        FROM `responce_master`
-                        WHERE `question_id` IN
-                        ( SELECT `id`
-                        FROM `question_master`
-                        WHERE `branch_id` = $branch_id) 
-                        GROUP BY `client_id`)AS DATA INNER JOIN `testimonial_response_table`
-                        ON DATA.`client_id`=`testimonial_response_table`.`client_id` 
-                        INNER JOIN `client_master` ON `client_master`.`client_id`=DATA.`client_id`
-                        ";
+
+            $sqlStatement = "SELECT *
+                            FROM
+                              (SELECT `feedback_id`,
+                                      `option_value`,
+                                      `question_id`,
+                                      ROUND(AVG(`option_value`), 0) AS Total_AVG
+                               FROM `responce_master`
+                               WHERE `question_id` IN
+                                   (SELECT `id`
+                                    FROM `question_master`
+                                    WHERE `branch_id` = $branch_id)
+                               GROUP BY `feedback_id`) AS AVERAGE
+                            INNER JOIN
+                              (SELECT `id`,
+                                      `client_id`
+                               FROM `feedback_master`) AS FeedbackMaster ON AVERAGE.`feedback_id`=FeedbackMaster.`id`
+                            INNER JOIN (SELECT `responce_text`,`responce_audio_url`,`responce_vedio_url`,`feedback_id` FROM `testimonial_response_table` ) AS testimonialresponsetable ON FeedbackMaster.`id`=testimonialresponsetable.`feedback_id`
+                            INNER JOIN `client_master` ON `client_master`.`client_id`=FeedbackMaster.`client_id`";
+
             $Feddback_Val = $_GET['feedback'];
             if (!isset($Feddback_Val)) {
                 $Feddback_Val = 'all';
@@ -190,16 +209,14 @@ class TestimonialsController extends Controller {
                     $sqlStatement .= "WHERE Total_AVG=5";
                     break;
                 case ($Feddback_Val == 'all'):
-                    $sqlStatement .= "ORDER BY Total_AVG ";
                     break;
             }
-
 //            echo $sqlStatement;
 //            Yii::app()->end();
             $command = $connection->createCommand($sqlStatement);
 
-            $command->bindParam(':client_id', $client_id, PDO::PARAM_INT);
-            $command->bindParam(':customer_custom_field_assignment_id', $customer_custom_field_assignment_id, PDO::PARAM_INT);
+//            $command->bindParam(':client_id', $client_id, PDO::PARAM_INT);
+//            $command->bindParam(':customer_custom_field_assignment_id', $customer_custom_field_assignment_id, PDO::PARAM_INT);
 
             $command->execute();
 
@@ -214,7 +231,8 @@ class TestimonialsController extends Controller {
         $this->render('index');
     }
 
-    public function actions() {
+    public
+            function actions() {
         return array(
             'toggle' => array(
                 'class' => 'bootstrap.actions.TbToggleAction',

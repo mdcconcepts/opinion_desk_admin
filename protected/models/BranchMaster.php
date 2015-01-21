@@ -14,6 +14,9 @@
  */
 class BranchMaster extends CActiveRecord {
 
+    const STATUS_NOACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
     /**
      * @return string the associated database table name
      */
@@ -66,6 +69,7 @@ class BranchMaster extends CActiveRecord {
             'branch_name' => 'Branch Name',
             'branch_address' => 'Branch Address',
             'tablet_no' => 'Tablet Count',
+            'status' => 'status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         );
@@ -183,6 +187,19 @@ class BranchMaster extends CActiveRecord {
             $Tablet_count = $item['tablet_no'];
         }
         return $Tablet_count;
+    }
+
+    public static function itemAlias($type, $code = NULL) {
+        $_items = array(
+            'status' => array(
+                self::STATUS_NOACTIVE => UserModule::t('Not active'),
+                self::STATUS_ACTIVE => UserModule::t('Active'),
+            ),
+        );
+        if (isset($code))
+            return isset($_items[$type][$code]) ? $_items[$type][$code] : false;
+        else
+            return isset($_items[$type]) ? $_items[$type] : false;
     }
 
 }

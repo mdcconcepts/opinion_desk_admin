@@ -1,11 +1,11 @@
 <?php
-if (!isset($_GET['media'])) {
+if (!isset($_GET['media'])&&!isset($_GET['feedback'])) {
 //    $branch_id = $Branches[0]->id;
-    $this->redirect(Yii::app()->request->baseUrl . '/index.php/testimonials?branch_id=' . $_GET['branch_id'] . '&media=all');
+    $this->redirect(Yii::app()->request->baseUrl . '/index.php/testimonials?branch_id=' . $_GET['branch_id'] . '&media=all&feedback=all');
 }
 $Branch = BranchMaster::model()->findAll(array(
-    'condition' => 'id = :branch_id',
-    'params' => array(':branch_id' => $_GET['branch_id'])
+            'condition' => 'id = :branch_id',
+            'params' => array(':branch_id' => $_GET['branch_id'])
         ))[0];
 ?>
 <input style="display: none;" value="<?php echo $model->id; ?>" id="branch_id" />
@@ -33,7 +33,7 @@ $Branch = BranchMaster::model()->findAll(array(
             if ($_GET['media'] == 'all') {
                 echo 'class = "active"';
             }
-            ?> ><a href = "<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $_GET['branch_id'] . "&media=all"); ?>"><img src = "<?php echo Yii::app()->theme->baseUrl; ?>/images/testimonials/<?php
+            ?> ><a href = "<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $_GET['branch_id'] . "&media=all&feedback=all"); ?>"><img src = "<?php echo Yii::app()->theme->baseUrl; ?>/images/testimonials/<?php
                         if ($_GET['media'] == 'all') {
                             echo 'selected/';
                         }
@@ -42,7 +42,7 @@ $Branch = BranchMaster::model()->findAll(array(
             if ($_GET['media'] == 'text') {
                 echo 'class = "active"';
             }
-            ?>> <a href = "<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $_GET['branch_id'] . "&media=text"); ?>"> <img src = "<?php echo Yii::app()->theme->baseUrl; ?>/images/testimonials/<?php
+            ?>> <a href = "<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $_GET['branch_id'] . "&media=text&feedback=all"); ?>"> <img src = "<?php echo Yii::app()->theme->baseUrl; ?>/images/testimonials/<?php
                         if ($_GET['media'] == 'text') {
                             echo 'selected/';
                         }
@@ -51,7 +51,7 @@ $Branch = BranchMaster::model()->findAll(array(
             if ($_GET['media'] == 'vedio') {
                 echo 'class = "active"';
             }
-            ?>><a href = "<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $_GET['branch_id'] . "&media=vedio"); ?>"> <img src = "<?php echo Yii::app()->theme->baseUrl; ?>/images/testimonials/<?php
+            ?>><a href = "<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $_GET['branch_id'] . "&media=vedio&feedback=all"); ?>"> <img src = "<?php echo Yii::app()->theme->baseUrl; ?>/images/testimonials/<?php
                         if ($_GET['media'] == 'vedio') {
                             echo 'selected/';
                         }
@@ -60,7 +60,7 @@ $Branch = BranchMaster::model()->findAll(array(
             if ($_GET['media'] == 'audio') {
                 echo 'class = "active"';
             }
-            ?>><a href = "<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $_GET['branch_id'] . "&media=audio"); ?>"><img src = "<?php echo Yii::app()->theme->baseUrl; ?>/images/testimonials/<?php
+            ?>><a href = "<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $_GET['branch_id'] . "&media=audio&feedback=all"); ?>"><img src = "<?php echo Yii::app()->theme->baseUrl; ?>/images/testimonials/<?php
                         if ($_GET['media'] == 'audio') {
                             echo 'selected/';
                         }
@@ -298,7 +298,7 @@ $Branch = BranchMaster::model()->findAll(array(
                                                 ?>
                                                 <video id="example_video_1" class="video-js vjs-default-skin"controls preload="none" height="100" width="400"
                                                        data-setup="{}">
-                                                    <source src="<?php echo $testimonial['responce_audio_url']; ?>" type='video/mp4' />
+                                                    <source src="http://opiniondesk.in/account/<?php echo $testimonial['responce_audio_url']; ?>" type='video/mp4' />
                                                 </video>
                                                 <?php
                                             }

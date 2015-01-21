@@ -41,6 +41,13 @@ class AssetsHelperForCustomTemplate {
             <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/advanced-datatable/css/demo_table.css" rel="stylesheet">
             <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-editable/bootstrap-editable.css" rel="stylesheet">
             <?php
+        } elseif (Yii::app()->controller->id == 'messageMaster') {
+            ?>
+            <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css" rel="stylesheet" type="text/css" />
+            <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/data-tables/DT_bootstrap.css" rel="stylesheet">
+            <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/advanced-datatable/css/demo_table.css" rel="stylesheet">
+            <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/advanced-datatable/css/demo_page.css" rel="stylesheet">
+            <?php
         }
     }
 
@@ -174,6 +181,28 @@ class AssetsHelperForCustomTemplate {
                         console.log(response);
                     }
                 });
+                $('.branch_status').editable({
+                    url: '/account/index.php/api/WebAppServices/postStatusForBranch',
+                    source: [
+                        {value: 0, text: 'Not Active'},
+                        {value: 1, text: 'Active'},
+                    ],
+                    success: function (response, newValue) {
+                        console.log(response);
+                        if (response.Success == "True") {
+
+                        } else if (response.Success == "False") {
+                            return response.Message;
+                        } else
+                        {
+                            return response.Message; //msg will be shown in editable form
+                        }
+
+                    },
+                    fail: function (response, newValue) {
+                        console.log(response);
+                    }
+                });
                 $('.status').editable({
                     url: '/account/index.php/api/WebAppServices/postStatusForUser',
                     source: [
@@ -200,6 +229,23 @@ class AssetsHelperForCustomTemplate {
                 $('.User_Table').dataTable({
                     "aaSorting": [[4, "desc"]]
                 });</script>
+            <?php
+        } elseif (Yii::app()->controller->id == 'messageMaster') {
+            ?>
+            <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/ckeditor/ckeditor.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery-2.0.2.min.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js" type="text/javascript"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js" type="text/javascript"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery-1.8.3.min.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/data-tables/jquery.dataTables.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/data-tables/DT_bootstrap.js"></script> 
+            <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/data-tables/dynamic_table_init.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('#text-editor').wysihtml5();
+                    $("#quick-access").css("bottom", "0px");
+                });
+            </script>
             <?php
         } else {
             ?>

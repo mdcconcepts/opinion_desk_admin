@@ -5,7 +5,7 @@
         font-size	: 11px;
     }	
 </style>
-
+<input id="customer_id" value="<?php echo Yii::app()->user->id ?>" style="display: none"/>
 <div class="row">
     <div class="col-md-12">
         <h2><i class="fa fa-home"></i> Home</h2>
@@ -13,9 +13,9 @@
 </div><!--/row--> 
 <div class="row">
     <div class="col-md-6">
-        <div class="block-web">
+        <div class="block-web" style=" height: 237px; ">
             <h3 class="content-header"> Your Statistics
-                <div data-toggle="buttons" class="button-group pull-right"> 
+                <div data-toggle="buttons" class="button-group pull-right" style="margin-bottom: 53px;"> 
                     <a class="btn small  border-gray active" href="javascript:;"> <span class="button-content" style=" padding: 3px; ">
                             <input type="radio" name="dashboard_radio_index" value="today">
                             Today </span> </a> 
@@ -35,14 +35,14 @@
                     <td class="fa-border"><button class="btn btn-danger padd-adj" type="button"><?php echo Dashboard_helper::getTotalFeedBackCountForAllBranches(date('Y-m-d'), date('Y-m-d')); ?></button>
                         Total Feedback</td>
                     <td class="fa-border"><button class="btn btn-primary padd-adj" type="button"><?php echo Dashboard_helper::getTotalFeedBackAverageForAllBranches(date('Y-m-d'), date('Y-m-d')); ?></button>
-                        Average Ratting</td>
+                        Average Rating</td>
 
                 </tr>
                 <tr>
                     <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo Dashboard_helper::getPositiveFeedbackForAllBranches(date('Y-m-d'), date('Y-m-d')); ?></button>
-                        Positive Ratting</td>
+                        Positive Rating</td>
                     <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo Dashboard_helper::getNegativeFeedbackForAllBranches(date('Y-m-d'), date('Y-m-d')); ?></button>
-                        Negative Ratting</td>
+                        Negative Rating</td>
                 </tr>
             </table>
             <table class="table margin-top-20 weekly" style="display: none;" width="100%" border="0" cellspacing="0" cellpadding="0" >
@@ -50,14 +50,14 @@
                     <td class="fa-border"><button class="btn btn-danger padd-adj" type="button"><?php echo Dashboard_helper::getTotalFeedBackCountForAllBranches(date('Y-m-d', strtotime('monday this week')), date('Y-m-d')); ?></button>
                         Total Feedback </td>
                     <td class="fa-border"><button class="btn btn-primary padd-adj" type="button"><?php echo Dashboard_helper::getTotalFeedBackAverageForAllBranches(date('Y-m-d', strtotime('monday this week')), date('Y-m-d')); ?></button>
-                        Average Ratting</td>
+                        Average Rating</td>
 
                 </tr>
                 <tr>
                     <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo Dashboard_helper::getPositiveFeedbackForAllBranches(date('Y-m-d', strtotime('monday this week')), date('Y-m-d')); ?></button>
-                        Positive Ratting</td>
+                        Positive Rating</td>
                     <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo Dashboard_helper::getNegativeFeedbackForAllBranches(date('Y-m-d', strtotime('monday this week')), date('Y-m-d')); ?></button>
-                        Negative Ratting</td>
+                        Negative Rating</td>
                 </tr>
             </table>
             <table class="table margin-top-20 montly" style="display: none;" width="100%" border="0" cellspacing="0" cellpadding="0" >
@@ -65,14 +65,14 @@
                     <td class="fa-border"><button class="btn btn-danger padd-adj" type="button"><?php echo Dashboard_helper::getTotalFeedBackCountForAllBranches(date('Y-m-d', strtotime('first day of this month')), date('Y-m-d')); ?></button>
                         Total Feedback </td>
                     <td class="fa-border"><button class="btn btn-primary padd-adj" type="button"><?php echo Dashboard_helper::getTotalFeedBackAverageForAllBranches(date('Y-m-d', strtotime('first day of this month')), date('Y-m-d')); ?></button>
-                        Average Ratting</td>
+                        Average Rating</td>
 
                 </tr>
                 <tr>
                     <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo Dashboard_helper::getPositiveFeedbackForAllBranches(date('Y-m-d', strtotime('first day of this month')), date('Y-m-d')); ?></button>
-                        Positive Ratting</td>
+                        Positive Rating</td>
                     <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo Dashboard_helper::getNegativeFeedbackForAllBranches(date('Y-m-d', strtotime('first day of this month')), date('Y-m-d')); ?></button>
-                        Negative Ratting</td>
+                        Negative Rating</td>
                 </tr>
             </table>
             <table class="table margin-top-20 yearly" style="display: none;" width="100%" border="0" cellspacing="0" cellpadding="0" >
@@ -80,31 +80,43 @@
                     <td class="fa-border"><button class="btn btn-danger padd-adj" type="button"><?php echo Dashboard_helper::getTotalFeedBackCountForAllBranches(date('Y-m-d', strtotime('first day of January this year')), date('Y-m-d')); ?></button>
                         Total Feedback </td>
                     <td class="fa-border"><button class="btn btn-primary padd-adj" type="button"><?php echo Dashboard_helper::getTotalFeedBackAverageForAllBranches(date('Y-m-d', strtotime('first day of January this year')), date('Y-m-d')); ?></button>
-                        Average Ratting</td>
+                        Average Rating</td>
 
                 </tr>
                 <tr>
                     <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo Dashboard_helper::getPositiveFeedbackForAllBranches(date('Y-m-d', strtotime('first day of January this year')), date('Y-m-d')); ?></button>
-                        Positive Ratting</td>
+                        Positive Rating</td>
                     <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo Dashboard_helper::getNegativeFeedbackForAllBranches(date('Y-m-d', strtotime('first day of January this year')), date('Y-m-d')); ?></button>
-                        Negative Ratting</td>
+                        Negative Rating</td>
                 </tr>
             </table>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="block-web">
+        <div class="block-web" >
             <h3 class="content-header text-center">Message Board</h3>
             <div class="panel-icon-add"><i class="fa fa-thumb-tack"></i></div>
-            <p class="text-center">Please be informed that server 3 will be offline from <strong>11:00 AM</strong> to <strong>12:00 AM</strong></p>
+            <?php
+            $Message = MessageHelper::getLatestMessage();
+            if ($Message == 0) {
+                ?>
+                <p class="text-center">No Message In board !</p>
+                <?php
+            } else {
+                ?>
+                <p class="text-center"><?php echo $Message['subject']; ?> <br/><a href="<?php echo Yii::app()->request->baseUrl . "/index.php/messageMaster/view/" . $Message['id']; ?>"><strong>Read more .. </strong></a></p>
+                <?php
+            }
+            ?>
+
         </div><!--/block-web-->
     </div><!--/col-md-3-->
-    <div class="col-md-3">
+    <div class="col-md-3" >
         <div class="panel">
             <div class="weather-bg">
-                <div class="panel-body">
+                <div class="panel-body" style=" height: 237px; ">
                     <div class="row">
-                        <h3 style="color: white;">Today</h3>
+                        <h3 style="color: white;margin-bottom: 27px;">Today</h3>
                         <div class="col-xs-6"> <i class="fa fa-users"></i> Your Customer </div>
                         <div class="col-xs-6">
                             <div class="degree"> <?php echo Dashboard_helper::getTodaysTotalCustomerForAllBranches(date('Y-m-d'), date('Y-m-d')); ?> </div>
@@ -133,54 +145,51 @@
                 </div>
             </h3>
             <div id="dashboard_graph" class="custom-bar-chart">
-
-                <?php // echo Dashboard_helper::getWeeklyReportForBranch();  ?>
-
+                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.gif" style="width: 100%;" />
             </div><!--/custom-bar-chart-->
         </div><!--/block-web-->
     </div><!--/col-md-6-->
-    <div class="row">
-        <div class="col-md-8">
-            <div class="block-web">
-                <h3> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/calculator.png"/>Customer Count <strong><?php echo Dashboard_helper::getTotalCustomerForAllBranches(); ?></strong></h3>
-                <table class="table margin-top-20 today" width="100%" border="0" cellspacing="0" cellpadding="0" >
-                    <tr>
-                        <td class="fa-border">
-                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/plus.png"/> 
-                            <strong><?php echo Dashboard_helper::getTotalNewCustomersForALLBranches(); ?></strong>
-                        </td>
-                        <td class="fa-border">
-                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/male.png"/> 
-                            <strong><?php echo Dashboard_helper::getTotalNewCustomersForALLBranches(); ?></strong>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td class="fa-border">
-                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/reload.png"/> 
-                            <strong><?php echo Dashboard_helper::getTotalRepeateCustomersForALLBranches(); ?></strong>
-                        </td>
-                        <td class="fa-border">
-                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/female.png"/> 
-                            <strong><?php echo Dashboard_helper::getTotalFEMALECustomerForAllBranches(); ?></strong>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div><!--/col-md-6-->
-        <div class="col-md-4">
-            <div class="block-web">
-                <h3>Customer <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/age.png"/>  Bounds</h3>
-                <table class="table margin-top-20" width="100%" border="0" cellspacing="0" cellpadding="0" >
-                    <tr>
-                        <?php Dashboard_helper::getAgeBoundsForCustomerForAllBranches(); ?>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div><!--/row end-->
 </div>
+<div class="row">
+    <div class="col-md-8">
+        <div class="block-web">
+            <h3> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/calculator.png"/>Customer Count <strong><?php echo Dashboard_helper::getTotalCustomerForAllBranches(); ?></strong></h3>
+            <table class="table margin-top-20 today" width="100%" border="0" cellspacing="0" cellpadding="0" >
+                <tr>
+                    <td class="fa-border">
+                        <img title="New Visitors"  src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/plus.png"/> 
+                        <strong><?php echo Dashboard_helper::getTotalNewCustomersForALLBranches(); ?></strong>
+                    </td>
+                    <td class="fa-border">
+                        <img  title="Male Visitors"  src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/male.png"/> 
+                        <strong><?php echo Dashboard_helper::getTotalMALECustomerForAllBranches(); ?></strong>
+                    </td>
 
+                </tr>
+                <tr>
+                    <td class="fa-border">
+                        <img title="Repeat Visitors" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/reload.png"/> 
+                        <strong><?php echo Dashboard_helper::getTotalRepeateCustomersForALLBranches(); ?></strong>
+                    </td>
+                    <td class="fa-border">
+                        <img title="Female Visitors" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/female.png"/> 
+                        <strong><?php echo Dashboard_helper::getTotalFEMALECustomerForAllBranches(); ?></strong>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div><!--/col-md-6-->
+    <div class="col-md-4">
+        <div class="block-web" style=" height: 217px; ">
+            <h3>Customer <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/age.png"/>  Bounds</h3>
+            <table class="table margin-top-20" width="100%" border="0" cellspacing="0" cellpadding="0" >
+                <tr>
+                    <?php Dashboard_helper::getAgeBoundsForCustomerForAllBranches(); ?>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div><!--/row end-->
 
 
 <?php

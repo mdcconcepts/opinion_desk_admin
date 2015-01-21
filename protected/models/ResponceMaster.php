@@ -11,7 +11,7 @@
  * @property string $responce_vedio_url
  * @property string $created_at
  * @property integer $question_id
- * @property integer $client_id
+ * @property integer $feedback_id
  */
 class ResponceMaster extends CActiveRecord {
 
@@ -29,8 +29,8 @@ class ResponceMaster extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('option_value, created_at, question_id, client_id', 'required'),
-            array('question_id, client_id', 'numerical', 'integerOnly' => true),
+            array('option_value, created_at, question_id, feedback_id', 'required'),
+            array('question_id, feedback_id', 'numerical', 'integerOnly' => true),
             array('option_value', 'numerical'),
             /*
               //Example username
@@ -41,7 +41,7 @@ class ResponceMaster extends CActiveRecord {
              */
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, option_value,  created_at, question_id, client_id', 'safe', 'on' => 'search'),
+            array('id, option_value,  created_at, question_id, feedback_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -53,6 +53,7 @@ class ResponceMaster extends CActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'ResponceMaster' => array(self::HAS_ONE, 'QuestionMaster', 'question_id'),
+            'FeedbackMaster' => array(self::HAS_ONE, 'FeedbackMaster', 'feedback_id'),
         );
     }
 
@@ -65,7 +66,7 @@ class ResponceMaster extends CActiveRecord {
             'option_value' => 'Option Value',
             'created_at' => 'Created At',
             'question_id' => 'Question',
-            'client_id' => 'Client',
+            'feedback_id' => 'Feedback',
         );
     }
 
@@ -90,7 +91,7 @@ class ResponceMaster extends CActiveRecord {
         $criteria->compare('option_value', $this->option_value);
         $criteria->compare('created_at', $this->created_at, true);
         $criteria->compare('question_id', $this->question_id);
-        $criteria->compare('client_id', $this->client_id);
+        $criteria->compare('feedback_id', $this->feedback_id);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

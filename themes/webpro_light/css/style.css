@@ -628,7 +628,7 @@ body.container {
     background: 0 #FFFFFF;
     border-radius: 3px;
     margin-bottom: 20px;
-    padding: 20px;
+    padding: 15px;
     position: relative;
     transition: padding 500ms ease 0s;
 }
@@ -726,7 +726,7 @@ body.container {
     color: #FFFFFF;
 }
 .primary-box {
-    background-color: #428bca;
+    background-color: #44AFB0;
     color: #FFFFFF;
 }
 .success-box {
@@ -939,7 +939,7 @@ body.container {
     padding: 0px 9px;
 }
 .login-container .block-web .head h3 {
-    color: #FFFFFF;
+    color: #169B9D;
     line-height: 35px;
     margin: 0;
     min-height: 40px;
@@ -1542,6 +1542,7 @@ body.container {
 }
 .tab-content h3, h2, h1:first-child {
     margin-top: 0;
+    /* margin-bottom: 20px; */
 }
 .tab-bottom .nav-tabs {
     margin-bottom: 40px;
@@ -3099,3 +3100,36 @@ div[data-role="editor-toolbar"] {
 .legendColorBox{
     padding-right:5px;
 }
+
+.no_data{
+    background-image:url('http://www.opiniondesk.in/account/themes/webpro_light/images/no_data.gif');
+}
+.right_shadow{
+        position: absolute;
+        float: right; 
+        right: -46px;
+        top: -20px;
+        opacity: 0.6;  
+    }
+    .right_shadow img{
+        width: 89%; 
+    }
+    .left_shadow{
+        position: absolute; 
+        float: right; 
+        left: -40px; 
+        top: -34px;
+        opacity: 0.6 
+    }
+    .left_shadow img{
+        width: 89%; 
+    }
+    .login_input{
+
+    }
+    .login_footer{
+        //position: absolute;
+        top: 135px;
+        z-index: 1;
+        font-size: 6px;
+    }

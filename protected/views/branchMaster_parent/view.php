@@ -1,3 +1,10 @@
+<?php
+/**
+ * Change Notification Read Status
+ */
+NotificationHelper::changeReadStatusOfNotification($_GET['id']);
+?>
+
 <input style="display: none;" value="<?php echo $model->id; ?>" id="branch_id" />
 <style>
     #dashboard_graph {
@@ -13,17 +20,23 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2><i class="fa fa-sitemap" style="margin-right: 10px;"></i>Branch Home</h2>
+        <h2><i class="fa fa-sitemap" style="margin-right: 10px;"></i>My Branch / <?php echo $model->branch_name; ?></h2>
     </div><!--/col-md-12--> 
 </div><!--/row-->
+<?php
+$bname = $model->branch_name;
+Yii::app()->session['branch_name'] = $bname;
+//$_SESSION['branch_name']=$bname;
+?>
 <div class="row">
     <div class="col-sm-3 col-lg-2" style="position: relative;margin-top: 30px;"> 
         <ul class="nav nav-pills nav-stacked nav-email" style="position: fixed;border: 2px solid #44AFB0;border-top-left-radius: 9px;border-top-right-radius: 9px;">
-            <li class="active"> <a href="#"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/selected/branches_menu.png"/> Branch </a> </li>
-            <li><a href="<?php echo Yii::app()->createUrl("questionMaster_Child?pId=" . $model->id); ?>">  <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_branch.png"/>  Questions</a></li>
-            <li><a href="<?php echo Yii::app()->createUrl("tabletMaster_child?pId=" . $model->id); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/tablet.png"/>  Tablets </a></li>
-            <li><a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent?pId=" . $model->id); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/custom_fields.png"/> Custom Fields</a></li>
-            <li> <a href="<?php echo Yii::app()->createUrl("branchMaster_parent"); ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>
+            <li  title="View Branch" class="active"> <a href="#"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/selected/branches_menu.png"/> Branch </a> </li>
+            <li title="View Questions"><a href="<?php echo Yii::app()->createUrl("questionMaster_Child?pId=" . $model->id); ?>">  <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_branch.png"/>  Questions</a></li>
+            <li title="View Tablets"><a href="<?php echo Yii::app()->createUrl("tabletMaster_child?pId=" . $model->id); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/tablet.png"/>  Tablets </a></li>
+            <li title="View Custom Fields"><a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent?pId=" . $model->id); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/custom_fields.png"/> Custom Fields</a></li>
+            <!--<li title="View All Branch"> <a href="<?php //echo Yii::app()->createUrl("branchMaster_parent");        ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>-->
+            <!-- View all branches removed - KK -->
         </ul>
     </div><!-- col-sm-3 -->
     <div class="col-md-10">
@@ -41,11 +54,6 @@
             <div class="tab-content"> 
                 <div id="about" class="tab-pane active animated fadeInRight">
                     <strong><?php echo $model->branch_name; ?></strong>
-                    <div class="pull-right">
-                        <div class="btn-group">
-                            <a href="#" onclick="delete_data('Are you sure you want to DELETE this Field?', '<?php echo Yii::app()->createUrl("branchMaster_parent/delete/" . $model->id); ?>')" title="" data-toggle="tooltip" type="button" class="btn btn-white tooltips" data-original-title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
-                        </div>
-                    </div>
                     <div class="user-profile-content">
                         <div class="col-sm-6">
                             <h5><strong>ABOUT</strong> <?php echo $model->branch_name; ?></h5>
@@ -92,14 +100,14 @@
 
                             <input style="display:none" class="span5" value="<?php echo Yii::app()->user->id; ?>" name="BranchMaster[customer_id]" id="BranchMaster_customer_id" type="text">
                             <div class="form-group">
-                                <?php // echo $form->labelEx($model, 'branch_name', array('class' => 'col-sm-3 control-label')); ?>
+                                <?php // echo $form->labelEx($model, 'branch_name', array('class' => 'col-sm-3 control-label'));  ?>
                                 <div class="col-sm-9">
                                     <?php echo $form->textFieldRow($model, 'branch_name', array('class' => 'span5 form-control', 'maxlength' => 45)); ?>       
                                     <?php echo $form->error($model, 'branch_name', array('style' => 'color:red;')); ?>
                                 </div>
                             </div><!--/form-group--> 
                             <div class="form-group">
-                                <?php // echo $form->labelEx($model, 'branch_address', array('class' => 'col-sm-3 control-label')); ?>
+                                <?php // echo $form->labelEx($model, 'branch_address', array('class' => 'col-sm-3 control-label'));  ?>
                                 <div class="col-sm-9" style="margin-bottom:  30px;">
                                     <?php echo $form->textFieldRow($model, 'branch_address', array('class' => 'span5 form-control', 'maxlength' => 45)); ?>       
                                     <?php echo $form->error($model, 'branch_address', array('style' => 'color:red;')); ?>
@@ -218,14 +226,14 @@
                                 <td class="fa-border"><button class="btn btn-danger padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalFeedBackCountForBranches(date('Y-m-d'), date('Y-m-d'), $model->id); ?></button>
                                     Total Feedback</td>
                                 <td class="fa-border"><button class="btn btn-primary padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalFeedBackAverageForBranches(date('Y-m-d'), date('Y-m-d'), $model->id); ?></button>
-                                    Average Ratting</td>
+                                    Average Rating</td>
 
                             </tr>
                             <tr>
                                 <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo BranchDashboard_helper::getPositiveFeedbackForBranches(date('Y-m-d'), date('Y-m-d'), $model->id); ?></button>
-                                    Positive Ratting</td>
+                                    Positive Rating</td>
                                 <td class="fa-border"><button class="btn btn-info padd-adj" type="button"><?php echo BranchDashboard_helper::getNegativeFeedbackForBranches(date('Y-m-d'), date('Y-m-d'), $model->id); ?></button>
-                                    Negative Ratting</td>
+                                    Negative Rating</td>
                             </tr>
                         </table>
 
@@ -234,7 +242,7 @@
                                 <td class = "fa-border"><button class = "btn btn-danger padd-adj" type = "button"><?php echo BranchDashboard_helper::getTotalFeedBackCountForBranches(date('Y-m-d', strtotime('monday this week')), date('Y-m-d'), $model->id); ?></button>
                                     Total Feedback </td>
                                 <td class="fa-border"><button class="btn btn-primary padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalFeedBackAverageForBranches(date('Y-m-d', strtotime('monday this week')), date('Y-m-d'), $model->id); ?></button>
-                                    Average Ratting</td>
+                                    Average Rating</td>
 
                             </tr>
                             <tr>
@@ -302,6 +310,9 @@
                         <h3 class="content-header"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/line_graph.png"/> Quick Stats
                             <div data-toggle="buttons" class="button-group pull-right"> 
                                 <a class="btn active small border-gray" href="javascript:;"> <span class="button-content" style=" padding: 3px; ">
+                                        <input type="radio" name="dashboard_radio_feedback_index"  value="daily">
+                                        Daily </span> </a>
+                                <a class="btn small border-gray" href="javascript:;"> <span class="button-content" style=" padding: 3px; ">
                                         <input type="radio" name="dashboard_radio_feedback_index"  value="weekly">
                                         Weekly </span> </a> 
                                 <a class="btn small border-gray" href="javascript:;"> <span class="button-content" style=" padding: 3px; ">
@@ -313,8 +324,8 @@
                             </div>
                         </h3>
                         <div id="dashboard_graph" class="custom-bar-chart">
-
-                            <?php // echo Dashboard_helper::getWeeklyReportForBranch();  ?>
+                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.gif" style="width: 100%;" />
+                            <?php // echo Dashboard_helper::getWeeklyReportForBranch();   ?>
 
                         </div><!--/custom-bar-chart-->
                     </div><!--/block-web-->
@@ -326,22 +337,22 @@
                             <table class="table margin-top-20 today" width="100%" border="0" cellspacing="0" cellpadding="0" >
                                 <tr>
                                     <td class="fa-border">
-                                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/plus.png"/> 
+                                        <a title="New Visitor">  <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/plus.png"/> </a>
                                         <strong><?php echo BranchDashboard_helper::getTotalNewCustomers($model->id); ?></strong>
                                     </td>
                                     <td class="fa-border">
-                                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/male.png"/> 
+                                        <a title="Male Visitor">   <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/male.png"/> </a>
                                         <strong><?php echo BranchDashboard_helper::getTotalMALECustomerForBranches($model->id); ?></strong>
                                     </td>
 
                                 </tr>
                                 <tr>
                                     <td class="fa-border">
-                                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/reload.png"/> 
+                                        <a title="Repeat Visitor"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/reload.png"/> </a>
                                         <strong><?php echo BranchDashboard_helper::getTotalRepeateCustomers($model->id); ?></strong>
                                     </td>
                                     <td class="fa-border">
-                                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/female.png"/> 
+                                        <a title="Female Visitor"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/female.png"/> </a>
                                         <strong><?php echo BranchDashboard_helper::getTotalFEMALECustomerForBranches($model->id); ?></strong>
                                     </td>
                                 </tr>
@@ -382,8 +393,8 @@
                             </div>
                         </h3>
                         <div id="dashboard_graph_category" class="custom-bar-chart">
-
-                            <?php // echo Dashboard_helper::getWeeklyReportForBranch();  ?>
+                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.gif" style="width: 100%;" />
+                            <?php // echo Dashboard_helper::getWeeklyReportForBranch();   ?>
 
                         </div><!--/custom-bar-chart-->
                     </div><!--/block-web-->
@@ -408,8 +419,8 @@
                             </div>
                         </h3>
                         <div id="New_Male_Female_repete_chartdiv" class="custom-bar-chart">
-
-                            <?php // echo Dashboard_helper::getWeeklyReportForBranch();  ?>
+                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.gif" style="width: 100%;" />
+                            <?php // echo Dashboard_helper::getWeeklyReportForBranch();   ?>
 
                         </div><!--/custom-bar-chart-->
                     </div><!--/block-web-->

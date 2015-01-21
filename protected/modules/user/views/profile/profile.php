@@ -183,20 +183,13 @@
                                                     <?php
                                                 } elseif ($field->varname == "gender") {
                                                     echo $form->dropDownList($profile, $field->varname, ['' => 'Select', 'male' => 'Male', 'female' => 'Female', 'other' => 'Other'], array('class' => 'form-control'));
-                                                } elseif ($field->varname == "lob") {
-                                                    ?>
-                                                    <select name="Profile[lob]" id="lob_gender">
-                                                        <?php LobMaster::getLOBTypes($profile->lob) ?>
-
-                                                    </select>
-                                                    <?php
                                                 } elseif ($field->varname == "theme_color") {
                                                     echo $form->textField($profile, $field->varname, array('class' => 'colorpicker-default form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));
                                                 } elseif ($field->varname == "organisation_logo") {
 //                                                echo $profile->organisation_logo;
                                                     ?>
-                                                    <img src = "<?php echo Yii::app()->request->baseUrl . '/' . User::model()->findByPK(Yii::app()->user->id)->profile->organisation_logo; ?>"> 
-                                                    <input type="file" name="organisation_logo"/>
+                                                    <img width="" class="organisation_logo_preview"  src = "<?php echo Yii::app()->request->baseUrl . '/' . User::model()->findByPK(Yii::app()->user->id)->profile->organisation_logo; ?>" style="width: 60%; "> 
+                                                    <input type="file" name="organisation_logo" class="organisation_logo" onchange="readURL(this);"/>
                                                     <?php
 //                                                echo $form->fileField($profile, $field->varname, array('class' => ' form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));
                                                 } else {

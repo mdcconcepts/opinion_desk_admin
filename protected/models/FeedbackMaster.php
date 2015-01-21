@@ -1,23 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "client_master".
+ * This is the model class for table "responce_master".
  *
- * The followings are the available columns in table 'client_master':
- * @property integer $client_id
- * @property string $name
- * @property string $mobile_no
- * @property integer $gender
- * @property string $dob
+ * The followings are the available columns in table 'responce_master':
+ * @property integer $id
+ * @property double $option_value
+ * @property string $responce_text
+ * @property string $responce_audio_url
+ * @property string $responce_vedio_url
  * @property string $created_at
+ * @property integer $question_id
+ * @property integer $client_id
  */
-class ClientMaster extends CActiveRecord {
+class FeedbackMaster extends CActiveRecord {
 
     /**
      * @return string the associated database table name
      */
     public function tableName() {
-        return 'client_master';
+        return 'feedback_master';
     }
 
     /**
@@ -27,15 +29,18 @@ class ClientMaster extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name, mobile_no, gender, dob', 'required'),
-            array('gender', 'numerical', 'integerOnly' => true),
-            array('name', 'length', 'max' => 45),
-            array('mobile_no', 'length', 'max' => 11),
-            array('created_at', 'safe'),
-            array('client_id, name, mobile_no, gender, dob, created_at', 'safe', 'on' => 'search'),
-            array('created_at', 'default',
-                'value' => new CDbExpression('NOW()'),
-                'setOnEmpty' => false, 'on' => 'update'),
+            array('client_id, created_at', 'required'),
+            array('client_id', 'numerical', 'integerOnly' => true),
+            /*
+              //Example username
+              array('username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u',
+              'message'=>'Username can contain only alphanumeric
+              characters and hyphens(-).'),
+              array('username','unique'),
+             */
+            // The following rule is used by search().
+            // @todo Please remove those attributes that should not be searched.
+            array('id, option_value,  created_at, question_id, client_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -46,6 +51,7 @@ class ClientMaster extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
+            'ResponceMaster' => array(self::HAS_MANY, 'ResponceMaster', 'feedback_id'),
         );
     }
 
@@ -54,13 +60,8 @@ class ClientMaster extends CActiveRecord {
      */
     public function attributeLabels() {
         return array(
+            'id' => 'Feedback',
             'client_id' => 'Client',
-            'name' => 'Name',
-            'mobile_no' => 'Mobile No',
-            'gender' => 'Gender',
-            'dob' => 'Dob',
-            'ref_name' => 'Reference Name',
-            'ref_mobile_no' => 'Reference Mobile No',
             'created_at' => 'Created At',
         );
     }
@@ -82,12 +83,10 @@ class ClientMaster extends CActiveRecord {
 
         $criteria = new CDbCriteria;
 
+        $criteria->compare('id', $this->id);
         $criteria->compare('client_id', $this->client_id);
-        $criteria->compare('name', $this->name, true);
-        $criteria->compare('mobile_no', $this->mobile_no, true);
-        $criteria->compare('gender', $this->gender);
-        $criteria->compare('dob', $this->dob, true);
         $criteria->compare('created_at', $this->created_at, true);
+
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -98,7 +97,7 @@ class ClientMaster extends CActiveRecord {
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!
      * @param string $className active record class name.
-     * @return ClientMaster the static model class
+     * @return ResponceMaster the static model class
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
@@ -110,32 +109,24 @@ class ClientMaster extends CActiveRecord {
             $userId = (int) Yii::app()->user->id;
 
         if ($this->isNewRecord) {
-            $this->created_at = new CDbExpression('NOW()');
+            
         } else {
             
         }
 
 
-        // NOT SURE RUN PLEASE HELP ME -> 
-        //$from=DateTime::createFromFormat('d/m/Y',$this->dob);
-        //$this->dob=$from->format('Y-m-d');
-
         return parent::beforeSave();
     }
 
-//    public function beforeDelete() {
-//        $userId = 0;
-//        if (null != Yii::app()->user->id)
-//            $userId = (int) Yii::app()->user->id;
-//
-//        return false;
-//    }
+    public function beforeDelete() {
+        $userId = 0;
+        if (null != Yii::app()->user->id)
+            $userId = (int) Yii::app()->user->id;
+
+        return false;
+    }
 
     public function afterFind() {
-
-        // NOT SURE RUN PLEASE HELP ME -> 
-        //$from=DateTime::createFromFormat('Y-m-d',$this->dob);
-        //$this->dob=$from->format('d/m/Y');
 
         parent::afterFind();
     }

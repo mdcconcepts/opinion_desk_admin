@@ -14,7 +14,7 @@
 	left: 0px;
 }
 .login-container .middle-login {
-    margin-left: -162px;
+    margin-left: -214px;
     width: 320px;
 }
 }
@@ -122,7 +122,7 @@ input[type="radio"] + .custom-radio:before {
 }
 input[type="radio"]:checked + .custom-radio:before {
 	border-color: #ADB8C0;
-	content: "•";
+	content: "?";
 	text-shadow: 0 1px #FFFFFF;
 }
 input[type="radio"]:checked + .custom-radio.blue:before {
@@ -306,6 +306,7 @@ checkbox-list > label {
 }
 label {
 	font-weight: normal;
+	/* width: 60%; */
 }
 .input-group .btn {
 	padding: 7px 12px;

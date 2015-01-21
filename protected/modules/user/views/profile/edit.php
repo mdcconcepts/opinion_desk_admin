@@ -69,8 +69,8 @@
                                             } elseif ($field->varname == "organisation_logo") {
 //                                                echo $profile->organisation_logo;
                                                 ?>
-                                                <img src = "<?php echo Yii::app()->request->baseUrl . '/' . User::model()->findByPK(Yii::app()->user->id)->profile->organisation_logo; ?>"> 
-                                                <input type="file" name="organisation_logo"/>
+                                                <img class="organisation_logo_preview" src = "<?php echo Yii::app()->request->baseUrl . '/' . User::model()->findByPK(Yii::app()->user->id)->profile->organisation_logo; ?>"> 
+                                                <input type="file" name="organisation_logo" onchange="readURL(this);"/>
                                                 <?php
 //                                                echo $form->fileField($profile, $field->varname, array('class' => ' form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));
                                             } else {
@@ -109,7 +109,24 @@
     </div><!--/col-md-8--> 
 </div><!--/row--> 
 
-
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            
+           console/
+//            var reader = new FileReader();
+//
+//            reader.onload = function (e) {
+//                $('.organisation_logo_preview')
+//                        .attr('src', e.target.result)
+//                        .width(150)
+//                        .height(200);
+//            };
+//
+//            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 
 <?php /**
   $this->pageTitle = Yii::app()->name . ' - ' . UserModule::t("Profile");

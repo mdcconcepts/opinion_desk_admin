@@ -1,99 +1,152 @@
+
 <div class="row">
-    <div class="col-md-12">
-        <div class="block-web">
-            <div class="header">
-                <div class="actions"> <a class="minimize" href="#"><i class="fa fa-chevron-down"></i></a> <a class="refresh" href="#"><i class="fa fa-repeat"></i></a> <a class="close-down" href="#"><i class="fa fa-times"></i></a> </div>
-                <h3 class="content-header">All Branches</h3>
-            </div>
-            <div class="porlets-content">
-                <?php if (Yii::app()->user->hasFlash('error')): ?>
-                    <div class="alert alert-danger"> 
-                        <?php echo Yii::app()->user->getFlash('error'); ?>
-                    </div>
-                <?php endif; ?>
-                <div class="btn-group" style="margin-bottom: 20px;">
-                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/branchMaster_parent/create" class="btn btn-primary">
-                        Add New <i class="fa fa-plus"></i>
-                    </a>
+    <div class="col-md-12 col-sm-12">
+        <h2>Branch Grids</h2>
+    </div>
+    <?php
+    $Branches = BranchMaster::model()->findAll(array(
+        'condition' => 'customer_id = :customer_id',
+        'params' => array(':customer_id' => Yii::app()->user->id)
+    ));
+
+    foreach ($Branches as $Branch) {
+        ?>
+
+
+        <div class="col-sm-4 col-md-4">
+            <div class="block-web primary-box" onclick="location.href = '<?php echo Yii::app()->request->baseUrl . '/index.php//branchMaster_parent/' . $Branch->id; ?>';" style="cursor: pointer;">
+                <div class="header" style=" padding: 22px; ">
+                    <h3 ><?php echo $Branch->branch_name ?></h3>
                 </div>
-                <div class="table-responsive">
-                    <?php
-                    $this->widget('zii.widgets.grid.CGridView', array(
-                        'dataProvider' => $model->getActiveUsers(),
-                        'summaryText' => '',
-                        'itemsCssClass' => 'display table table-bordered table-striped Branch_master',
-                        'htmlOptions' => array('class' => ''),
-                        'columns' => array(
-                            array('header' => 'No', 'value' => '($this->grid->dataProvider->pagination->currentPage*
-                                $this->grid->dataProvider->pagination->pageSize
-                                )+
-                                array_search($data,$this->grid->dataProvider->getData())+1',
-                                'htmlOptions' => array('style' => 'width: 25px; text-align:center;'),
-                            ),
-                            array(
-                                'name' => 'branch_name',
-                                'value' => '($data->branch_name)',
-                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                            ),
-                            array(
-                                'name' => 'branch_address',
-                                'value' => '($data->branch_address)',
-                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                            ),
-                            array(
-                                'name' => 'tablet_no',
-                                'value' => '($data->tablet_no)',
-                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                            ),
-                            array(
-                                'name' => 'created_at',
-                                'value' => '($data->created_at)',
-                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                            ),
-                            array(
-                                'name' => 'updated_at',
-                                'value' => '($data->updated_at)',
-                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                            ),
-                            array(
-                                'class' => 'bootstrap.widgets.TbButtonColumn',
-                                'htmlOptions' => array('style' => 'width:90px'),
-                                'template' => '{detail}',
-                                'buttons' => array
-                                    (
-                                    'detail' => array
-                                        (
-                                        'label' => 'View Branch',
-                                        'icon' => 'fa fa-folder-open',
-                                        'url' => 'array("view","id"=>$data->id)',
-                                        'options' => array(
-                                            'class' => 'badge badge-info',
-                                        ),
-                                    ),
-//                                    'delete' => array
-//                                        (
-//                                        'label' => 'Update Branch',
-//                                        'icon' => 'fa fa-trash-o',
-//                                        'url' => 'array("delete","id"=>$data->id)',
-//                                        'options' => array(
-//                                            'class' => 'badge badge-info',
-//                                        ),
-//                                    ),
-                                )
-                            ),
-                        ),
-                    ));
-                    ?>
-                </div><!--/table-responsive-->
-            </div><!--/porlets-content-->
+                <!--                <h3 class="content-header"> Your Branch Statistics
+                                    </h3>-->
+                <table class="table margin-top-20 today" width="100%" border="0" cellspacing="0" cellpadding="0" >
+                    <tr >
+                        <td style="border-top: 0px solid #ddd;" ><button class="btn btn-primary padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalFeedBackCountForBranches(date('Y-m-d'), date('Y-m-d'), $Branch->id); ?></button>
+                            Total Feedback</td>
+                        <td style="border-top: 0px solid #ddd;"><button class="btn btn-primary padd-adj" type="button"><?php echo BranchDashboard_helper::getTotalFeedBackAverageForBranches(date('Y-m-d'), date('Y-m-d'), $Branch->id); ?></button>
+                            Average Ratting</td>
 
+                    </tr>
+                    <tr >
+                        <td  style="border-top: 0px solid #ddd;"><button class="btn btn-primary padd-adj" type="button"><?php echo BranchDashboard_helper::getPositiveFeedbackForBranches(date('Y-m-d'), date('Y-m-d'), $Branch->id); ?></button>
+                            Positive Ratting</td>
+                        <td  style="border-top: 0px solid #ddd;"><button class="btn btn-primary padd-adj" type="button"><?php echo BranchDashboard_helper::getNegativeFeedbackForBranches(date('Y-m-d'), date('Y-m-d'), $Branch->id); ?></button>
+                            Negative Ratting</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
-        </div><!--/block-web--> 
-    </div><!--/col-md-12--> 
-</div><!--/row-->
+        <?php
+//    echo json_encode($Branch->branch_name);
+    }
+    ?>
+    <div class="col-sm-4 col-md-4">
+        <a href="<?php echo Yii::app()->request->baseUrl . '/index.php//branchMaster_parent/create'; ?>" class="btn btn-primary" style=" font-size: 136px;"> 
+            +
+        </a>
+    </div>
+</div>
 
 <?php
-/* @var $this BranchMaster_parentController */
+/*
+  <div class="row">
+  <div class="col-md-12">
+  <div class="block-web">
+  <div class="header">
+  <div class="actions"> <a class="minimize" href="#"><i class="fa fa-chevron-down"></i></a> <a class="refresh" href="#"><i class="fa fa-repeat"></i></a> <a class="close-down" href="#"><i class="fa fa-times"></i></a> </div>
+  <h3 class="content-header">All Branches</h3>
+  </div>
+  <div class="porlets-content">
+  <?php if (Yii::app()->user->hasFlash('error')): ?>
+  <div class="alert alert-danger">
+  <?php echo Yii::app()->user->getFlash('error'); ?>
+  </div>
+  <?php endif; ?>
+  <div class="btn-group" style="margin-bottom: 20px;">
+  <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/branchMaster_parent/create" class="btn btn-primary">
+  Add New <i class="fa fa-plus"></i>
+  </a>
+  </div>
+  <div class="table-responsive">
+  <?php
+  $this->widget('zii.widgets.grid.CGridView', array(
+  'dataProvider' => $model->getActiveUsers(),
+  'summaryText' => '',
+  'itemsCssClass' => 'display table table-bordered table-striped Branch_master',
+  'htmlOptions' => array('class' => ''),
+  'columns' => array(
+  array('header' => 'No', 'value' => '($this->grid->dataProvider->pagination->currentPage*
+  $this->grid->dataProvider->pagination->pageSize
+  )+
+  array_search($data,$this->grid->dataProvider->getData())+1',
+  'htmlOptions' => array('style' => 'width: 25px; text-align:center;'),
+  ),
+  array(
+  'name' => 'branch_name',
+  'value' => '($data->branch_name)',
+  'headerHtmlOptions' => array('style' => 'text-align:center;'),
+  ),
+  array(
+  'name' => 'branch_address',
+  'value' => '($data->branch_address)',
+  'headerHtmlOptions' => array('style' => 'text-align:center;'),
+  ),
+  array(
+  'name' => 'tablet_no',
+  'value' => '($data->tablet_no)',
+  'headerHtmlOptions' => array('style' => 'text-align:center;'),
+  ),
+  array(
+  'name' => 'created_at',
+  'value' => '($data->created_at)',
+  'headerHtmlOptions' => array('style' => 'text-align:center;'),
+  ),
+  array(
+  'name' => 'updated_at',
+  'value' => '($data->updated_at)',
+  'headerHtmlOptions' => array('style' => 'text-align:center;'),
+  ),
+  array(
+  'class' => 'bootstrap.widgets.TbButtonColumn',
+  'htmlOptions' => array('style' => 'width:90px'),
+  'template' => '{detail}',
+  'buttons' => array
+  (
+  'detail' => array
+  (
+  'label' => 'View Branch',
+  'icon' => 'fa fa-folder-open',
+  'url' => 'array("view","id"=>$data->id)',
+  'options' => array(
+  'class' => 'badge badge-info',
+  ),
+  ),
+  //                                    'delete' => array
+  //                                        (
+  //                                        'label' => 'Update Branch',
+  //                                        'icon' => 'fa fa-trash-o',
+  //                                        'url' => 'array("delete","id"=>$data->id)',
+  //                                        'options' => array(
+  //                                            'class' => 'badge badge-info',
+  //                                        ),
+  //                                    ),
+  )
+  ),
+  ),
+  ));
+  ?>
+  </div><!--/table-responsive-->
+  </div><!--/porlets-content-->
+
+
+  </div><!--/block-web-->
+  </div><!--/col-md-12-->
+  </div><!--/row-->
+
+  <?php
+  /* @var $this BranchMaster_parentController */
 /* @var $dataProvider CActiveDataProvider */
 
 /**

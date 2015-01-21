@@ -22,7 +22,7 @@ class Dashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT COUNT(*) AS Total_Feedback FROM `responce_master` WHERE "
+            $sqlStatement = "SELECT COUNT(DISTINCT `feedback_id`) AS Total_Feedback FROM `responce_master` WHERE "
                     . "`question_id` in (SELECT `id` FROM `question_master` "
                     . "WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE"
                     . " `customer_id`=:customer_id)) AND DATE(`created_at`) BETWEEN DATE(:FROM_DATE)"
@@ -92,10 +92,21 @@ class Dashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT COUNT(`option_value`) AS Total_Positive_Feedback FROM "
-                    . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
-                    . " WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id))"
-                    . " AND `option_value`>2 AND DATE(`created_at`) BETWEEN :FROM_DATE AND :TO_DATE";
+            $sqlStatement = "SELECT COUNT(*) AS Total_Positive_Feedback FROM  (SELECT `feedback_id`,
+                                      `option_value`,
+                                      `question_id`,
+                                      ROUND(AVG(`option_value`), 0) AS Total_AVG
+                               FROM `responce_master`
+                               WHERE `question_id` IN
+                                   (SELECT `id`
+                                    FROM `question_master`
+                                    WHERE `branch_id` IN
+                                        (SELECT `id`
+                                         FROM `branch_master`
+                                         WHERE `customer_id`=:customer_id))
+                               GROUP BY `feedback_id`) AS Feedback
+                            INNER JOIN `feedback_master` ON `feedback_master`.`id`=Feedback.`feedback_id`
+                            WHERE Total_AVG>2 AND DATE(`feedback_master`.`created_at`) BETWEEN :FROM_DATE AND :TO_DATE";
 
 
             $command = $connection->createCommand($sqlStatement);
@@ -125,10 +136,22 @@ class Dashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT COUNT(`option_value`) AS Total_Negative_Feedback FROM "
-                    . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
-                    . " WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id))"
-                    . " AND `option_value`<=2 AND DATE(`created_at`) BETWEEN :FROM_DATE AND :TO_DATE";
+            $sqlStatement = "SELECT COUNT(*) AS Total_Negative_Feedback FROM  (SELECT `feedback_id`,
+                                      `option_value`,
+                                      `question_id`,
+                                      ROUND(AVG(`option_value`), 0) AS Total_AVG
+                               FROM `responce_master`
+                               WHERE `question_id` IN
+                                   (SELECT `id`
+                                    FROM `question_master`
+                                    WHERE `branch_id` IN
+                                        (SELECT `id`
+                                         FROM `branch_master`
+                                         WHERE `customer_id`=:customer_id))
+                               GROUP BY `feedback_id`) AS Feedback
+                            INNER JOIN `feedback_master` ON `feedback_master`.`id`=Feedback.`feedback_id`
+                            WHERE Total_AVG<=2 AND DATE(`feedback_master`.`created_at`) BETWEEN :FROM_DATE AND :TO_DATE";
+
 
 
             $command = $connection->createCommand($sqlStatement);
@@ -158,9 +181,10 @@ class Dashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer FROM "
+            $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer "
+                    . " FROM `feedback_master` WHERE `id` in ( SELECT `feedback_id` FROM "
                     . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
-                    . " WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id))";
+                    . " WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id)))";
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -188,10 +212,10 @@ class Dashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer FROM "
+            $sqlStatement = "SELECT COUNT(DISTINCT `client_id`) AS Total_Customer  FROM `feedback_master` WHERE `id` in (SELECT `feedback_id` FROM "
                     . "`responce_master` WHERE `question_id` in (SELECT `id` FROM `question_master`"
                     . " WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id)) "
-                    . " AND DATE(`created_at`) BETWEEN :FROM_DATE AND :TO_DATE";
+                    . " AND DATE(`created_at`) BETWEEN :FROM_DATE AND :TO_DATE)";
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -224,10 +248,12 @@ class Dashboard_helper {
             $connection = Yii::app()->db;
 
             $sqlStatement = "SELECT COUNT(`gender`) AS Total_Male_Customer FROM `client_master` WHERE "
-                    . "`client_id` in (SELECT `client_id` FROM `responce_master` "
+                    . "`client_id` in (SELECT `client_id` AS "
+                    . "Total_Customer  FROM `feedback_master` WHERE `id` in "
+                    . "(SELECT `feedback_id` FROM  `responce_master` "
                     . "WHERE `question_id` in (SELECT `id` FROM `question_master` "
                     . "WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE "
-                    . "`customer_id`=:customer_id))) AND `gender`=1";
+                    . "`customer_id`=:customer_id)))) AND `gender`=1";
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -254,11 +280,14 @@ class Dashboard_helper {
 
             $connection = Yii::app()->db;
 
+
             $sqlStatement = "SELECT COUNT(`gender`) AS Total_Male_Customer FROM `client_master` WHERE "
-                    . "`client_id` in (SELECT `client_id` FROM `responce_master` "
+                    . "`client_id` in (SELECT `client_id` AS "
+                    . "Total_Customer  FROM `feedback_master` WHERE `id` in "
+                    . "(SELECT `feedback_id` FROM  `responce_master` "
                     . "WHERE `question_id` in (SELECT `id` FROM `question_master` "
                     . "WHERE `branch_id` in (SELECT `id` FROM `branch_master` WHERE "
-                    . "`customer_id`=:customer_id))) AND `gender`=0";
+                    . "`customer_id`=:customer_id)))) AND `gender`=0";
 
             $command = $connection->createCommand($sqlStatement);
 
@@ -296,9 +325,11 @@ class Dashboard_helper {
 
             $connection = Yii::app()->db;
 
-            $sqlStatement = "select COUNT(*) AS TotalReapet from (SELECT `client_id` FROM `responce_master`"
-                    . " WHERE `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id`  in (SELECT `id` FROM `branch_master` WHERE "
-                    . "`customer_id`=:customer_id)) "
+            $sqlStatement = "select COUNT(*) AS TotalReapet from ( SELECT `client_id` "
+                    . " FROM `feedback_master` WHERE `id` in (SELECT `feedback_id`  FROM `responce_master`"
+                    . " WHERE `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id`  in "
+                    . "(SELECT `id` FROM `branch_master` WHERE "
+                    . "`customer_id`=:customer_id))) "
                     . "GROUP BY `client_id` HAVING COUNT(`client_id`)>1) AS Repeate_Customer ";
 
             $command = $connection->createCommand($sqlStatement);
@@ -336,9 +367,10 @@ class Dashboard_helper {
                             SELECT DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(`dob`, '%Y') - 
                             (DATE_FORMAT(NOW(), '00-%m-%d') < DATE_FORMAT(`dob`, '00-%m-%d')) 
                             AS age FROM `client_master` WHERE `client_id` IN 
-                            (SELECT `client_id` FROM `responce_master` WHERE `question_id` in 
+                            (SELECT `client_id` "
+                    . " FROM `feedback_master` WHERE `id` in (SELECT  `feedback_id`  FROM `responce_master` WHERE `question_id` in 
                             (SELECT `id` FROM `question_master` WHERE `branch_id` in 
-                            (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id))))
+                            (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id)))))
                             AS TBL GROUP BY ageband";
 
             $command = $connection->createCommand($sqlStatement);
@@ -364,48 +396,50 @@ class Dashboard_helper {
         return 0;
     }
 
-    public static function getWeeklyReportForBranch() {
-        try {
-
-
-            $connection = Yii::app()->db;
-
-            $sqlStatement = "SELECT Week(`created_at`) AS Week,COUNT(`created_at`)
-                Total_Customer_Visit FROM `responce_master` WHERE MONTH(`created_at`)=MONTH(now()) 
-                AND `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id` in
-                (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id))
-                GROUP BY Week(`created_at`)";
-
-            $command = $connection->createCommand($sqlStatement);
-
-            $customer_id = Yii::app()->user->id;
-            $command->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
-            $command->execute();
-
-            $reader = $command->query();
-
-
-            foreach ($reader as $row) {
-                ?>
-                <div class="bar">
-                    <div class="value tooltips" data-original-title="30%" data-toggle="tooltip" data-placement="top"><?php echo $row['Total_Customer_Visit'] * 50; ?></div>
-                    <div class="title"><?php echo $row['Week']; ?></div>
-                </div><!--/bar-->
-                <?php
-//                echo '<tr>
-//                            <td>
-//                            ' . $row['Week'] . '
-//                            </td>
-//                            <td>
-//                            ' . $row['Total_Customer_Visit'] . '
-//                            </td>
-//                        </tr>';
-            }
-        } catch (Exception $ex) {
-            return "error, " . $ex->getMessage();
-        }
-
-        return 0;
-    }
-
+//    public static function getWeeklyReportForBranch() {
+//        try {
+//
+//
+//            $connection = Yii::app()->db;
+//
+//            $sqlStatement = "SELECT Week(`created_at`) AS Week,COUNT(`created_at`)
+//                Total_Customer_Visit FROM `responce_master` WHERE MONTH(`created_at`)=MONTH(now()) 
+//                AND `question_id` in (SELECT `id` FROM `question_master` WHERE `branch_id` in
+//                (SELECT `id` FROM `branch_master` WHERE `customer_id`=:customer_id))
+//                GROUP BY Week(`created_at`)";
+//
+//            $command = $connection->createCommand($sqlStatement);
+//
+//            $customer_id = Yii::app()->user->id;
+//            $command->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+//            $command->execute();
+//
+//            $reader = $command->query();
+//
+//
+//            foreach ($reader as $row) {
+//                
+    /* ?>
+      <div class="bar">
+      <div class="value tooltips" data-original-title="30%" data-toggle="tooltip" data-placement="top">//<?php echo $row['Total_Customer_Visit'] * 50; ?></div>
+      <div class="title">//<?php echo $row['Week']; ?></div>
+      </div><!--/bar-->
+      //<?php
+     * 
+     */
+////                echo '<tr>
+////                            <td>
+////                            ' . $row['Week'] . '
+////                            </td>
+////                            <td>
+////                            ' . $row['Total_Customer_Visit'] . '
+////                            </td>
+////                        </tr>';
+//            }
+//        } catch (Exception $ex) {
+//            return "error, " . $ex->getMessage();
+//        }
+//
+//        return 0;
+//    }
 }

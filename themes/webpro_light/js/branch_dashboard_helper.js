@@ -71,6 +71,12 @@ $('input[name="dashboard_radio_feedback_index"]').on("change", function () {
                 branch_id: $('#branch_id').val(),
                 period: 3
             };
+            break;
+        case 'daily':
+            data = {
+                branch_id: $('#branch_id').val(),
+                period: 4
+            };
 
             break;
     }
@@ -79,15 +85,38 @@ $('input[name="dashboard_radio_feedback_index"]').on("change", function () {
 
                 if (data.Success == "True") {
 
+                    var categoryAxesSettings = "";
+
+                    switch ($('input[name="dashboard_radio_feedback_index"]:checked').val())
+                    {
+                        case 'weekly':
+                            categoryAxesSettings = {
+                                minPeriod: "WW"
+                            };
+                            break;
+                        case 'montly':
+                            categoryAxesSettings = {
+                                minPeriod: "MM"
+                            };
+                            break;
+                        case 'yearly':
+                            categoryAxesSettings = {
+                                minPeriod: "YY"
+                            };
+                        case 'daily':
+                            categoryAxesSettings = {
+                                minPeriod: "DD"
+                            };
+                            break;
+                    }
+
                     var chart = AmCharts.makeChart("dashboard_graph", {
                         type: "stock",
                         "theme": "none",
                         pathToImages: "http://www.amcharts.com/lib/3/images/",
-                        categoryAxesSettings: {
-                            minPeriod: "mm"
-                        },
+                        categoryAxesSettings: categoryAxesSettings,
                         dataSets: [{
-                                color: "#b0de09",
+                                color: "#169B9D",
                                 fieldMappings: [{
                                         fromField: "value",
                                         toField: "value"
@@ -100,7 +129,7 @@ $('input[name="dashboard_radio_feedback_index"]').on("change", function () {
                             }],
                         panels: [{
                                 showCategoryAxis: false,
-                                title: "Value",
+                                title: "Total Feedback",
                                 percentHeight: 70,
                                 stockGraphs: [{
                                         id: "g1",
@@ -115,7 +144,7 @@ $('input[name="dashboard_radio_feedback_index"]').on("change", function () {
                                 }
                             },
                             {
-                                title: "Volume",
+                                title: "Average Feedback",
                                 percentHeight: 30,
                                 stockGraphs: [{
                                         valueField: "volume",
@@ -151,74 +180,81 @@ $('input[name="dashboard_radio_feedback_index"]').on("change", function () {
 var postTo = '/account/index.php/api/WebAppServices/getFeedbackDataForDashboardForGraphBranch';
 var data = {
     branch_id: $('#branch_id').val(),
-    period: 1
+    period: 4
 };
 jQuery.post(postTo, data,
         function (data) {
- 
-            if (data.Success == "True") {
 
-                var chart = AmCharts.makeChart("dashboard_graph", {
-                    type: "stock",
-                    "theme": "none",
-                    pathToImages: "http://www.amcharts.com/lib/3/images/",
-                    categoryAxesSettings: {
-                        minPeriod: "mm"
-                    },
-                    dataSets: [{
-                            color: "#b0de09",
-                            fieldMappings: [{
-                                    fromField: "value",
-                                    toField: "value"
-                                }, {
-                                    fromField: "volume",
-                                    toField: "volume"
-                                }],
-                            dataProvider: data.dataProvider,
-                            categoryField: "date"
-                        }],
-                    panels: [{
-                            showCategoryAxis: false,
-                            title: "Value",
-                            percentHeight: 70,
-                            stockGraphs: [{
-                                    id: "g1",
-                                    valueField: "value",
-                                    type: "smoothedLine",
-                                    lineThickness: 2,
-                                    bullet: "round"
-                                }],
-                            stockLegend: {
-                                valueTextRegular: " ",
-                                markerType: "none"
-                            }
+            if (data.Success == "True") {
+                if (data.dataProvider != 0) {
+                    $('#dashboard_graph').removeClass('no_data');
+                    var chart = AmCharts.makeChart("dashboard_graph", {
+                        type: "stock",
+                        "theme": "none",
+                        pathToImages: "http://www.amcharts.com/lib/3/images/",
+                        categoryAxesSettings: {
+                            minPeriod: "DD"
                         },
-                        {
-                            title: "Volume",
-                            percentHeight: 30,
-                            stockGraphs: [{
-                                    valueField: "volume",
-                                    type: "column",
-                                    cornerRadiusTop: 2,
-                                    fillAlphas: 1
-                                }],
-                            stockLegend: {
-                                valueTextRegular: " ",
-                                markerType: "none"
+                        dataSets: [{
+                                color: "#169B9D",
+                                fieldMappings: [{
+                                        fromField: "value",
+                                        toField: "value"
+                                    }, {
+                                        fromField: "volume",
+                                        toField: "volume"
+                                    }],
+                                dataProvider: data.dataProvider,
+                                categoryField: "date"
+                            }],
+                        panels: [{
+                                showCategoryAxis: false,
+                                title: "Total Feedback",
+                                percentHeight: 70,
+                                stockGraphs: [{
+                                        id: "g1",
+                                        valueField: "value",
+                                        type: "smoothedLine",
+                                        lineThickness: 2,
+                                        bullet: "round"
+                                    }],
+                                stockLegend: {
+                                    valueTextRegular: " ",
+                                    markerType: "none"
+                                }
+                            },
+                            {
+                                title: "Average Feedback",
+                                percentHeight: 30,
+                                stockGraphs: [{
+                                        valueField: "volume",
+                                        type: "column",
+                                        cornerRadiusTop: 2,
+                                        fillAlphas: 1
+                                    }],
+                                stockLegend: {
+                                    valueTextRegular: " ",
+                                    markerType: "none"
+                                }
                             }
+                        ],
+                        chartCursorSettings: {
+                            valueBalloonsEnabled: true
+                        },
+                        panelsSettings: {
+                            usePrefixes: true
                         }
-                    ],
-                    chartCursorSettings: {
-                        valueBalloonsEnabled: true
-                    },
-                    panelsSettings: {
-                        usePrefixes: true
-                    }
-                });
+                    });
+                } else
+                {
+                    $('#dashboard_graph').addClass('no_data');
+                    $('#dashboard_graph').html("");
+                }
 
             } else if (data.Success == "False") {
 
-
+                $('#dashboard_graph').addClass('no_data');
+                $('#dashboard_graph').html("");
 //                console.log("Invalied Username");
             }
 
@@ -264,7 +300,76 @@ $('input[name="dashboard_radio_category_index"]').on("change", function () {
             function (data) {
 
                 if (data.Success == "True") {
+                    if (data.dataProvider != 0) {
+                        $('#dashboard_graph_category').removeClass('no_data');
+                        var chart = AmCharts.makeChart("dashboard_graph_category", {
+                            "type": "serial",
+                            "theme": "light",
+                            "dataProvider": data.dataProvider,
+                            "valueAxes": [{
+                                    "gridColor": "#FFFFFF",
+                                    "gridAlpha": 0.2,
+                                    "dashLength": 0
+                                }],
+                            "gridAboveGraphs": true,
+                            "startDuration": 1,
+                            "graphs": [{
+                                    "balloonText": "[[category]]: <b>[[value]]</b>",
+                                    "fillAlphas": 0.8,
+                                    "lineAlpha": 0.2,
+                                    "type": "column",
+                                    "valueField": "visits"
+                                }],
+                            "chartCursor": {
+                                "categoryBalloonEnabled": false,
+                                "cursorAlpha": 0,
+                                "zoomable": false
+                            },
+                            "categoryField": "country",
+                            "categoryAxis": {
+                                "gridPosition": "start",
+                                "gridAlpha": 0,
+                                "tickPosition": "start",
+                                "tickLength": 20
+                            },
+                            "exportConfig": {
+                                "menuTop": 0,
+                                "menuItems": [{
+                                        "icon": '/lib/3/images/export.png',
+                                        "format": 'png'
+                                    }]
+                            }
+                        });
+                    } else
+                    {
+                        $('#dashboard_graph_category').addClass('no_data');
+                        $('#dashboard_graph_category').html("");
+                    }
 
+
+                } else if (data.Success == "False") {
+
+                    $('#dashboard_graph_category').addClass('no_data');
+                    $('#dashboard_graph_category').html("");
+//                console.log("Invalied Username");
+                }
+
+
+            }, 'json');
+
+});
+
+var postTo = '/account/index.php/api/WebAppServices/getCategoryDataForDashboardForGraphBranch';
+var data = {
+    branch_id: $('#branch_id').val(),
+    period: 1
+};
+jQuery.post(postTo, data,
+        function (data) {
+
+            if (data.Success == "True") {
+                if (data.dataProvider != 0) {
+                    $('#dashboard_graph_category').removeClass('no_data');
                     var chart = AmCharts.makeChart("dashboard_graph_category", {
                         "type": "serial",
                         "theme": "light",
@@ -303,69 +408,14 @@ $('input[name="dashboard_radio_category_index"]').on("change", function () {
                                 }]
                         }
                     });
-
-                } else if (data.Success == "False") {
-
-
-//                console.log("Invalied Username");
+                } else
+                {
+                    $('#dashboard_graph_category').addClass('no_data');
+                    $('#dashboard_graph_category').html("");
                 }
-
-
-            }, 'json');
-
-});
-
-var postTo = '/account/index.php/api/WebAppServices/getCategoryDataForDashboardForGraphBranch';
-var data = {
-    branch_id: $('#branch_id').val(),
-    period: 1
-};
-jQuery.post(postTo, data,
-        function (data) {
-
-            if (data.Success == "True") {
-
-                var chart = AmCharts.makeChart("dashboard_graph_category", {
-                    "type": "serial",
-                    "theme": "light",
-                    "dataProvider": data.dataProvider,
-                    "valueAxes": [{
-                            "gridColor": "#FFFFFF",
-                            "gridAlpha": 0.2,
-                            "dashLength": 0
-                        }],
-                    "gridAboveGraphs": true,
-                    "startDuration": 1,
-                    "graphs": [{
-                            "balloonText": "[[category]]: <b>[[value]]</b>",
-                            "fillAlphas": 0.8,
-                            "lineAlpha": 0.2,
-                            "type": "column",
-                            "valueField": "visits"
-                        }],
-                    "chartCursor": {
-                        "categoryBalloonEnabled": false,
-                        "cursorAlpha": 0,
-                        "zoomable": false
-                    },
-                    "categoryField": "country",
-                    "categoryAxis": {
-                        "gridPosition": "start",
-                        "gridAlpha": 0,
-                        "tickPosition": "start",
-                        "tickLength": 20
-                    },
-                    "exportConfig": {
-                        "menuTop": 0,
-                        "menuItems": [{
-                                "icon": '/lib/3/images/export.png',
-                                "format": 'png'
-                            }]
-                    }
-                });
-
             } else if (data.Success == "False") {
-
+                $('#dashboard_graph_category').addClass('no_data');
+                $('#dashboard_graph_category').html("");
 
 //                console.log("Invalied Username");
             }
@@ -440,7 +490,93 @@ $('input[name="dashboard_radio_Female_Male_index"]').on("change", function () {
             function (data) {
 
                 if (data.Success == "True") {
+                    if (data.dataProvider != 0) {
+                        $('#New_Male_Female_repete_chartdiv').removeClass('no_data');
+                        var chart = AmCharts.makeChart("New_Male_Female_repete_chartdiv", {
+                            "type": "serial",
+                            "theme": "light",
+                            "pathToImages": "http://www.amcharts.com/lib/3/images/",
+                            "legend": {
+                                "useGraphSettings": true
+                            },
+                            "dataProvider": data.dataProvider,
+                            "valueAxes": [{
+                                    "id": "v1",
+                                    "axisColor": "#FF6600",
+                                    "axisThickness": 2,
+                                    "gridAlpha": 0,
+                                    "axisAlpha": 1,
+                                    "position": "left"
+                                }, {
+                                    "id": "v2",
+                                    "axisColor": "#FCD202",
+                                    "axisThickness": 2,
+                                    "gridAlpha": 0,
+                                    "axisAlpha": 1,
+                                    "position": "right"
+                                }],
+                            "graphs": [{
+                                    "valueAxis": "v1",
+                                    "lineColor": "#FF6600",
+                                    "bullet": "round",
+                                    "bulletBorderThickness": 1,
+                                    "hideBulletsCount": 30,
+                                    "title": "Male",
+                                    "valueField": "visits",
+                                    "fillAlphas": 0
+                                }, {
+                                    "valueAxis": "v2",
+                                    "lineColor": "#FCD202",
+                                    "bullet": "square",
+                                    "bulletBorderThickness": 1,
+                                    "hideBulletsCount": 30,
+                                    "title": "Female",
+                                    "valueField": "hits",
+                                    "fillAlphas": 0
+                                }],
+                            "chartScrollbar": {},
+                            "chartCursor": {
+                                "cursorPosition": "mouse"
+                            },
+                            "categoryField": "date",
+                            "categoryAxis": {
+                                "parseDates": true,
+                                "axisColor": "#DADADA",
+                                "minorGridEnabled": true
+                            }
+                        });
+                    } else
+                    {
+                        $('#New_Male_Female_repete_chartdiv').addClass('no_data');
+                        $('#New_Male_Female_repete_chartdiv').html("");
+                    }
 
+//                    chart.addListener("dataUpdated", zoomChart);
+//                    chart.zoomToIndexes(chart.dataProvider.length - 20, chart.dataProvider.length - 1);
+
+                } else if (data.Success == "False") {
+
+                    $('#New_Male_Female_repete_chartdiv').addClass('no_data');
+                    $('#New_Male_Female_repete_chartdiv').html("");
+//                console.log("Invalied Username");
+                }
+
+
+            }, 'json');
+
+});
+
+var postTo = '/account/index.php/api/WebAppServices/getFeedbackDataForDashboardForGraphBranch_For_MALE_AND_FEMALE';
+var data = {
+    branch_id: $('#branch_id').val(),
+    period: 1
+};
+jQuery.post(postTo, data,
+        function (data) {
+
+            if (data.Success == "True") {
+                if (data.dataProvider != 0) {
+                    $('#New_Male_Female_repete_chartdiv').removeClass('no_data');
                     var chart = AmCharts.makeChart("New_Male_Female_repete_chartdiv", {
                         "type": "serial",
                         "theme": "light",
@@ -494,90 +630,19 @@ $('input[name="dashboard_radio_Female_Male_index"]').on("change", function () {
                             "minorGridEnabled": true
                         }
                     });
-
-//                    chart.addListener("dataUpdated", zoomChart);
-//                    chart.zoomToIndexes(chart.dataProvider.length - 20, chart.dataProvider.length - 1);
-
-                } else if (data.Success == "False") {
-
-
-//                console.log("Invalied Username");
+                } else
+                {
+                    $('#New_Male_Female_repete_chartdiv').addClass('no_data');
+                    $('#New_Male_Female_repete_chartdiv').html("");
                 }
-
-
-            }, 'json');
-
-});
-
-var postTo = '/account/index.php/api/WebAppServices/getFeedbackDataForDashboardForGraphBranch_For_MALE_AND_FEMALE';
-var data = {
-    branch_id: $('#branch_id').val(),
-    period: 1
-};
-jQuery.post(postTo, data,
-        function (data) {
-
-            if (data.Success == "True") {
-                var chart = AmCharts.makeChart("New_Male_Female_repete_chartdiv", {
-                    "type": "serial",
-                    "theme": "light",
-                    "pathToImages": "http://www.amcharts.com/lib/3/images/",
-                    "legend": {
-                        "useGraphSettings": true
-                    },
-                    "dataProvider": data.dataProvider,
-                    "valueAxes": [{
-                            "id": "v1",
-                            "axisColor": "#FF6600",
-                            "axisThickness": 2,
-                            "gridAlpha": 0,
-                            "axisAlpha": 1,
-                            "position": "left"
-                        }, {
-                            "id": "v2",
-                            "axisColor": "#FCD202",
-                            "axisThickness": 2,
-                            "gridAlpha": 0,
-                            "axisAlpha": 1,
-                            "position": "right"
-                        }],
-                    "graphs": [{
-                            "valueAxis": "v1",
-                            "lineColor": "#FF6600",
-                            "bullet": "round",
-                            "bulletBorderThickness": 1,
-                            "hideBulletsCount": 30,
-                            "title": "Male",
-                            "valueField": "visits",
-                            "fillAlphas": 0
-                        }, {
-                            "valueAxis": "v2",
-                            "lineColor": "#FCD202",
-                            "bullet": "square",
-                            "bulletBorderThickness": 1,
-                            "hideBulletsCount": 30,
-                            "title": "Female",
-                            "valueField": "hits",
-                            "fillAlphas": 0
-                        }],
-                    "chartScrollbar": {},
-                    "chartCursor": {
-                        "cursorPosition": "mouse"
-                    },
-                    "categoryField": "date",
-                    "categoryAxis": {
-                        "parseDates": true,
-                        "axisColor": "#DADADA",
-                        "minorGridEnabled": true
-                    }
-                });
 
 //                chart.addListener("dataUpdated", zoomChart);
 //                chart.zoomToIndexes(chart.dataProvider.length - 20, chart.dataProvider.length - 1);
 
             } else if (data.Success == "False") {
 
-
+                $('#New_Male_Female_repete_chartdiv').addClass('no_data');
+                $('#New_Male_Female_repete_chartdiv').html("");
 //                console.log("Invalied Username");
             }
 

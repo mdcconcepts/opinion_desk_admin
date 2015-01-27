@@ -23,7 +23,7 @@ class AdminController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('admin', 'delete', 'create', 'update', 'view'),
+                'actions' => array('admin', 'inactive', 'banned', 'delete', 'create', 'update', 'view'),
                 'users' => UserModule::getAdmins(),
             ),
             array('deny', // deny all users
@@ -42,6 +42,52 @@ class AdminController extends Controller {
             $model->attributes = $_GET['User'];
 
         $this->render('index', array(
+            'model' => $model,
+        ));
+        /* $dataProvider=new CActiveDataProvider('User', array(
+          'pagination'=>array(
+          'pageSize'=>Yii::app()->controller->module->user_page_size,
+          ),
+          ));
+
+          $this->render('index',array(
+          'dataProvider'=>$dataProvider,
+          ));// */
+    }
+
+    /**
+     * Manages all models.
+     */
+    public function actioninactive() {
+        $model = new User('search');
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['User']))
+            $model->attributes = $_GET['User'];
+
+        $this->render('inactive', array(
+            'model' => $model,
+        ));
+        /* $dataProvider=new CActiveDataProvider('User', array(
+          'pagination'=>array(
+          'pageSize'=>Yii::app()->controller->module->user_page_size,
+          ),
+          ));
+
+          $this->render('index',array(
+          'dataProvider'=>$dataProvider,
+          ));// */
+    }
+
+    /**
+     * Manages all models.
+     */
+    public function actionbanned() {
+        $model = new User('search');
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['User']))
+            $model->attributes = $_GET['User'];
+
+        $this->render('banned', array(
             'model' => $model,
         ));
         /* $dataProvider=new CActiveDataProvider('User', array(

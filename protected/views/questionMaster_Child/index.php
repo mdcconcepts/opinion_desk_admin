@@ -10,10 +10,12 @@ $branch_name = Yii::app()->session['branch_name'];
     <div class="col-sm-3 col-lg-2" style="position: relative;margin-top: 30px;"> 
         <ul class="nav nav-pills nav-stacked nav-email" style="position: fixed;border: 2px solid #44AFB0;border-top-left-radius: 9px;border-top-right-radius: 9px;">
             <li title="View Branch"> <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/branchMaster_parent/<?php echo $_GET['pId']; ?>"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/branches_menu.png"/> Branch </a> </li>
+            <li title="View Report"><a href="<?php echo Yii::app()->createUrl("ResponceMaster_child/viewbranchreport?branch_id=" . $_GET['pId']); ?>">   <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_report.png"/> Report</a></li>
+            <li title="View testimonial"><a href="<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $_GET['pId']); ?>">   <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_testi.png"/> Testimonials</a></li>
             <li title="View Questions" class="active"><a href="<?php echo Yii::app()->createUrl("questionMaster_Child?pId=" . $_GET['pId']); ?>">  <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/selected/question_branch.png"/>  Questions</a></li>
             <li title="View Tablets"><a href="<?php echo Yii::app()->createUrl("tabletMaster_child?pId=" . $_GET['pId']); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/tablet.png"/>  Tablets </a></li>
             <li title="View Custom Fields"><a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent?pId=" . $_GET['pId']); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/custom_fields.png"/> Custom Fields</a></li>
-          <!--  <li title="View All Branch"> <a href="<?php //echo Yii::app()->createUrl("branchMaster_parent");          ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>-->
+          <!--  <li title="View All Branch"> <a href="<?php //echo Yii::app()->createUrl("branchMaster_parent");                               ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>-->
             <!-- View all branches removed - KK -->
         </ul>
     </div><!-- col-sm-3 -->
@@ -36,78 +38,119 @@ $branch_name = Yii::app()->session['branch_name'];
                     </ul>
                 </div>
                 <div class="table-responsive">
+                    <table  class="display table table-bordered table-striped question_master">
+                        <thead>
+                            <tr>
+                                <th>Question</th>
+                                <th>Average Rating</th>
+                                <th>Category</th>
+                                <th>Option Type</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $Questions = QuestionMaster::model()->findAll(array(
+                                'condition' => 'branch_id = :branch_id',
+                                'params' => array(':branch_id' => $pId)
+                            ));
+
+                            foreach ($Questions as $question) {
+                                ?> 
+                                <tr class="gradeX">
+                                    <td><?php echo $question->question; ?></td>
+                                    <td><?php echo QuestionMaster::getQuestionAverageFeedback($question->id); ?></td>
+                                    <td><?php echo CategoryMaster::model()->findbypk($question->category_id)->category_name; ?></td>
+                                    <td><?php echo OptionType::model()->findbypk($question->option_type_id)->option_type; ?></td>
+                                    <td><a href="#" class="branch_status" data-type="select" data-pk="<?php echo $question->id; ?>" data-value="" data-title="Select Status"><?php echo QuestionMaster::itemAlias('status', $question->status); ?></a></td>
+                                    <td><a class="badge badge-info" title="View Profile" data-toggle="tooltip" href="/account/index.php/questionMaster_Child/<?php echo $question->id; ?>?pId=<?php echo $pId; ?>">
+                                            <i class="fa fa-folder"></i></a>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+
+                        </tbody>
+                    </table>
                     <?php
-                    $this->widget('zii.widgets.grid.CGridView', array(
-                        'dataProvider' => $model->getDataFromPK($pId),
-                        'summaryText' => '',
-                        'itemsCssClass' => 'display table table-striped question_master',
-                        'htmlOptions' => array('class' => ''),
-                        'columns' => array(
-                            array('header' => 'No', 'value' => '($this->grid->dataProvider->pagination->currentPage*
-                                $this->grid->dataProvider->pagination->pageSize
-                                )+
-                                array_search($data,$this->grid->dataProvider->getData())+1',
-                                'htmlOptions' => array('style' => 'width: 25px; text-align:center;'),
-                            ),
-                            array(
-                                'name' => 'question',
-                                'value' => '($data->question)',
-                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                            ),
-                            array(
-                                'name' => 'Average Rating',
-                                'value' => '(QuestionMaster::getQuestionAverageFeedback($data->id))',
-                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                            ),
-                            array(
-                                'name' => 'category_id',
-                                'value' => '(CategoryMaster::model()->findbypk($data->category_id)->category_name)',
-                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                            ),
-                            array(
-                                'name' => 'option_type_id',
-                                'value' => '(OptionType::model()->findbypk($data->option_type_id)->option_type)',
-                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                            ), /*                             * OptionType->option_type */
-                            /* created at and updated at removed - KK */
-                            /* array(
-                              'name' => 'created_at',
-                              'value' => '($data->created_at)',
-                              'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                              ),
-                              array(
-                              'name' => 'update_at',
-                              'value' => '($data->update_at)',
-                              'headerHtmlOptions' => array('style' => 'text-align:center;'),
-                              ), */
-                            array(
-                                'class' => 'bootstrap.widgets.TbButtonColumn',
-                                'htmlOptions' => array('style' => 'width:30px'),
-                                'template' => '  {detail}',
-                                'buttons' => array
-                                    (
-                                    'detail' => array
-                                        (
-                                        'label' => 'View Question',
-                                        'icon' => 'fa fa-folder-open',
-                                        'url' => 'array("view","id"=>$data->id,"pId"=>$_GET["pId"])',
-                                        'options' => array(
-                                            'class' => 'badge badge-info',
-                                        ),
-                                    ),
-//                                    'delete' => array
+//                    $this->widget('zii.widgets.grid.CGridView', array(
+//                        'dataProvider' => $model->getDataFromPK($pId),
+//                        'summaryText' => '',
+//                        'itemsCssClass' => 'display table table-striped question_master',
+//                        'htmlOptions' => array('class' => ''),
+//                        'columns' => array(
+//                            array('header' => 'No', 'value' => '($this->grid->dataProvider->pagination->currentPage*
+//                                $this->grid->dataProvider->pagination->pageSize
+//                                )+
+//                                array_search($data,$this->grid->dataProvider->getData())+1',
+//                                'htmlOptions' => array('style' => 'width: 25px; text-align:center;'),
+//                            ),
+//                            array(
+//                                'name' => 'question',
+//                                'value' => '($data->question)',
+//                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
+//                            ),
+//                            array(
+//                                'name' => 'Average Rating',
+//                                'value' => '(QuestionMaster::getQuestionAverageFeedback($data->id))',
+//                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
+//                            ),
+//                            array(
+//                                'name' => 'category_id',
+//                                'value' => '(CategoryMaster::model()->findbypk($data->category_id)->category_name)',
+//                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
+//                            ),
+//                            array(
+//                                'name' => 'option_type_id',
+//                                'value' => '(OptionType::model()->findbypk($data->option_type_id)->option_type)',
+//                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
+//                            ),
+//                            array(
+//                                'name' => 'Status',
+//                                'value' => '<p>data</p>',
+//                                'headerHtmlOptions' => array('style' => 'text-align:center;'),
+//                            ), /*                             * OptionType->option_type */
+//                            /* created at and updated at removed - KK */
+//                            /* array(
+//                              'name' => 'created_at',
+//                              'value' => '($data->created_at)',
+//                              'headerHtmlOptions' => array('style' => 'text-align:center;'),
+//                              ),
+//                              array(
+//                              'name' => 'update_at',
+//                              'value' => '($data->update_at)',
+//                              'headerHtmlOptions' => array('style' => 'text-align:center;'),
+//                              ), */
+//                            array(
+//                                'class' => 'bootstrap.widgets.TbButtonColumn',
+//                                'htmlOptions' => array('style' => 'width:30px'),
+//                                'template' => '  {detail}',
+//                                'buttons' => array
+//                                    (
+//                                    'detail' => array
 //                                        (
-//                                        'label' => 'Update Branch',
-//                                        'icon' => 'fa fa-trash-o',
-//                                        'url' => 'array("delete","id"=>$data->id)',
+//                                        'label' => 'View Question',
+//                                        'icon' => 'fa fa-folder-open',
+//                                        'url' => 'array("view","id"=>$data->id,"pId"=>$_GET["pId"])',
 //                                        'options' => array(
 //                                            'class' => 'badge badge-info',
 //                                        ),
 //                                    ),
-                                )
-                            ),
-                        ),
-                    ));
+////                                    'delete' => array
+////                                        (
+////                                        'label' => 'Update Branch',
+////                                        'icon' => 'fa fa-trash-o',
+////                                        'url' => 'array("delete","id"=>$data->id)',
+////                                        'options' => array(
+////                                            'class' => 'badge badge-info',
+////                                        ),
+////                                    ),
+//                                )
+//                            ),
+//                        ),
+//                    ));
                     ?>
                 </div><!--/table-responsive-->
             </div><!--/porlets-content-->

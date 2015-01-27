@@ -210,12 +210,25 @@
 ?>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-3 col-lg-2" style="position: relative;margin-top: 30px;"> 
+        <ul class="nav nav-pills nav-stacked nav-email" style="position: fixed;border: 2px solid #44AFB0;border-top-left-radius: 9px;border-top-right-radius: 9px;">
+            <li title="View Branch"> <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/branchMaster_parent/<?php echo $_GET['branch_id']; ?>"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/branches_menu.png"/> Branch </a> </li>
+            <li title="View Report"  class="active"><a href="<?php echo Yii::app()->createUrl("ResponceMaster_child/viewbranchreport?branch_id=" . $_GET['branch_id']); ?>">   <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/selected/question_report.png"/> Report</a></li>
+            <li title="View testimonial"><a href="<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $_GET['branch_id']); ?>">   <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_testi.png"/> Testimonials</a></li>
+            <li title="View Questions"><a href="<?php echo Yii::app()->createUrl("questionMaster_Child?pId=" . $_GET['branch_id']); ?>">  <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_branch.png"/>  Questions</a></li>
+            <li title="View Tablets"><a href="<?php echo Yii::app()->createUrl("tabletMaster_child?pId=" . $_GET['branch_id']); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/tablet.png"/>  Tablets </a></li>
+            <li title="View Custom Fields"><a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent?pId=" . $_GET['branch_id']); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/custom_fields.png"/> Custom Fields</a></li>
+          <!--  <li title="View All Branch"> <a href="<?php //echo Yii::app()->createUrl("branchMaster_parent");             ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>-->
+            <!-- View all branches removed - KK -->
+        </ul>
+    </div><!-- col-sm-3 -->
+
+    <div class="col-md-10" style=" margin-top: 28px; ">
         <div class="block-web full">
             <div class="col-md-12">
                 <div class="block-web">
                     <div class="header">
-                       
+
                         <div class="actions"> <a href="#" class="minimize"><i class="fa fa-chevron-down"></i></a> <a href="#" class="refresh"><i class="fa fa-repeat"></i></a> </div>
                         <h3 class="content-header">Create Report For Branch <?php echo BranchMaster::model()->findByPK($branch_id)->branch_name; ?></h3>
                     </div>

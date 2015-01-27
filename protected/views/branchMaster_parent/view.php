@@ -32,12 +32,15 @@ Yii::app()->session['branch_name'] = $bname;
     <div class="col-sm-3 col-lg-2" style="position: relative;margin-top: 30px;"> 
         <ul class="nav nav-pills nav-stacked nav-email" style="position: fixed;border: 2px solid #44AFB0;border-top-left-radius: 9px;border-top-right-radius: 9px;">
             <li  title="View Branch" class="active"> <a href="#"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/selected/branches_menu.png"/> Branch </a> </li>
+            <li title="View Report"><a href="<?php echo Yii::app()->createUrl("ResponceMaster_child/viewbranchreport?branch_id=" . $model->id); ?>">   <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_report.png"/> Report</a></li>
+            <li title="View testimonial"><a href="<?php echo Yii::app()->createUrl("testimonials?branch_id=" . $model->id); ?>">   <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_testi.png"/> Testimonials</a></li>
             <li title="View Questions"><a href="<?php echo Yii::app()->createUrl("questionMaster_Child?pId=" . $model->id); ?>">  <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/question_branch.png"/>  Questions</a></li>
             <li title="View Tablets"><a href="<?php echo Yii::app()->createUrl("tabletMaster_child?pId=" . $model->id); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/tablet.png"/>  Tablets </a></li>
             <li title="View Custom Fields"><a href="<?php echo Yii::app()->createUrl("customerCustomFieldAssignmentTable_Parent?pId=" . $model->id); ?>"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/custom_fields.png"/> Custom Fields</a></li>
-            <!--<li title="View All Branch"> <a href="<?php //echo Yii::app()->createUrl("branchMaster_parent");        ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>-->
+            <!--<li title="View All Branch"> <a href="<?php //echo Yii::app()->createUrl("branchMaster_parent");             ?>"> <i class="glyphicon glyphicon-th-list"></i> View All Branch </a> </li>-->
             <!-- View all branches removed - KK -->
         </ul>
+
     </div><!-- col-sm-3 -->
     <div class="col-md-10">
         <div class="porlets-content">
@@ -70,12 +73,12 @@ Yii::app()->session['branch_name'] = $bname;
                         <div class="col-sm-6">
                             <h5><strong>ABOUT</strong> Tablets</h5>
                             <address>
-                                <strong>Table Used for Branch <?php echo $model->branch_name; ?></strong><br>
+                                <strong>Tablet Used for Branch <?php echo $model->branch_name; ?></strong><br>
                                 <abbr title="Tablet Consume"><?php echo BranchMaster::getTablet_count($model->id); ?></abbr>
                             </address>
                             <hr/>
                             <address>
-                                <strong>Table Allowed for Branch <?php echo $model->branch_name; ?></strong><br>
+                                <strong>Tablet Allowed for Branch <?php echo $model->branch_name; ?></strong><br>
                                 <abbr title="Date Of Birth"><?php echo $model->tablet_no; ?></abbr>
                             </address>
                         </div>
@@ -292,7 +295,7 @@ Yii::app()->session['branch_name'] = $bname;
                             <div class="panel-body">
                                 <div class="row">
                                     <h3 style="color: white;">Today</h3>
-                                    <div class="col-xs-6"> <i class="fa fa-users"></i> Your Costomer </div>
+                                    <div class="col-xs-6"> <i class="fa fa-users"></i> Your Customer </div>
                                     <div class="col-xs-6">
                                         <div class="degree"> <?php echo BranchDashboard_helper::getTotalCustomerForAllBranches(date('Y-m-d'), date('Y-m-d'), $model->id); ?> </div>
                                     </div>
@@ -324,7 +327,7 @@ Yii::app()->session['branch_name'] = $bname;
                             </div>
                         </h3>
                         <div id="dashboard_graph" class="custom-bar-chart">
-                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.gif" style="width: 100%;" />
+                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.jpg" style="width: 100%;" />
                             <?php // echo Dashboard_helper::getWeeklyReportForBranch();   ?>
 
                         </div><!--/custom-bar-chart-->
@@ -393,7 +396,7 @@ Yii::app()->session['branch_name'] = $bname;
                             </div>
                         </h3>
                         <div id="dashboard_graph_category" class="custom-bar-chart">
-                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.gif" style="width: 100%;" />
+                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.jpg" style="width: 100%;" />
                             <?php // echo Dashboard_helper::getWeeklyReportForBranch();   ?>
 
                         </div><!--/custom-bar-chart-->
@@ -419,7 +422,7 @@ Yii::app()->session['branch_name'] = $bname;
                             </div>
                         </h3>
                         <div id="New_Male_Female_repete_chartdiv" class="custom-bar-chart">
-                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.gif" style="width: 100%;" />
+                            <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.jpg" style="width: 100%;" />
                             <?php // echo Dashboard_helper::getWeeklyReportForBranch();   ?>
 
                         </div><!--/custom-bar-chart-->

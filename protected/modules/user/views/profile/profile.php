@@ -55,10 +55,10 @@
                                 ?></strong> Branches</h5>
                     </div>
                     <div class="col-md-4">
-                        <h5><strong><?php echo TabletMaster::getAllTablet_Count_User(); ?></strong>Tablets</h5>
+                        <h5><strong><?php echo TabletMaster::getAllTablet_Count_User(); ?></strong> Tablets</h5>
                     </div>
                     <div class="col-md-4">
-                        <h5><strong><?php echo QuestionMaster::getAllQuestion_Count_User(); ?></strong>Question</h5>
+                        <h5><strong><?php echo QuestionMaster::getAllQuestion_Count_User(); ?></strong> Question</h5>
                     </div>
                 </div>
             </div>
@@ -188,7 +188,8 @@
                                                 } elseif ($field->varname == "organisation_logo") {
 //                                                echo $profile->organisation_logo;
                                                     ?>
-                                                    <img width="" class="organisation_logo_preview"  src = "<?php echo Yii::app()->request->baseUrl . '/' . User::model()->findByPK(Yii::app()->user->id)->profile->organisation_logo; ?>" style="width: 60%; "> 
+                                                    <img width="" class="organisation_logo_preview"  src = "<?php echo Yii::app()->request->baseUrl . '/' . User::model()->findByPK(Yii::app()->user->id)->profile->organisation_logo; ?>" style="width: 15%; "> 
+                                                    <br/>
                                                     <input type="file" name="organisation_logo" class="organisation_logo" onchange="readURL(this);"/>
                                                     <?php
 //                                                echo $form->fileField($profile, $field->varname, array('class' => ' form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));

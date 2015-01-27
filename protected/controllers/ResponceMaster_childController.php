@@ -167,10 +167,10 @@ class ResponceMaster_childController extends Controller {
                         case 'both':
 
                             break;
-                        case 'repeat' :
+                        case 'new' :
                             $sqlStatement.= ' GROUP BY FeedbackMaster.`client_id` HAVING COUNT(FeedbackMaster.`client_id`)<=1 ';
                             break;
-                        case 'new' :
+                        case 'repeat' :
                             $sqlStatement.= ' GROUP BY FeedbackMaster.`client_id` HAVING COUNT(FeedbackMaster.`client_id`)>1';
                             break;
                     }

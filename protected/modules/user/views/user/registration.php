@@ -49,7 +49,7 @@
                             <fieldset>
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <div class="input-group"> <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                        <div class="input-group"> <span class="input-group-addon registration_page_span"><i class="fa fa-user"></i></span>
                                             <?php echo $form->textField($model, 'username', array('class' => 'form-control', 'placeholder' => 'Username')); ?>
                                         </div>
                                         <?php echo $form->error($model, 'username'); ?>
@@ -58,7 +58,7 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <div class="input-group"> <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                        <div class="input-group"> <span class="input-group-addon registration_page_span"><i class="fa fa-envelope"></i></span>
                                             <?php echo $form->textField($model, 'email', array('class' => 'form-control', 'placeholder' => 'Email Address')); ?>
                                         </div>
                                         <?php echo $form->error($model, 'email'); ?>
@@ -67,7 +67,7 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <div class="input-group"> <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                        <div class="input-group"> <span class="input-group-addon registration_page_span"><i class="fa fa-lock"></i></span>
 
                                             <input class="form-control" placeholder="Password" name="RegistrationForm[password]" id="RegistrationForm_password" type="password" maxlength="128">
                                             <?php // echo $form->passwordField($model, 'password', array('class' => 'form-control', 'placeholder' => 'Password')); ?>
@@ -80,7 +80,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-12">
                                         <div class="input-group"> 
-                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            <span class="input-group-addon registration_page_span"><i class="fa fa-lock"></i></span>
                                             <input class="form-control" placeholder="Verify Password" name="RegistrationForm[verifyPassword]" id="RegistrationForm_verifyPassword" type="password">
                                             <?php // echo $form->passwordField($model, 'verifyPassword', array('class' => 'form-control', 'placeholder' => 'Verify Password')); ?>
 
@@ -105,7 +105,61 @@
                                         <div class="form-group">
                                             <div class="col-sm-12">
                                                 <div class="input-group"> 
-                                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                                    <span class="input-group-addon registration_page_span">
+
+                                                        <?php
+                                                        switch ($field->varname) {
+                                                            case 'firstname':
+                                                                ?>
+                                                                <i class="fa fa-user" style=" width: 20px; "></i>
+                                                                <?php
+                                                                break;
+                                                            case 'lastname':
+                                                                ?>
+                                                                <i class="fa fa-user" style=" width: 20px; "></i>
+                                                                <?php
+                                                                break;
+                                                            case 'gender':
+                                                                ?>
+                                                                <!--<i class="fa fa-user"></i>-->
+                                                                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/signup_page_sub_icons/gender.png"/>
+                                                                <?php
+                                                                break;
+                                                            case 'phone_no':
+                                                                ?>
+                                                                <!--<i class="fa fa-user"></i>-->
+                                                                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/signup_page_sub_icons/phone_no.png"/>
+                                                                <?php
+                                                                break;
+                                                            case 'address':
+                                                                ?>
+                                                                <!--<i class="fa fa-user"></i>-->
+                                                                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/signup_page_sub_icons/address.png"/>
+                                                                <?php
+                                                                break;
+                                                            case 'zipcode':
+                                                                ?>
+                                                                <!--<i class="fa fa-user"></i>-->
+                                                                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/signup_page_sub_icons/zipcode.png"/>
+                                                                <?php
+                                                                break;
+                                                            case 'dob':
+                                                                ?>
+                                                                <!--<i class="fa fa-user"></i>-->
+                                                                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/signup_page_sub_icons/dob.png"/>
+                                                                <?php
+                                                                break;
+                                                            case 'annivarsary':
+                                                                ?>
+                                                                <!--<i class="fa fa-user"></i>-->
+                                                                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/signup_page_sub_icons/annivarsary.png"/>
+                                                                <?php
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                        ?>
+                                                    </span>
 
                                                     <?php
                                                     if ($widgetEdit = $field->widgetEdit($profile)) {
@@ -156,11 +210,39 @@
                                         if ($field->category != 2) {
                                             continue;
                                         }
+                                        if ($field->varname == 'theme_color') {
+                                            continue;
+                                        }
                                         ?>
                                         <div class="form-group">
                                             <div class="col-sm-12">
                                                 <div class="input-group"> 
-                                                    <span class="input-group-addon"><i class="fa fa-building-o"></i></span>
+                                                    <span class="input-group-addon registration_page_span">
+                                                        <?php
+                                                        switch ($field->varname) {
+                                                            case 'business_name':
+                                                                ?>
+                                                                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/signup_page_sub_icons/business_name.png"/>
+                                                                <?php
+                                                                break;
+                                                            case 'lob':
+                                                                ?>
+                                                               <!--<i class="fa fa-user"></i>-->
+                                                                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/signup_page_sub_icons/lob.png"/>
+                                                                <?php
+                                                                break;
+                                                            case 'pan_number':
+                                                                ?>
+                                                                <!--<i class="fa fa-user"></i>-->
+                                                                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/signup_page_sub_icons/pan_number.png"/>
+                                                                <?php
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                        ?>
+
+                                                    </span>
 
                                                     <?php
                                                     if ($widgetEdit = $field->widgetEdit($profile)) {
@@ -185,8 +267,6 @@
 
                                                         </select>
                                                         <?php
-                                                    } elseif ($field->varname == "theme_color") {
-                                                        echo $form->textField($profile, $field->varname, array('class' => 'colorpicker-default form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));
                                                     } else {
                                                         echo $form->textField($profile, $field->varname, array('class' => 'form-control', 'placeholder' => $field->varname, 'size' => 60, 'maxlength' => (($field->field_size) ? $field->field_size : 255)));
                                                     }

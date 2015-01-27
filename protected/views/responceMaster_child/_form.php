@@ -40,7 +40,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 </div>
 <input style="display: none;" value="<?php echo $_GET['branch_id'] ?>" name="branch_id" />
 <div class="form-group">
-    <label class="col-sm-2">Date Format</label>
+    <label class="col-sm-2">Date Format *</label>
     <div class="col-md-6">
         <div class="input-group input-large" data-date="2013-07-13" data-date-format="yyyy-mm-dd">
             <input type="text" class="form-control dpd1" required name="date_range_from">
@@ -50,7 +50,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         <span class="help-block">Select date range</span> </div>
 </div><!--/form-group-->
 <div class="form-group">
-    <label class="col-sm-2">Age Range</label>
+    <label class="col-sm-2">Age Range *</label>
     <div class="col-sm-4">
         <select class="form-control" name="age_range_from">
             <?php
@@ -182,7 +182,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </div>
 </div>
 <div class="form-group">
-    <label class="col-sm-2">Data to export</label>
+    <label class="col-sm-2">Data to export *</label>
     <?php
     $customer_custom_field_assignment = CustomerCustomFieldAssignmentTable::model()->findByPk(1);
     echo $customer_custom_field = $customer_custom_field_assignment->Customer_Custom_Fields->Field_Category->field_category;

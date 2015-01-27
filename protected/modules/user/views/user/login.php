@@ -51,7 +51,7 @@ right:53px" class="input-group-btn">
                         
                         <div style="padding-left: 10px;padding-right: 3px; clear:both;">
                             <?php echo CHtml::link(UserModule::t("Forgot Password?"), Yii::app()->getModule('user')->recoveryUrl, array('style' => 'color: #8e8e8e; font-size: 11px;')); ?>
-                            <?php echo CHtml::link(UserModule::t("Registration"), Yii::app()->request->baseUrl . '/index.php/user/registration', array('style' => 'color: #8e8e8e; font-size: 12px;margin-left: 68px;')); ?>
+                            <?php echo CHtml::link(UserModule::t("Registration"), Yii::app()->request->baseUrl . '/index.php/user/registration', array('style' => 'color: #8e8e8e; font-size: 12px;margin-left: 57px;')); ?>
                         </div>
                     </div>
                     

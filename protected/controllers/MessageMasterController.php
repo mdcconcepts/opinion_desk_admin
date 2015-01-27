@@ -95,7 +95,7 @@ class MessageMasterController extends Controller {
                     }
                     $transaction->commit();
                     $messageType = 'success';
-                    $message = "<strong>Well done!</strong> You message successfull send.";
+                    $message = "Your message has been sent successfully.";
                     Yii::app()->user->setFlash($messageType, $message);
                     $this->redirect(array('create'));
                 }

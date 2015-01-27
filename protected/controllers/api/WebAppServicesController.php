@@ -281,6 +281,52 @@ class WebAppServicesController extends Controller {
         $this->_sendResponse(200, $Responce);
     }
 
+    public function actionpostStatusForQuestion() {
+//        $customer_id = Yii::app()->request->getPost('username');
+
+        if (!isset($_POST['pk'])) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => 'Bad Request Parameters',
+                'Error' => 'pk not found.'
+            ];
+            $this->_sendResponse(200, $Responce);
+        } elseif (!isset($_POST['value'])) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => 'Bad Request Parameters',
+                'Error' => 'value not found.'
+            ];
+            $this->_sendResponse(200, $Responce);
+        }
+
+        $Questions = QuestionMaster::model()->findByPK($_POST['pk']);
+        $Questions->status = $_POST['value'];
+        if ($Questions->save()) {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'True',
+                'Message' => 'Status saved'
+            ];
+            $this->_sendResponse(200, $Responce);
+        } else {
+            $Responce = [
+                'Status_code' => '200',
+                'Success' => 'False',
+                'Message' => $Branch->getErrors(),
+            ];
+            $this->_sendResponse(200, $Responce);
+        }
+        $Responce = [
+            'Status_code' => '200',
+            'Success' => 'False',
+            'Message' => 'Unknown Responce',
+        ];
+        $this->_sendResponse(200, $Responce);
+    }
+
     public function actionpostStatusForBranch() {
 //        $customer_id = Yii::app()->request->getPost('username');
 

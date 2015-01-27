@@ -3102,34 +3102,59 @@ div[data-role="editor-toolbar"] {
 }
 
 .no_data{
-    background-image:url('http://www.opiniondesk.in/account/themes/webpro_light/images/no_data.gif');
+    background-image:url('http://www.opiniondesk.in/account/themes/webpro_light/images/no_data.jpg');
+    background-repeat: no-repeat;
 }
-.right_shadow{
-        position: absolute;
-        float: right; 
-        right: -46px;
-        top: -20px;
-        opacity: 0.6;  
-    }
-    .right_shadow img{
-        width: 89%; 
-    }
-    .left_shadow{
-        position: absolute; 
-        float: right; 
-        left: -40px; 
-        top: -34px;
-        opacity: 0.6 
-    }
-    .left_shadow img{
-        width: 89%; 
-    }
-    .login_input{
+.right_shadow{  
+    position: absolute;
+    float: right; 
+    right: -46px;
+    top: -20px;
+    opacity: 0.6;  
+}
+.right_shadow img{
+    width: 89%; 
+}
+.left_shadow{
+    position: absolute; 
+    float: right; 
+    left: -40px; 
+    top: -34px;
+    opacity: 0.6 
+}
+.left_shadow img{
+    width: 89%; 
+}
+.login_input{
 
-    }
-    .login_footer{
-        //position: absolute;
-        top: 135px;
-        z-index: 1;
-        font-size: 6px;
-    }
+}
+.login_footer{
+    //position: absolute;
+    top: 135px;
+    z-index: 1;
+    font-size: 6px;
+}
+.menu_active{
+    background-color: #f5f4f4;
+}
+.menu_active:hover{
+    background-color: #f8f7f7;
+}
+.branch_index_grid_border{
+    border:solid 2px #44AFB0;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+.groid_text:hover{
+    text-decoration:none;
+} 
+
+.registration_page_span img{ 
+    width: 20px;
+    height: 20px;
+} 
+.registration_page_span
+{
+    color: #555555;
+}

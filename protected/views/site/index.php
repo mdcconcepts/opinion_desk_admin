@@ -145,7 +145,7 @@
                 </div>
             </h3>
             <div id="dashboard_graph" class="custom-bar-chart">
-                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.gif" style="width: 100%;" />
+                <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/no_data.jpg" style="width: 100%;" />
             </div><!--/custom-bar-chart-->
         </div><!--/block-web-->
     </div><!--/col-md-6-->

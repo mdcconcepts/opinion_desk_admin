@@ -56,7 +56,6 @@
             </div>
             <div class="bottom">
                 <button class="btn btn-primary">Send</button>
-                <button class="btn btn-success" type="button">Save</button>
             </div>
             <?php $this->endWidget(); ?>
         </div><!--/ block-web --> 

@@ -392,7 +392,7 @@ class MobileServicesController extends Controller {
 
         $sqlStatement = "SELECT *,question_master.id AS question_id_i FROM `question_master` INNER JOIN `category_master` ON  "
                 . "`question_master`.`category_id`=`category_master`.id "
-                . "WHERE `branch_id`=:branch_id";
+                . "WHERE `branch_id`=:branch_id AND `question_master`.status=1";
 
         $command = $connection->createCommand($sqlStatement);
 
@@ -868,12 +868,15 @@ class MobileServicesController extends Controller {
     }
 
     function destroy_session($tablet_id) {
-        $Session = TabletSessionMaster::model()->findAll(array(
-                    'condition' => 'tablet_id = :tablet_id',
-                    'params' => array(':tablet_id' => $tablet_id)
-                ))[0];
+        $Sessions = TabletSessionMaster::model()->findAll(array(
+            'condition' => 'tablet_id = :tablet_id',
+            'params' => array(':tablet_id' => $tablet_id)
+        ));
 
-        $Session->delete();
+        foreach ($Sessions as $Session) {
+            $Session->delete();
+        }
+
         $_SESSION['session_token'] = "Deleted";
         return $_SESSION['session_token'];
     }
@@ -885,6 +888,7 @@ class MobileServicesController extends Controller {
         $password = $_SERVER['HTTP_API_' . self::APPLICATION_ID . '_PASSWORD'];
         $SESSION_TOKEN = TabletSessionMaster::model()->findAll(array(
                     'condition' => 'tablet_id = :tablet_id',
+                    'order' => 'timeout DESC',
                     'params' => array(':tablet_id' => $tablet_id)
                 ))[0]->session_token;
         if ($SESSION_TOKEN != md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR'] . $username . $password)) {

@@ -180,11 +180,19 @@ class BranchMaster extends CActiveRecord {
         }
     }
 
-    public static function getTablet_count($id) {
+    public static function getTotalTablet_count($id) {
         $list = Yii::app()->db->createCommand('SELECT `tablet_no` FROM `branch_master` WHERE `id`=' . $id)->queryAll();
         $Tablet_count = "";
         foreach ($list as $item) {
             $Tablet_count = $item['tablet_no'];
+        }
+        return $Tablet_count;
+    }
+    public static function getTablet_count($id) {
+        $list = Yii::app()->db->createCommand('SELECT COUNT(DISTINCT `tablet_id`) AS Totoal_Login_Device FROM `tablet_session_master` WHERE `tablet_id` in (SELECT `id` FROM `tablet_master` WHERE `branch_id`=' . $id . ')')->queryAll();
+        $Tablet_count = "";
+        foreach ($list as $item) {
+            $Tablet_count = $item['Totoal_Login_Device'];
         }
         return $Tablet_count;
     }

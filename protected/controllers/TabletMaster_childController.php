@@ -76,7 +76,7 @@ class TabletMaster_childController extends Controller {
 
 
 
-                    if ($count >= BranchMaster::getTablet_count($model->branch_id)) {
+                    if ($count >= BranchMaster::getTotalTablet_count($model->branch_id)) {
                         Yii::app()->user->setFlash('error', "<strong>Your Tablets limit for this Branch is expired !</strong></br>Please upgrade your package, kindly contact to our support !");
 //                echo json_encode("error");
                         $this->render('create', array(

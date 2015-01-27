@@ -6,13 +6,13 @@
     <body class = "light-theme">
         <?php require(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_header.php'); ?>
         <?php require(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_right_sidebar.php'); ?>
-        <div class = "page-container">
-            <div class = "nav-collapse top-margin fixed box-shadow2 hidden-xs" id = "sidebar">
+        <div class = "page-container" >
+            <div class = "nav-collapse top-margin fixed box-shadow2 hidden-xs hide-left-bar" id = "sidebar">
                 <?php require(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_left_navigation.php'); ?>
             </div><!--/sidebar-->
 
 
-            <div id = "main-content">
+            <div id = "main-content" class="merge-left">
                 <div class = "page-content">
                     <?php echo $content; ?>
                 </div> <!--/page-content end-->

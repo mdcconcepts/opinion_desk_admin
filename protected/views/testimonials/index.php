@@ -1,5 +1,5 @@
 <?php
-if (!isset($_GET['media'])&&!isset($_GET['feedback'])) {
+if (!isset($_GET['media']) && !isset($_GET['feedback'])) {
 //    $branch_id = $Branches[0]->id;
     $this->redirect(Yii::app()->request->baseUrl . '/index.php/testimonials?branch_id=' . $_GET['branch_id'] . '&media=all&feedback=all');
 }
@@ -29,6 +29,7 @@ $Branch = BranchMaster::model()->findAll(array(
 <div class="row">
     <div class="col-sm-3 col-lg-2" style="position: relative;margin-top: 30px;"> 
         <ul class="nav nav-pills nav-stacked nav-email" style="position: fixed;border: 2px solid #44AFB0;border-top-left-radius: 9px;border-top-right-radius: 9px;">
+            <li title="View Branch"> <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/branchMaster_parent/<?php echo $_GET['branch_id']; ?>"> <img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/theme_images/branches_menu.png"/> Branch </a> </li>
             <li <?php
             if ($_GET['media'] == 'all') {
                 echo 'class = "active"';

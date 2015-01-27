@@ -12,6 +12,9 @@
  */
 class QuestionMaster extends CActiveRecord {
 
+    const STATUS_NOACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
     /**
      * @return string the associated database table name
      */
@@ -72,6 +75,7 @@ class QuestionMaster extends CActiveRecord {
             'option_type_id' => 'Option Type',
             'category_id' => 'Category',
             'question' => 'Question',
+            'status' => 'status',
             'created_at' => 'Created At',
             'update_at' => 'Update At',
             'branch_id' => 'Branch',
@@ -188,6 +192,19 @@ class QuestionMaster extends CActiveRecord {
             $Question_Average_Feedback = round($item['Average_Feedback_Value'], 2);
         }
         return $Question_Average_Feedback;
+    }
+
+    public static function itemAlias($type, $code = NULL) {
+        $_items = array(
+            'status' => array(
+                self::STATUS_NOACTIVE => 'Not Active',
+                self::STATUS_ACTIVE => 'Active',
+            ),
+        );
+        if (isset($code))
+            return isset($_items[$type][$code]) ? $_items[$type][$code] : false;
+        else
+            return isset($_items[$type]) ? $_items[$type] : false;
     }
 
 }
